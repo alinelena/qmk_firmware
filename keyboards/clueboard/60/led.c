@@ -50,4 +50,4 @@ void led_set_kb(uint8_t usb_led) {
         // Turn capslock off
         palClearPad(GPIOB, 7);
     }
-}
+
