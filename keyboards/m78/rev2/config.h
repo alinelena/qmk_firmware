@@ -37,7 +37,7 @@ A6 avoid
 #define MATRIX_ROW_PINS { C14, C15, A0, A2, A3, A7}
 //#define MATRIX_COL_PINS { B12, B13, B14, B15,  B6,  B5,  B4,  B3, A10,  A9,  A8,  B0, B1}
 //#define MATRIX_COL_PINS { A8, A9, B14, B15,  B6,  B5,  B4,  B3, A15,  B0, B1, B10, B11}
-#define MATRIX_COL_PINS { B14, B15, A8,  A9, A15, B3, B4, B5, B6, B11, B10, B1, B0}
+#define MATRIX_COL_PINS { B15, A8,  A9, A10, A15, B3, B4, B5, B6, B11, B10, B1, B0}
 //                          0    1   2    3    4   5   6   7   8   9   10   11  12
 //#define ENCODERS_PAD_A { B12 }
 //#define ENCODERS_PAD_B { B13 }
