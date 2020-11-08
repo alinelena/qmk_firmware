@@ -1,5 +1,5 @@
 #ifndef CONFIG_REV1_H
-#define CONFIG__REV1_H
+#define CONFIG_REV1_H
 
 #define DEVICE_VER      0x0001
 
