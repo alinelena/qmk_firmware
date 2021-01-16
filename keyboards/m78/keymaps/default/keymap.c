@@ -60,7 +60,8 @@ enum custom_keycodes {
 #define _QW 0
 #define _Fortran 1
 #define _CPP 2
-#define _UN 3
+#define _MATH 3
+#define _UN 4
 
 #define TAP(keycode) tap_code16(keycode)
 
@@ -75,7 +76,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_LCTL,         KC_LGUI, TT(_Fortran), KC_LALT, TT(_CPP),KC_SPC, KC_SPC, KC_SPC, KC_RALT, KC_RSPC,  KC_LEFT,     KC_DOWN,      KC_RGHT),
 
   [_Fortran] = KEYMAP(
-      KC_ESC,           KC_F1,        KC_F2,   KC_F3,    KC_F4, KC_F5,  KC_F6,   KC_F7,  KC_F8,   KC_F9,  KC_F10,      KC_F11,      KC_F12,
+      KC_ESC,    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12,
       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS,     F_Q,     F_W,     F_E,     F_R,     F_T,     F_Y,     F_U,     F_I,     F_O,     F_P, KC_TRNS, KC_TRNS,
       KC_TRNS,     F_A,     F_S,     F_D,     F_F,     F_G,     F_H,     F_J,     F_K,     F_L, KC_TRNS, KC_TRNS, KC_TRNS,
@@ -83,11 +84,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         RESET, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
 
   [_CPP] = KEYMAP(
-      KC_ESC,           KC_F1,        KC_F2,   KC_F3,    KC_F4, KC_F5,  KC_F6,   KC_F7,  KC_F8,   KC_F9,  KC_F10,      KC_F11,      KC_F12,
+      KC_ESC,    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12,
       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS,     C_Q,     C_W,     C_E,     C_R,     C_T,     C_Y,     C_U,     C_I,     C_O,     C_P, KC_TRNS, KC_TRNS,
       KC_TRNS,     C_A,     C_S,     C_D,     C_F,     C_G,     C_H,     C_J,     C_K,     C_L, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS, KC_TRNS,     C_Z,     C_X,     C_C,     C_V,     C_B,     C_N,     C_M, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
+
+  [_MATH] = KEYMAP(
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
 
   [_UN] = KEYMAP(
@@ -116,14 +125,16 @@ static inline void led_fortran(const bool on){
     DDRD |= (1 << 4); PORTD |= (1 << 4);
 #endif
 #ifdef KEYBOARD_m78_rev2
-    writePinHigh(B5);
+    //writePinHigh(B6);
+    writePinHigh(C13);
 #endif
   } else {
 #ifdef KEYBOARD_m78_rev1
     DDRD &= ~(1 << 4); PORTD &= ~(1 << 4);
 #endif
 #ifdef KEYBOARD_m78_rev2
-    writePinLow(B5);
+    //writePinLow(B6);
+    writePinLow(C13);
 #endif
   }
 
@@ -136,14 +147,16 @@ static inline void led_cpp(const bool on){
     DDRD |= (1 << 6); PORTD |= (1 << 6);
 #endif
 #ifdef KEYBOARD_m78_rev2
-    writePinHigh(B7);
+    //writePinHigh(B7);
+    writePinHigh(C14);
 #endif
   } else {
 #ifdef KEYBOARD_m78_rev1
     DDRD &= ~(1 << 6); PORTD &= ~(1 << 6);
 #endif
 #ifdef KEYBOARD_m78_rev2
-    writePinLow(B7);
+    //writePinLow(B7);
+    writePinLow(C14);
 #endif
   }
 
@@ -151,8 +164,10 @@ static inline void led_cpp(const bool on){
 
 void matrix_init_user(void) {
 #ifdef KEYBOARD_m78_rev2
-setPinOutput(B6);
-setPinOutput(B7);
+//setPinOutput(B6);
+//setPinOutput(B7);
+setPinOutput(C13);
+setPinOutput(C14);
 #endif
 }
 

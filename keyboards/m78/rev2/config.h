@@ -25,8 +25,18 @@ A12 avoid usb
 */
 
 //                          0    1    2    3   4   5
-#define MATRIX_ROW_PINS { B12, B13, B14, B15, A8, A9 }
-//                         0   1   2   3   4   5    6    7   8   9  10   11   12
-#define MATRIX_COL_PINS { A0, A2, A3, A7, B0, B1, B10, B11, B5, B4, B3, A15, A10 }
+//wired
+//#define MATRIX_ROW_PINS { B12, B13, B14, B15, A8, A9 }
 
+//pcb
+#define MATRIX_ROW_PINS { B11, B1, B0,  A7, B12, A0 }
+
+
+//                         0   1   2   3   4   5    6    7   8   9  10   11   12
+//wired
+//#define MATRIX_COL_PINS { A0, A2, A3, A7, B0, B1, B10, B11, B5, B4, B3, A15, A10 }
+
+//pcb
+#define MATRIX_COL_PINS { A9, A10, A15, B3, B4, B5, B6, B7, B8, B9, B13, A3, B10 }
+//
 #endif // CONFIG_REV2_H

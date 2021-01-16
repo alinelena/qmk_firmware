@@ -56,3 +56,5 @@ BACKLIGHT_ENABLE ?= no  # Enable keyboard backlight functionality
 DEBOUNCE_TYPE ?= sym_pk
 AUDIO_ENABLE ?= no
 RGBLIGHT_ENABLE ?= no
+UNICODE_ENABLE ?= yes
+

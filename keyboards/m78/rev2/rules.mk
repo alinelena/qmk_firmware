@@ -34,7 +34,6 @@ NKRO_ENABLE = yes            # Nkey Rollover - if this doesn't work, see here: h
 BACKLIGHT_ENABLE = no      # Enable keyboard backlight functionality
 MIDI_ENABLE = no            # MIDI controls
 AUDIO_ENABLE = yes           # Audio output
-UNICODE_ENABLE = no         # Unicode
 BLUETOOTH_ENABLE = no       # Enable Bluetooth with the Adafruit EZ-Key HID
 RGBLIGHT_ENABLE = no        # Enable WS2812 RGB underlight.
 #WS2812_DRIVER = pwm
@@ -47,6 +46,7 @@ SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
 # SERIAL_LINK_ENABLE = yes
 ENCODER_ENABLE = no
 DIP_SWITCH_ENABLE = no
+UNICODE_ENABLE ?= yes
 
 #LAYOUTS = ortho_4x12 planck_mit
 #LAYOUTS_HAS_RGB = no
