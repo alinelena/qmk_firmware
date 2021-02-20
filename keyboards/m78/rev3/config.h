@@ -3,10 +3,12 @@
 
 #define DEVICE_VER      0x0003
 #undef MANUFACTURER
-#define MANUFACTURER    alinb
+#define MANUFACTURER    alin
 
 #undef MATRIX_ROWS
 #undef MATRIX_COLS
+#undef DEBOUNCING_DELAY
+#define DEBOUNCING_DELAY 5
 
 /* key matrix size */
 #define MATRIX_ROWS 6

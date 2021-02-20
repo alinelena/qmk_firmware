@@ -9,6 +9,8 @@
 /* key matrix size */
 #define MATRIX_ROWS 6
 #define MATRIX_COLS 13
+#undef DEBOUNCING_DELAY
+#define DEBOUNCING_DELAY 30
 
 /*
 3V3 GNG  5V  B9  B8  B7  B6  B5  B4  B3 A15 A12 A11 A10  A9  A8 B15 B14 B13 B12

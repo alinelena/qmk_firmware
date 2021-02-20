@@ -1,4 +1,4 @@
-#include "m78.h"
+#include "m65.h"
 
 
 enum custom_keycodes {
@@ -60,53 +60,30 @@ enum custom_keycodes {
 #define _QW 0
 #define _Fortran 1
 #define _CPP 2
-#define _MATH 3
-#define _UN 4
 
 #define TAP(keycode) tap_code16(keycode)
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_QW] = KEYMAP(
-       KC_ESC,           KC_AUDIO_MUTE,      KC_AUDIO_VOL_UP,  KC_AUDIO_VOL_DOWN,   KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE,  KC_MEDIA_NEXT_TRACK, M_EXTDISP,  KC_SYSTEM_SLEEP, KC_SYSTEM_WAKE, KC_PSCREEN, KC_DEL, KC_BSPC,
-       KC_GRV,            KC_1,         KC_2,    KC_3,     KC_4,  KC_5,   KC_6,    KC_7,   KC_8,    KC_9,    KC_0,     KC_MINS,      KC_EQL,
+       KC_ESC,            KC_1,         KC_2,    KC_3,     KC_4,  KC_5,   KC_6,    KC_7,   KC_8,    KC_9,    KC_0,     KC_MINS,      KC_EQL,
        KC_TAB,            KC_Q,         KC_W,    KC_E,     KC_R,  KC_T,   KC_Y,    KC_U,   KC_I,    KC_O,    KC_P, KC_LBRACKET, KC_RBRACKET,
       KC_NUHS,            KC_A,         KC_S,    KC_D,     KC_F,  KC_G,   KC_H,    KC_J,   KC_K,    KC_L, KC_SCLN,     KC_QUOT,      KC_ENT,
       KC_LSPO, KC_NONUS_BSLASH,         KC_Z,    KC_X,     KC_C,  KC_V,   KC_B,    KC_N,   KC_M, KC_COMM,  KC_DOT,       KC_UP,     KC_SLSH,
-      KC_LCTL,         KC_LGUI, TT(_Fortran), KC_LALT, TT(_CPP),KC_SPC, KC_SPC, KC_SPC, KC_DEL, KC_BSPC,  KC_LEFT,     KC_DOWN,      KC_RGHT),
+      KC_LCTL,         KC_LGUI, TT(_Fortran), KC_LALT, TT(_CPP),KC_SPC, KC_SPC, KC_SPC, KC_RALT, KC_RSPC, KC_LEFT,     KC_DOWN,    KC_RGHT),
 
   [_Fortran] = KEYMAP(
-      KC_ESC,    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12,
-      KC_BTN4, KC_BTN5, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_DEL, KC_BSPC,
+      KC_GRV, KC_AUDIO_MUTE,  KC_AUDIO_VOL_UP,  KC_AUDIO_VOL_DOWN,   KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE,  KC_MEDIA_NEXT_TRACK, M_EXTDISP,  KC_SYSTEM_SLEEP, KC_SYSTEM_WAKE, KC_PSCREEN, KC_DEL, KC_BSPC,
       KC_BTN3,     F_Q,     F_W,     F_E,     F_R,     F_T,     F_Y,     F_U,     F_I,     F_O,     F_P, KC_TRNS, KC_TRNS,
       KC_BTN2,     F_A,     F_S,     F_D,     F_F,     F_G,     F_H,     F_J,     F_K,     F_L, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS, KC_BTN1,     F_Z,     F_X,     F_C,     F_V,     F_B,     F_N,     F_M, KC_TRNS, KC_TRNS, KC_MS_U, KC_TRNS,
-        RESET, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R),
+        RESET, KC_BTN4, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R),
 
   [_CPP] = KEYMAP(
       KC_ESC,    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_DEL, KC_BSPC,
       KC_TRNS,     C_Q,     C_W,     C_E,     C_R,     C_T,     C_Y,     C_U,     C_I,     C_O,     C_P, KC_TRNS, KC_TRNS,
       KC_TRNS,     C_A,     C_S,     C_D,     C_F,     C_G,     C_H,     C_J,     C_K,     C_L, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS, KC_TRNS,     C_Z,     C_X,     C_C,     C_V,     C_B,     C_N,     C_M, KC_TRNS, KC_TRNS, KC_WH_U, KC_TRNS,
       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_WH_L, KC_WH_D, KC_WH_R),
-
-  [_MATH] = KEYMAP(
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
-
-  [_UN] = KEYMAP(
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS),
-
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
@@ -121,28 +98,26 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
 static inline void led_fortran(const bool on){
 
   if (on){
-#ifdef KEYBOARD_m78_rev1
-    DDRD |= (1 << 4); PORTD |= (1 << 4);
-#endif
-#ifdef KEYBOARD_m78_rev2
+#ifdef KEYBOARD_m65_rev2
     //writePinHigh(B6);
     writePinHigh(C13);
 #endif
-#ifdef KEYBOARD_m78_rev3
-    //writePinLow(B6);
-    writePinHigh(C13);
+#ifdef KEYBOARD_m65_rev1
+    writePinHigh(B13);
+#endif
+#ifdef KEYBOARD_m65_rev3
+    writePinHigh(B13);
 #endif
   } else {
-#ifdef KEYBOARD_m78_rev1
-    DDRD &= ~(1 << 4); PORTD &= ~(1 << 4);
-#endif
-#ifdef KEYBOARD_m78_rev2
+#ifdef KEYBOARD_m65_rev2
     //writePinLow(B6);
     writePinLow(C13);
 #endif
-#ifdef KEYBOARD_m78_rev3
-    //writePinLow(B6);
-    writePinLow(C13);
+#ifdef KEYBOARD_m65_rev1
+    writePinLow(B13);
+#endif
+#ifdef KEYBOARD_m65_rev3
+    writePinLow(B13);
 #endif
   }
 
@@ -151,41 +126,43 @@ static inline void led_fortran(const bool on){
 static inline void led_cpp(const bool on){
 
   if (on){
-#ifdef KEYBOARD_m78_rev1
-    DDRD |= (1 << 6); PORTD |= (1 << 6);
-#endif
-#ifdef KEYBOARD_m78_rev2
+#ifdef KEYBOARD_m65_rev2
     //writePinHigh(B7);
     writePinHigh(C14);
 #endif
-#ifdef KEYBOARD_m78_rev3
-    //writePinHigh(B7);
-    writePinHigh(C14);
+#ifdef KEYBOARD_m65_rev1
+    writePinHigh(B12);
+#endif
+#ifdef KEYBOARD_m65_rev3
+    writePinHigh(B12);
 #endif
   } else {
-#ifdef KEYBOARD_m78_rev1
-    DDRD &= ~(1 << 6); PORTD &= ~(1 << 6);
-#endif
-#ifdef KEYBOARD_m78_rev2
+#ifdef KEYBOARD_m65_rev2
     //writePinLow(B7);
     writePinLow(C14);
 #endif
-#ifdef KEYBOARD_m78_rev3
-    //writePinLow(B7);
-    writePinLow(C14);
+#ifdef KEYBOARD_m65_rev1
+    writePinLow(B12);
+#endif
+#ifdef KEYBOARD_m65_rev3
+    writePinLow(B12);
 #endif
   }
 
 }
 
 void matrix_init_user(void) {
-#ifdef KEYBOARD_m78_rev2
+#ifdef KEYBOARD_m65_rev2
 setPinOutput(C13);
 setPinOutput(C14);
 #endif
-#ifdef KEYBOARD_m78_rev3
-setPinOutput(C13);
-setPinOutput(C14);
+#ifdef KEYBOARD_m65_rev1
+setPinOutput(B13);
+setPinOutput(B12);
+#endif
+#ifdef KEYBOARD_m65_rev3
+setPinOutput(B13);
+setPinOutput(B12);
 #endif
 }
 
