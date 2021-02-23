@@ -76,14 +76,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_BTN3,     F_Q,     F_W,     F_E,     F_R,     F_T,     F_Y,     F_U,     F_I,     F_O,     F_P, KC_TRNS, KC_TRNS,
       KC_BTN2,     F_A,     F_S,     F_D,     F_F,     F_G,     F_H,     F_J,     F_K,     F_L, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS, KC_BTN1,     F_Z,     F_X,     F_C,     F_V,     F_B,     F_N,     F_M, KC_TRNS, KC_TRNS, KC_MS_U, KC_TRNS,
-        RESET, KC_BTN4, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R),
+      KC_TRNS, KC_BTN4, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_L, KC_MS_D, KC_MS_R),
 
   [_CPP] = KEYMAP(
       KC_ESC,    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12,
       KC_TRNS,     C_Q,     C_W,     C_E,     C_R,     C_T,     C_Y,     C_U,     C_I,     C_O,     C_P, KC_TRNS, KC_TRNS,
       KC_TRNS,     C_A,     C_S,     C_D,     C_F,     C_G,     C_H,     C_J,     C_K,     C_L, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS, KC_TRNS,     C_Z,     C_X,     C_C,     C_V,     C_B,     C_N,     C_M, KC_TRNS, KC_TRNS, KC_WH_U, KC_TRNS,
-      KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_WH_L, KC_WH_D, KC_WH_R),
+      KC_TRNS,   RESET, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_WH_L, KC_WH_D, KC_WH_R),
 };
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
