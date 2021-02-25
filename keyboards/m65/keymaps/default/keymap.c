@@ -64,17 +64,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 static inline void led_lwr(const bool on){
-
-  if (on){
 #ifdef KEYBOARD_m65_rev1
-    writePinHigh(B13);
+    writePin(B13, on);
 #endif
-  } else {
-#ifdef KEYBOARD_m65_rev1
-    writePinLow(B13);
-#endif
-  }
-
 }
 
 static inline void led_rse(const bool on){
