@@ -42,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       KC_LCTL,         KC_LGUI, TT(_LWR), KC_LALT, TT(_RSE),KC_SPC, KC_SPC, KC_SPC, KC_RALT, KC_RSPC, KC_LEFT,     KC_DOWN,    KC_RGHT),
 
   [_LWR] = LAYOUT(
-      KC_GRV, KC_AUDIO_MUTE,  KC_AUDIO_VOL_UP,  KC_AUDIO_VOL_DOWN,   KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE,  KC_MEDIA_NEXT_TRACK, M_EXTDISP,  KC_SYSTEM_SLEEP, KC_SYSTEM_WAKE, KC_PSCREEN, KC_DEL, KC_EQL,
+      KC_GRV, KC_AUDIO_MUTE,  KC_AUDIO_VOL_UP,  KC_AUDIO_VOL_DOWN,   KC_MEDIA_PREV_TRACK, KC_MEDIA_PLAY_PAUSE,  KC_MEDIA_NEXT_TRACK, LGUI(KC_P),  KC_SYSTEM_SLEEP, KC_SYSTEM_WAKE, KC_PSCREEN, KC_DEL, KC_EQL,
       KC_BTN3,  KC_TRNS,  KC_TRNS,    KC_TRNS,  KC_TRNS,  KC_TRNS,     KC_TRNS,  KC_TRNS,   KC_TRNS,    KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS,
       KC_BTN2,  KC_TRNS,  KC_TRNS,    KC_TRNS,  KC_TRNS,  KC_TRNS,  KC_TRNS,    KC_TRNS,    KC_TRNS,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS,  KC_BTN1,  KC_TRNS, KC_TRNS,    KC_TRNS,    KC_TRNS,   KC_TRNS,     KC_TRNS,   KC_TRNS, KC_TRNS, KC_TRNS, KC_MS_U, KC_TRNS,
@@ -51,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_RSE] = LAYOUT(
       KC_ESC,    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F11,  KC_F12,
       KC_TRNS, KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS,
-      KC_TRNS, KC_TRNS,     M_FIND,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
+      KC_TRNS, KC_TRNS,     KC_TRNS,     KC_TRNS,     LALT(KC_F2),     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
       KC_TRNS, KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS,    KC_TRNS,     KC_TRNS,     KC_TRNS,     KC_TRNS, KC_TRNS, KC_TRNS, KC_WH_U, KC_TRNS,
       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_WH_L, KC_WH_D, KC_WH_R),
 
@@ -86,21 +86,6 @@ void matrix_scan_user(void) {
 
   led_lwr(IS_LAYER_ON(_LWR));
   led_rse(IS_LAYER_ON(_RSE));
-}
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-
-  if (!record->event.pressed) return true; /* not entirely sure you should always be returning `true` here */
-
-  switch (keycode) {
-    case M_EXTDISP:
-        TAP(LGUI(KC_P));
-      break;
-    case M_FIND:
-        TAP(LALT(KC_F2));
-      break;
-  }
-  return true;
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
