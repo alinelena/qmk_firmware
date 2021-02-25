@@ -70,17 +70,9 @@ static inline void led_lwr(const bool on){
 }
 
 static inline void led_rse(const bool on){
-
-  if (on){
 #ifdef KEYBOARD_m65_rev1
-    writePinHigh(B12);
+    writePin(B12, on);
 #endif
-  } else {
-#ifdef KEYBOARD_m65_rev1
-    writePinLow(B12);
-#endif
-  }
-
 }
 
 void matrix_init_user(void) {
