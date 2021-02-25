@@ -19,6 +19,6 @@ flashing:
 ```
     make m65/rev1:default:flash
 ```
-L2+LGUI key (second in the last row from left)
+LWR+RSE+r to get into flash mode
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
