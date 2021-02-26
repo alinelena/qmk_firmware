@@ -1,6 +1,6 @@
 # M65
 
-![M65](https://i.imgur.com/L6P9n0S.png)
+![M65](https://i.imgur.com/L6P9n0Sl.png)
 
 A  (13x5) ortholinear keyboard that can be hand wired or using a pcb.
 
