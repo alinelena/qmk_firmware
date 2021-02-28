@@ -17,7 +17,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include QMK_KEYBOARD_H
 
-#define TAP(keycode) tap_code16(keycode)
 
 enum custom_keycodes {
   M_EXTDISP = SAFE_RANGE,
