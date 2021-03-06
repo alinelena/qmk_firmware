@@ -67,15 +67,7 @@ static inline void led_rse(const bool on){
 #endif
 }
 
-void matrix_init_user(void) {
-#ifdef KEYBOARD_m65_rev1
-  setPinOutput(B13);
-  setPinOutput(B12);
-#endif
-}
-
 void matrix_scan_user(void) {
-
   led_lwr(IS_LAYER_ON(_LWR));
   led_rse(IS_LAYER_ON(_RSE));
 }

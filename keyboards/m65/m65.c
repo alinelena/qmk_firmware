@@ -17,3 +17,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include "m65.h"
+
+void keyboard_pre_init_user(void) {
+#ifdef KEYBOARD_m65_rev1
+  setPinOutput(B13);
+  setPinOutput(B12);
+  writePinLow(B12);
+  writePinLow(B13);
+#endif
+}
