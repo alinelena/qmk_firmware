@@ -68,6 +68,12 @@ static inline void led_rse(const bool on) {
 #endif
 }
 
+static inline void led_caps(const bool on) {
+#ifdef LED_CAPS_LOCK_PIN
+    writePin(LED_CAPS_LOCK_PIN, on);
+#endif
+}
+
 bool led_update_user(led_t led_state) {
     // Disable the default LED update code, so that lock LEDs could be reused to show layer status.
     return false;
@@ -76,6 +82,8 @@ bool led_update_user(led_t led_state) {
 void matrix_scan_user(void) {
     led_lwr(toggle_lwr);
     led_rse(toggle_rse);
+    led_t led_state = host_keyboard_led_state();
+    led_caps(led_state.caps_lock);
     if (layer_state_is(_ADJ)) {
         led_lwr(true);
         led_rse(true);
