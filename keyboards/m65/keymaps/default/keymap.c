@@ -76,9 +76,9 @@ bool led_update_user(led_t led_state) {
 void matrix_scan_user(void) {
     led_lwr(toggle_lwr);
     led_rse(toggle_rse);
-    if (layer_state_is(_ADJ)){
-      led_lwr(true);
-      led_rse(true);
+    if (layer_state_is(_ADJ)) {
+        led_lwr(true);
+        led_rse(true);
     }
 }
 
