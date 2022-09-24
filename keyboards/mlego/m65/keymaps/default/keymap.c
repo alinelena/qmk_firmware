@@ -51,6 +51,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
+    [_QW]  = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [_LWR] = { ENCODER_CCW_CW(RGB_HUD, RGB_HUI) },
+    [_RSE] = { ENCODER_CCW_CW(RGB_VAD, RGB_VAI) },
+    [_ADJ] = { ENCODER_CCW_CW(RGB_RMOD, RGB_MOD) },
+};
+#endif
+
 bool led_update_user(led_t led_state) {
     // Disable the default LED update code, so that lock LEDs could be reused to show layer status.
     return false;
@@ -63,6 +72,7 @@ void matrix_scan_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+
     switch (keycode) {
         case (TT(_LWR)):
             if (!record->event.pressed && record->tap.count == TAPPING_TOGGLE) {
@@ -86,7 +96,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 #ifdef RGBLIGHT_ENABLE
 
-    set_rgb_layers(state);
+   set_rgb_layers(state);
 
 #endif
 
@@ -96,6 +106,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 #ifdef RGBLIGHT_ENABLE
 
 layer_state_t default_layer_state_set_user(layer_state_t state) {
+
     set_default_rgb_layers(state);
     return state;
 }
@@ -103,17 +114,19 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 #endif
 
 void keyboard_post_init_user(void) {
-
 #ifdef RGBLIGHT_ENABLE
 
-    // Enable the LED layers
+  // Enable the LED layers
     rgblight_layers = my_rgb();
 
 #endif
 
 #ifdef OLED_ENABLE
-
     init_timer();
-
 #endif
 }
+
+
+
+
+
