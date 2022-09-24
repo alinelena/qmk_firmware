@@ -27,6 +27,15 @@ enum layer_names {
 #define LOWER TT(_LWR)
 #define RAISE TT(_RSE)
 
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
+    [_QW]  = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+    [_LWR] = { ENCODER_CCW_CW(RGB_HUD, RGB_HUI) },
+    [_RSE] = { ENCODER_CCW_CW(RGB_VAD, RGB_VAI) },
+    [_ADJ] = { ENCODER_CCW_CW(RGB_RMOD, RGB_MOD) },
+};
+#endif
+
 #ifdef RGBLIGHT_ENABLE
 
 const rgblight_segment_t PROGMEM my_qwerty_layer[] = RGBLIGHT_LAYER_SEGMENTS({0, RGBLED_NUM, HSV_PURPLE});
