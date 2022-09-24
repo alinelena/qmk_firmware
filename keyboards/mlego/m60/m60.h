@@ -19,19 +19,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "quantum.h"
 
-#define LAYOUT_ortho_5x12( \
-    K000, K001, K002, K003, K004, K005, K006, K007, K008, K009, K010, K011, \
-    K100, K101, K102, K103, K104, K105, K106, K107, K108, K109, K110, K111, \
-    K200, K201, K202, K203, K204, K205, K206, K207, K208, K209, K210, K211, \
-    K300, K301, K302, K303, K304, K305, K306, K307, K308, K309, K310, K311, \
-    K400, K401, K402, K403, K404, K405, K406, K407, K408, K409, K410, K411  \
-) { \
-    {K000, K001, K002, K003, K004, K005, K006, K007, K008, K009, K010, K011}, \
-    {K100, K101, K102, K103, K104, K105, K106, K107, K108, K109, K110, K111}, \
-    {K200, K201, K202, K203, K204, K205, K206, K207, K208, K209, K210, K211}, \
-    {K300, K301, K302, K303, K304, K305, K306, K307, K308, K309, K310, K311}, \
-    {K400, K401, K402, K403, K404, K405, K406, K407, K408, K409, K410, K411}  \
-}
+enum layer_names {
+    _QW = 0,
+    _LWR,
+    _RSE,
+    _ADJ
+};
+
+#ifdef OLED_ENABLE
+void user_oled_magic(void);
+void render_logo(void);
+void clear_screen(void);
+void init_timer(void);
+#endif
+
+#ifdef RGBLIGHT_ENABLE
+void set_rgb_layers(layer_state_t);
+const rgblight_segment_t * const*  my_rgb(void);
+void set_default_rgb_layers(layer_state_t);
+#endif
+
+
+void toggle_leds(void);
+void set_led_toggle(const uint8_t, const bool);
+
 
 static inline void led_lwr(const bool on) {
 #ifdef LED_NUM_LOCK_PIN
@@ -46,7 +57,8 @@ static inline void led_rse(const bool on) {
 }
 static inline void led_caps(const bool on) {
 #ifdef LED_CAPS_LOCK_PIN
-        writePin(LED_CAPS_LOCK_PIN, !on);
+// logic is inverse on original rpico
+        writePin(LED_CAPS_LOCK_PIN, on);
 #endif
 }
 
