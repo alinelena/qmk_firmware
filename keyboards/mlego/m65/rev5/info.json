@@ -1,16 +1,16 @@
 {
     "manufacturer": "Alin Elena",
-    "keyboard_name": "mlego/m65 rev1",
+    "keyboard_name": "m65 rev5 with rp2040 ",
     "maintainer": "alin elena",
-    "bootloader": "stm32duino",
+    "bootloader": "rp2040",
     "debounce": 5,
     "diode_direction": "COL2ROW",
     "encoder": {
         "enabled": true,
         "rotary": [
             {
-                "pin_a": "A8",
-                "pin_b": "A9",
+                "pin_a": "GP4",
+                "pin_b": "GP5",
                 "resolution": 4
             }
         ]
@@ -22,22 +22,24 @@
         "command": false,
         "console": false,
         "encoder": true,
-        "encoder_map": true,
+         "encoder_map": true,
         "extrakey": true,
         "mousekey": true,
         "nkro": true,
-        "rgblight": true
+        "oled": true,
+        "rgblight": true,
+        "wpm": true
     },
     "indicators": {
-        "caps_lock": "C13",
-        "num_lock": "B12",
-        "scroll_lock": "B13"
+        "caps_lock": "GP25",
+        "num_lock": "GP28",
+        "scroll_lock": "GP27"
     },
     "matrix_pins": {
-        "cols": ["A10", "A15", "B3", "B4", "B5", "B9", "B8", "B7", "B6", "C15", "A0", "A7", "B10"],
-        "rows": ["B11", "B0", "B1", "A2", "A3"]
+        "cols": ["GP1", "GP6", "GP7", "GP8", "GP9", "GP15", "GP14", "GP13", "GP12", "GP11", "GP10", "GP17", "GP21"],
+        "rows": ["GP22", "GP16", "GP18", "GP19", "GP20"]
     },
-    "processor": "STM32F103",
+    "processor": "RP2040",
     "rgblight": {
         "animations": {
             "alternating": true,
@@ -56,17 +58,17 @@
             "enabled": true
         },
         "led_count": 20,
-        "pin": "B15",
+        "pin": "GP0",
         "saturation_steps": 8
-    },
-    "tapping": {
-        "toggle": 2
     },
     "url": "https://gitlab.com/m-lego/m65",
     "usb": {
         "device_version": "0.0.1",
-        "pid": "0x6061",
+        "pid": "0x6063",
         "vid": "0xBABA"
+    },
+    "tapping": {
+        "toggle": 2
     },
     "layouts": {
         "LAYOUT_ortho_5x13": {
