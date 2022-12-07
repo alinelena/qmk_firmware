@@ -6,7 +6,6 @@
     "board": "BLACKPILL_STM32_F401",
     "debounce": 5,
     "diode_direction": "COL2ROW",
-    "diode_direction": "COL2ROW",
         "encoder": {
         "enabled": true,
         "rotary": [
