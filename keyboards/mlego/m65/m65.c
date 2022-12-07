@@ -130,16 +130,16 @@ void user_oled_magic(void) {
 #ifdef UNICODE_COMMON_ENABLE
     oled_write_P(PSTR("\nunicode: "), false);
     switch (get_unicode_input_mode()) {
-      case UC_LNX:
+      case UNICODE_MODE_LINUX:
         oled_write_P(PSTR("Linux"), false);
         break;
-      case UC_MAC:
+      case UNICODE_MODE_MACOS:
         oled_write_P(PSTR("apple"), false);
         break;
-      case UC_WIN:
+      case UNICODE_MODE_WINDOWS:
         oled_write_P(PSTR("windows"), false);
         break;
-      case UC_WINC:
+      case UNICODE_MODE_WINCOMPOSE:
         oled_write_P(PSTR("windows c"), false);
         break;
       default:
