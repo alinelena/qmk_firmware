@@ -1,3 +1,6 @@
+// Copyright 2022 alin m elena (@alinelena)
+// SPDX-License-Identifier: GPL-2.0-or-later
+
 #include "quantum.h"
 
 #include "wait.h"
@@ -29,6 +32,9 @@ void matrix_init_custom(void) {
   setPinInputLow(ROW_2);
 
   spi_init();
+
+  setPinOutput(SPI_LATCH_PIN);
+
   wait_ms(50);
 }
 
