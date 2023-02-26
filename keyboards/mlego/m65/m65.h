@@ -1,4 +1,4 @@
-// Copyright 2020-2023 alin m elena (@alinelena)
+// Copyright 2020-2023 alin m elena (@alinelena, @drFaustroll)
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
@@ -10,7 +10,6 @@ enum unicode_names { la = 0, lA, lb, lB, lc, lC, ld, lD, le, lE, lf, lF, lg, lG,
 #endif
 
 enum layer_names { _QW = 0, _LWR, _RSE, _ADJ };
-
 
 #if defined(OLED_ENABLE)
 void user_oled_magic(void);
