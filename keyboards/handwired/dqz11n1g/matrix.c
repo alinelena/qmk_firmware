@@ -101,7 +101,7 @@ bool matrix_read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
 
     /* Unselect row & wait for all columns signals to go high. */
     unselect_row(current_row);
-    matrix_output_unselect_delay(current_row, current_row_value != 0); 
+    matrix_output_unselect_delay(current_row, current_row_value != 0);
 
     /* Update row in matrix. */
     if (current_row_value != current_matrix[current_row]) {

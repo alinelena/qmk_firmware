@@ -1,4 +1,4 @@
-/* Copyright 2021-2022 alin elena <alin@elena.space>
+/* Copyright 2021-2023 alin elena <alin@elena.space>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
