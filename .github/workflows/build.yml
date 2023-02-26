@@ -1,0 +1,125 @@
+name: Build firmware for mlego
+on:
+  push:
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+jobs:
+  build-firmware:
+    runs-on: ubuntu-latest
+    container: qmkfm/qmk_cli
+    strategy:
+      fail-fast: false
+      matrix:
+        keyboard:
+          - mlego/m65/rev1
+          - mlego/m65/rev2
+          - mlego/m65/rev3
+          - mlego/m65/rev4
+          - mlego/m65/rev5
+          - mlego/m65/rev6
+          - mlego/m65/rev7
+        keymap:
+          - default
+          - default_adv
+          - uk
+        include:
+          - keyboard: mlego/m65/rev7
+            keymap: default_61
+          - keyboard: mlego/m65/rev11
+            keymap: default_knob
+          - keyboard: mlego/m65/rev11
+            keymap: default_knob_adv
+          - keyboard: mlego/m65/rev11
+            keymap: uk_knob
+          - keyboard: mlego/m65/rev9
+            keymap: default_knob
+          - keyboard: mlego/m65/rev9
+            keymap: default_knob_adv
+          - keyboard: mlego/m65/rev9
+            keymap: uk_knob
+          - keyboard: mlego/m65/rev10
+            keymap: default_knob
+          - keyboard: mlego/m65/rev10
+            keymap: default_knob_adv
+          - keyboard: mlego/m65/rev10
+            keymap: uk_knob
+          - keyboard: mlego/m60/rev1
+            keymap: default
+          - keyboard: mlego/m60/rev1
+            keymap: default_adv
+          - keyboard: mlego/m60/rev2
+            keymap: default
+          - keyboard: mlego/m60/rev2
+            keymap: default_adv
+          - keyboard: mlego/m48/rev1
+            keymap: default
+          - keyboard: mlego/m48/rev1
+            keymap: default_adv
+          - keyboard: mlego/m60_split/rev1
+            keymap: default
+          - keyboard: mlego/m60_split/rev2
+            keymap: default
+          - keyboard: mlego/m20/rev1
+            keymap: default
+          - keyboard: mlego/m20/rev1
+            keymap: default_adv
+          - keyboard: mlego/m20/rev2
+            keymap: default_adv_knob
+          - keyboard: mlego/m78/rev1
+            keymap: default
+          - keyboard: mlego/m8/rev1
+            keymap: default
+          - keyboard: tipro/rev3
+            keymap: default_120
+          - keyboard: tipro/rev2
+            keymap: default_96
+          - keyboard: tipro/rev1
+            keymap: default
+          - keyboard: tipro/rev1
+            keymap: default_ansiortho
+          - keyboard: tipro/rev1
+            keymap: default_orthoansi
+          - keyboard: tipro32
+            keymap: default
+          - keyboard: mlego/m78/rev1
+            keymap: default
+          - keyboard: mlego/m78/rev2
+            keymap: default
+          - keyboard: mlego/m78/rev1
+            keymap: uk
+          - keyboard: mlego/m78/rev2
+            keymap: uk
+
+    steps:
+    - name: checkout qmk
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
+        persist-credentials: false
+        submodules: true
+
+    - name: build
+      id: build
+      run: |
+        git config --global --add safe.directory '*'
+        python3 -m pip install -r requirements-dev.txt
+        make git-submodule
+        #if [ -d keyboards/${{ matrix.keyboard}}/keymaps/${{ matrix.keymap }} ]; then
+          qmk compile -kb ${{ matrix.keyboard}} -km ${{ matrix.keymap }}
+
+          TARGET="$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{matrix.keymap}}"
+          echo "artifact-name=${TARGET}" >> $GITHUB_OUTPUT
+          echo "artifact-name: ${{ steps.build.outputs.artifact-name }}"
+        #fi
+
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: "${{ steps.build.outputs.artifact-name }}"
+        path: |
+          *.hex
+          *.bin
+          *.uf2
+      continue-on-error: true
