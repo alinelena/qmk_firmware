@@ -33,14 +33,16 @@ void touch_spi_stop(spi_touch_comms_config_t comms_config) {
     sipo_write_high(comms_config.chip_select_pin);
 }
 
-static inline void read_data(int16_t *x, int16_t *y, spi_touch_comms_config_t comms_config) {
+static inline int16_t read_coord(uint8_t cmd, spi_touch_comms_config_t comms_config) {
     sipo_write_low(comms_config.chip_select_pin);
-    custom_spi_write(comms_config.x_cmd, TOUCH_SPI_DRIVER_ID);
-    *x = ((custom_spi_write(0, TOUCH_SPI_DRIVER_ID) << 8) | custom_spi_write(0, TOUCH_SPI_DRIVER_ID)) >> 3;
-
-    custom_spi_write(comms_config.y_cmd, TOUCH_SPI_DRIVER_ID);
-    *y = ((custom_spi_write(0, TOUCH_SPI_DRIVER_ID) << 8) | custom_spi_write(0, TOUCH_SPI_DRIVER_ID)) >> 3;
+    custom_spi_write(cmd, TOUCH_SPI_DRIVER_ID);
     sipo_write_high(comms_config.chip_select_pin);
+
+    sipo_write_low(comms_config.chip_select_pin);
+    int16_t coord = ((custom_spi_write(0, TOUCH_SPI_DRIVER_ID) << 8) | custom_spi_write(0, TOUCH_SPI_DRIVER_ID)) >> 3;
+    sipo_write_high(comms_config.chip_select_pin);
+
+    return coord;
 }
 
 touch_report_t get_spi_touch_report(touch_device_t device, bool check_irq) {
@@ -70,18 +72,13 @@ touch_report_t get_spi_touch_report(touch_device_t device, bool check_irq) {
     wait_ms(20);
 
     // Read data from sensor, 0-rotation based
-    int16_t x = 0;
-    int16_t y = 0;
-    read_data(&x, &y, comms_config);
-
-    ts_dprintf("Read from SPI | x: %d, y: %d\n", x, y);
+    int16_t x = read_coord(driver->spi_config.x_cmd, comms_config);
+    int16_t y = read_coord(driver->spi_config.y_cmd, comms_config);
 
     // Handles edge cases, scaling, offset, upside down & rotation
-    report_from(x, y, driver, report);
+    report_from(x, y, driver, &report);
 
     touch_spi_stop(comms_config);
-
-    ts_dprintf("Scaled down and rotated | x: %d, y: %d\n", x, y);
 
     return report;
 }

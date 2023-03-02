@@ -84,8 +84,6 @@ void housekeeping_task_user(void) {
     uint8_t payload[PAYLOAD_SIZE] = { ILI9341_ID, ili9341_touch_report.x & 0xFF, ili9341_touch_report.x >> 8, ili9341_touch_report.y & 0xFF, ili9341_touch_report.y >> 8 };
     xap_broadcast(0x03, payload, sizeof(payload)); // 3 -> user-level message
 
-    dprintf("x: %d, y: %d\n", ili9341_touch_report.x, ili9341_touch_report.y);
-
     ili9341_release_notified = false;
 
 #    if defined(ONE_HAND_ENABLE)

@@ -472,6 +472,14 @@ int16_t qp_drawtext_recolor(painter_device_t device, uint16_t x, uint16_t y, pai
 #    include "qp_ssd1351.h"
 #endif // QUANTUM_PAINTER_SSD1351_ENABLE
 
+#ifdef QUANTUM_PAINTER_IL91874_ENABLE
+#    include "qp_il91874.h"
+#endif // QUANTUM_PAINTER_IL91874_ENABLE
+
+#ifdef QUANTUM_PAINTER_SSD1680_ENABLE
+#    include "qp_ssd1680.h"
+#endif // QUANTUM_PAINTER_SSD1680_ENABLE
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Quantum Painter Extras
 

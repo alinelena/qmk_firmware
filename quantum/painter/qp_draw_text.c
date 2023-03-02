@@ -164,7 +164,7 @@ typedef bool (*code_point_handler)(qff_font_handle_t *qff_font, uint32_t code_po
 
 // Helper that sets up the palette (if required) and returns the offset in the stream that the data starts
 static inline bool qp_drawtext_prepare_font_for_render(painter_device_t device, qff_font_handle_t *qff_font, qp_pixel_t fg_hsv888, qp_pixel_t bg_hsv888, uint32_t *data_offset) {
-    struct painter_driver_t *driver = (struct painter_driver_t *)device;
+    painter_driver_t *driver = (painter_driver_t *)device;
 
     // Drop out if we can't actually place the data we read out anywhere
     if (!data_offset) {
@@ -349,7 +349,7 @@ struct code_point_iter_drawglyph_state {
 // Codepoint handler callback: drawing
 static inline bool qp_font_code_point_handler_drawglyph(qff_font_handle_t *qff_font, uint32_t code_point, uint8_t width, uint8_t height, void *cb_arg) {
     struct code_point_iter_drawglyph_state *state  = (struct code_point_iter_drawglyph_state *)cb_arg;
-    struct painter_driver_t *               driver = (struct painter_driver_t *)state->device;
+    painter_driver_t *               driver = (painter_driver_t *)state->device;
 
     // Reset the input state's RLE mode -- the stream should already be correctly positioned by qp_iterate_code_points()
     state->input_state->rle.mode = MARKER_BYTE; // ignored if not using RLE
@@ -405,7 +405,7 @@ int16_t qp_drawtext(painter_device_t device, uint16_t x, uint16_t y, painter_fon
 
 int16_t qp_drawtext_recolor(painter_device_t device, uint16_t x, uint16_t y, painter_font_handle_t font, const char *str, uint8_t hue_fg, uint8_t sat_fg, uint8_t val_fg, uint8_t hue_bg, uint8_t sat_bg, uint8_t val_bg) {
     qp_dprintf("qp_drawtext_recolor: entry\n");
-    struct painter_driver_t *driver = (struct painter_driver_t *)device;
+    painter_driver_t *driver = (painter_driver_t *)device;
     if (!driver->validate_ok) {
         qp_dprintf("qp_drawtext_recolor: fail (validation_ok == false)\n");
         return 0;

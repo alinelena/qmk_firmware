@@ -3,6 +3,7 @@ VPATH += $(USER_PATH)/eeprom \
          $(USER_PATH)/painter/images \
          $(USER_PATH)/painter/fonts \
          $(USER_PATH)/registers \
+         $(USER_PATH)/rgb \
          $(USER_PATH)/spi \
          $(USER_PATH)/touch
 

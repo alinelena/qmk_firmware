@@ -53,5 +53,5 @@ typedef struct touch_driver_t {
 
 
 bool touch_spi_init(touch_device_t device);
-void report_from(int16_t x, int16_t y, touch_driver_t *driver, touch_report_t report);
+void report_from(int16_t x, int16_t y, touch_driver_t *driver, touch_report_t *report);
 touch_report_t get_spi_touch_report(touch_device_t device, bool check_irq);

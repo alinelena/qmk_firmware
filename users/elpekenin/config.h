@@ -3,6 +3,5 @@
 
 #pragma once
 
-#include "audio_config.h"
 #include "qp_config.h"
 #include "rgb_matrix_config.h"

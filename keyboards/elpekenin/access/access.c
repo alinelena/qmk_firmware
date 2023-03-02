@@ -24,7 +24,20 @@ one_hand_movement_t one_hand_movement;
 #if defined(INIT_EE_HANDS_LEFT)
 #    include "qp_eink_panel.h"
 painter_device_t il91874;
-uint8_t il91874_buffer[EINK_3C_BYTES_REQD(IL91874_WIDTH, IL91874_HEIGHT)];
+uint8_t il91874_buffer[EINK_BYTES_REQD(IL91874_WIDTH, IL91874_HEIGHT)];
+
+void draw_commit(painter_device_t device) {
+    painter_driver_t *    driver     = (painter_driver_t *)device;
+    painter_font_handle_t font       = qp_fonts[0];
+    uint16_t              dev_width  = driver->panel_width;
+    uint16_t              dev_height = driver->panel_height;
+    int16_t               hash_width = qp_textwidth(font, QMK_GIT_HASH);
+
+    uint16_t x = dev_width - hash_width;
+    uint16_t y = dev_height-font->line_height;
+
+    qp_drawtext_recolor(device, x, y, font, QMK_GIT_HASH, HSV_BLACK, HSV_WHITE);
+}
 
 uint32_t flush_display(uint32_t trigger_time, void *device) {
     qp_flush((painter_device_t *)device);
@@ -41,9 +54,6 @@ painter_device_t ili9341;
 touch_device_t ili9341_touch;
 bool ili9341_irq = true;
 #endif // TOUCH_SCREEN_ENABLE && INIT_EE_HANDS_RIGHT
-
-// Version info
-char *commit_hash = QMK_GIT_HASH;
 
 uint32_t deferred_init(uint32_t trigger_time, void *cb_arg) {
     dprint("---------- Init phase ----------\n");
@@ -67,20 +77,21 @@ uint32_t deferred_init(uint32_t trigger_time, void *cb_arg) {
         IL91874_CS_PIN
     );
 
-    il91874 = qp_il91874_no_sram_make_spi_device(_IL91874_WIDTH, _IL91874_HEIGHT, IL91874_CS_PIN, SCREENS_DC_PIN, IL91874_RST_PIN, SCREENS_SPI_DIV, SCREENS_SPI_MODE, true, (void *)il91874_buffer);
+    il91874 = qp_il91874_make_spi_device(_IL91874_WIDTH, _IL91874_HEIGHT, IL91874_CS_PIN, SCREENS_DC_PIN, IL91874_RST_PIN, SCREENS_SPI_DIV, SCREENS_SPI_MODE, (void *)il91874_buffer);
     load_display(il91874);
     qp_init(il91874, IL91874_ROTATION);
 
     // draw on it after timeout, preventing damage if replug fast
-    eink_panel_dc_reset_with_sram_painter_device_t *eink = (eink_panel_dc_reset_with_sram_painter_device_t *)il91874;
-    defer_exec(eink->eink_base.timeout, flush_display, (void *)eink);
+    eink_panel_dc_reset_painter_device_t *eink = (eink_panel_dc_reset_painter_device_t *)il91874;
+    defer_exec(eink->timeout, flush_display, (void *)eink);
 
-    // show EEPROM state (enable features)
+    // show EEPROM state (enabled features)
 #    if defined(CUSTOM_EEPROM_ENABLE)
-    // enabled features based on `#define`s on current firmware
+    // see features on current firmware
     uint32_t current_config = custom_eeprom_generate();
 
-    // if any change has ocurred, we could run some logic
+    // if current firmware contains any change, we could run some logic here
+    // so far, we just update EEPROM value
     if (current_config != eeconfig_read_user()) {
         dprintf("EEPROM config has changed\n");
         eeconfig_update_user(current_config);
@@ -89,10 +100,7 @@ uint32_t deferred_init(uint32_t trigger_time, void *cb_arg) {
     custom_eeprom_draw_config((void *)il91874);
 #    endif // CUSTOM_EEPROM_ENABLE
 
-    // show commit's hash
-    painter_font_handle_t font       = qp_fonts[0];
-    int16_t               hash_width = qp_textwidth(font, commit_hash);
-    qp_drawtext_recolor(il91874, IL91874_WIDTH-hash_width, IL91874_HEIGHT-font->line_height, font, commit_hash, HSV_BLACK, HSV_WHITE);
+    draw_commit(il91874);
 
     dprint("IL91874 initialised\n");
 #else // --------------------  Right half --------------------

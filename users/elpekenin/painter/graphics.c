@@ -8,10 +8,11 @@ painter_device_t qp_displays[QUANTUM_PAINTER_NUM_DISPLAYS] = {}; // Has to be fi
 painter_font_handle_t qp_fonts[QUANTUM_PAINTER_NUM_FONTS] = {};
 painter_image_handle_t qp_images[QUANTUM_PAINTER_NUM_IMAGES] = {};
 
-// Fonts
+// Fonts, in alphabetical order to easier checking
 #include "fira_code.qff.h"
 
-// Images
+// Images, in alphabetical order to easier checking
+#include "ab-testing.qgf.h"
 #include "lightbulb_off_outline.qgf.h"
 #include "lightbulb_on_20.qgf.h"
 #include "lightbulb_on_40.qgf.h"
@@ -63,6 +64,7 @@ void _load_image(const uint8_t *img) {
 void load_qp_resources(void) {
     load_font(font_fira_code);
 
+    load_image(gfx_ab_testing);
     load_image(gfx_lightbulb_off_outline);
     load_image(gfx_lightbulb_on_20);
     load_image(gfx_lightbulb_on_40);

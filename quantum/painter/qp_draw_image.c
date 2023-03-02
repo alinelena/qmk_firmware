@@ -124,7 +124,7 @@ typedef struct qgf_frame_info_t {
 } qgf_frame_info_t;
 
 static bool qp_drawimage_prepare_frame_for_stream_read(painter_device_t device, qgf_image_handle_t *qgf_image, uint16_t frame_number, qp_pixel_t fg_hsv888, qp_pixel_t bg_hsv888, qgf_frame_info_t *info) {
-    struct painter_driver_t *driver = (struct painter_driver_t *)device;
+    painter_driver_t *driver = (painter_driver_t *)device;
 
     // Drop out if we can't actually place the data we read out anywhere
     if (!info) {
@@ -209,7 +209,7 @@ static bool qp_drawimage_prepare_frame_for_stream_read(painter_device_t device, 
 
 static bool qp_drawimage_recolor_impl(painter_device_t device, uint16_t x, uint16_t y, painter_image_handle_t image, int frame_number, qgf_frame_info_t *frame_info, qp_pixel_t fg_hsv888, qp_pixel_t bg_hsv888) {
     qp_dprintf("qp_drawimage_recolor: entry\n");
-    struct painter_driver_t *driver = (struct painter_driver_t *)device;
+    painter_driver_t *driver = (painter_driver_t *)device;
     if (!driver->validate_ok) {
         qp_dprintf("qp_drawimage_recolor: fail (validation_ok == false)\n");
         return false;

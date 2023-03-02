@@ -13,7 +13,7 @@
 
 // Driver vtable with extras
 struct tft_panel_dc_reset_painter_driver_vtable_t {
-    struct painter_driver_vtable_t base; // must be first, so it can be cast to/from the painter_driver_vtable_t* type
+    painter_driver_vtable_t base; // must be first, so it can be cast to/from the painter_driver_vtable_t* type
 
     // Number of bytes for transmitting x/y coordinates
     uint8_t num_window_bytes;
@@ -33,7 +33,7 @@ struct tft_panel_dc_reset_painter_driver_vtable_t {
 
 // Device definition
 typedef struct tft_panel_dc_reset_painter_device_t {
-    struct painter_driver_t base; // must be first, so it can be cast to/from the painter_device_t* type
+    painter_driver_t base; // must be first, so it can be cast to/from the painter_device_t* type
 
     union {
 #ifdef QUANTUM_PAINTER_SPI_ENABLE

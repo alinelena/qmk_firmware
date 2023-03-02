@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "config_common.h"
-
 #if !defined(INIT_EE_HANDS_LEFT) && !defined(INIT_EE_HANDS_RIGHT)
 #    error "You need to configure EE_HANDS"
 #endif
