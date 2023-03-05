@@ -59,7 +59,7 @@ void qp_surface_rotate_xy(painter_rotation_t rotation, uint16_t width, uint16_t 
             new_y = *y;
             break;
         case QP_ROTATION_90:
-            new_x = height - 1 - *y;
+            new_x = width - 1 - *y;
             new_y = *x;
             break;
         case QP_ROTATION_180:
@@ -68,7 +68,7 @@ void qp_surface_rotate_xy(painter_rotation_t rotation, uint16_t width, uint16_t 
             break;
         case QP_ROTATION_270:
             new_x = *y;
-            new_y = width - 1 - *x;
+            new_y = height - 1 - *x;
             break;
     }
 

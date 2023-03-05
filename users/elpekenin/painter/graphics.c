@@ -10,6 +10,7 @@ painter_image_handle_t qp_images[QUANTUM_PAINTER_NUM_IMAGES] = {};
 
 // Fonts, in alphabetical order to easier checking
 #include "fira_code.qff.h"
+#include "thintel15.qff.h"
 
 // Images, in alphabetical order to easier checking
 #include "ab-testing.qgf.h"
@@ -20,6 +21,8 @@ painter_image_handle_t qp_images[QUANTUM_PAINTER_NUM_IMAGES] = {};
 #include "lightbulb_on_80.qgf.h"
 #include "lightbulb_on.qgf.h"
 #include "pokeball.qgf.h"
+#include "qmk_icon_48.qgf.h"
+#include "elephant.qgf.h"
 
 // =======
 // Load resources
@@ -63,6 +66,7 @@ void _load_image(const uint8_t *img) {
 
 void load_qp_resources(void) {
     load_font(font_fira_code);
+    load_font(font_thintel15);
 
     load_image(gfx_ab_testing);
     load_image(gfx_lightbulb_off_outline);
@@ -72,4 +76,6 @@ void load_qp_resources(void) {
     load_image(gfx_lightbulb_on_80);
     load_image(gfx_lightbulb_on);
     load_image(gfx_pokeball);
+    load_image(gfx_qmk_icon_48);
+    load_image(gfx_elephant);
 }

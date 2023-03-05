@@ -1,204 +1,162 @@
-/*
-Copyright 2021-2022 Alin M Elena <alinm.elena@gmail.com>
+// Copyright 2020-2023 alin m elena (@alinelena, @drFaustroll)
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+#include QMK_KEYBOARD_H
 
 #include "m65.h"
 
-// let us assume we start with both layers off
-static bool toggle_lwr = false;
-static bool toggle_rse = false;
+#if defined(QUANTUM_PAINTER_ENABLE)
+#include "color.h"
+#include "graphics.h"
+#include "qp.h"
+#include "qp_eink_panel.h"
+#include "qp_surface.h"
+#include "version.h"
+painter_device_t ssd1680;
+uint8_t ssd1680_buffer[EINK_BYTES_REQD(SSD1680_WIDTH, SSD1680_HEIGHT)] = {0};
 
-#ifdef RGBLIGHT_ENABLE
+uint32_t flush_display(uint32_t trigger_time, void *device) {
+    qp_flush((painter_device_t *)device);
+    return 0;
+}
+#if defined(CUSTOM_EEPROM_ENABLE)
+#    include "custom_eeprom.h"
+#endif // CUSTOM_EEPROM_ENABLE
 
-const rgblight_segment_t PROGMEM my_qwerty_layer[] = RGBLIGHT_LAYER_SEGMENTS({0, RGBLED_NUM, HSV_PURPLE});
-const rgblight_segment_t PROGMEM my_lwr_layer[]    = RGBLIGHT_LAYER_SEGMENTS({0, RGBLED_NUM, HSV_CYAN});
-const rgblight_segment_t PROGMEM my_rse_layer[]    = RGBLIGHT_LAYER_SEGMENTS({0, RGBLED_NUM, HSV_RED});
-const rgblight_segment_t PROGMEM my_adj_layer[]    = RGBLIGHT_LAYER_SEGMENTS({0, RGBLED_NUM, HSV_GREEN});
 
-const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(my_qwerty_layer, my_lwr_layer, my_rse_layer, my_adj_layer);
+#define QMK_BH  QMK_BUILDDATE "-" QMK_GIT_HASH
+char build_date[] = QMK_BUILDDATE;
+char commit_hash[] = QMK_GIT_HASH;
+char bh[] = QMK_BH;
 
 #endif
 
-#ifdef OLED_ENABLE
+uint32_t deferred_init(uint32_t trigger_time, void *cb_arg) {
+    dprint("---------- Init phase ----------\n");
 
-static uint32_t oled_logo_timer = 0;
-static bool clear_logo = true;
-static const char PROGMEM m65_logo[] = {
-    0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5, 0xa5,
-    0x80, 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f, 0x90, 0x91, 0x92, 0x93, 0x94,
-    0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa, 0xab, 0xac, 0xad, 0xae, 0xaf, 0xb0, 0xb1, 0xb2, 0xb3, 0xb4,
-    0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xcb, 0xcc, 0xcd, 0xce, 0xcf, 0xd0, 0xd1, 0xd2, 0xd3, 0xd4,
-    0};
+#if defined(QUANTUM_PAINTER_ENABLE)
 
-#endif
 
-#ifdef RGBLIGHT_ENABLE
+    wait_ms(1500); //Let screens draw some power
+    load_qp_resources();
 
-void set_rgb_layers(layer_state_t state){
 
-    rgblight_set_layer_state(0, layer_state_cmp(state, _QW));
-    rgblight_set_layer_state(1, layer_state_cmp(state, _LWR));
-    rgblight_set_layer_state(2, layer_state_cmp(state, _RSE));
-    rgblight_set_layer_state(3, layer_state_cmp(state, _ADJ));
+    ssd1680 = qp_ssd1680_make_spi_device(_SSD1680_WIDTH, _SSD1680_HEIGHT, EINK_CS_PIN, EINK_DC_PIN, EINK_RST_PIN, SPI_DIVISOR, SPI_MODE, (void *)ssd1680_buffer);
+    load_display(ssd1680);
+    qp_init(ssd1680, SSD1680_ROTATION);
 
-}
 
-void set_default_rgb_layers(layer_state_t state){
-    rgblight_set_layer_state(0, layer_state_cmp(state, _QW));
-}
+    // show EEPROM state (enable features)
+#    if defined(CUSTOM_EEPROM_ENABLE)
+    // enabled features based on `#define`s on current firmware
+    uint32_t current_config = custom_eeprom_generate();
 
-const rgblight_segment_t * const* my_rgb(void){
-    return my_rgb_layers;
-}
-
-#endif
-
-void set_led_toggle(const uint8_t layer, const bool state){
-
-    switch (layer) {
-        case _LWR:
-          toggle_lwr = state;
-          break;
-        case _RSE:
-          toggle_rse = state;
-          break;
-        default:
-          break;
+    // if any change has ocurred, we could run some logic
+    if (current_config != eeconfig_read_user()) {
+        dprintf("EEPROM config has changed\n");
+        eeconfig_update_user(current_config);
+        custom_eeprom_draw_config((void *)ssd1680);
     }
+
+#    endif // CUSTOM_EEPROM_ENABLE
+
+    dprint("Quantum painter devices initialised\n");
+#ifdef EINK_BWR
+#define color HSV_RED
+#else
+#define color HSV_BLACK
+#endif
+
+#if (SSD1680_ROTATION == 0 || SSD1680_ROTATION == 2)
+
+    qp_rect(ssd1680, 0, 0, SSD1680_WIDTH-7, SSD1680_HEIGHT-1, HSV_WHITE, true);
+    qp_drawimage_recolor(ssd1680, 40, SSD1680_HEIGHT/2-70, qp_images[7], color, HSV_WHITE);
+    qp_drawimage_recolor(ssd1680, 0, 110, qp_images[8], HSV_WHITE, HSV_BLACK);
+    qp_rect(ssd1680, 0, 0, SSD1680_WIDTH-7, SSD1680_HEIGHT-1, HSV_BLACK, false);
+    char hello[] = "QMK";
+    int16_t               hello_width = qp_textwidth(qp_fonts[0], hello);
+    qp_drawtext_recolor(ssd1680, SSD1680_WIDTH-hello_width-10, 5, qp_fonts[0],hello,color,HSV_WHITE);
+    int16_t               hash_width = qp_textwidth(qp_fonts[0], commit_hash);
+    qp_drawtext_recolor(ssd1680, SSD1680_WIDTH-hash_width-10, 5+qp_fonts[0]->line_height, qp_fonts[0], commit_hash, HSV_BLACK, HSV_WHITE);
+    int16_t               build_width = qp_textwidth(qp_fonts[1], build_date);
+    qp_drawtext_recolor(ssd1680, SSD1680_WIDTH-build_width-10, 5+2.25*qp_fonts[1]->line_height,qp_fonts[1], build_date, color, HSV_WHITE);
+#else
+    qp_rect(ssd1680, 0, 6, SSD1680_WIDTH-1, SSD1680_HEIGHT-1, HSV_WHITE, true);
+    qp_rect(ssd1680, 0, 6, SSD1680_HEIGHT-1, SSD1680_WIDTH-1, HSV_BLACK, false);
+    qp_rect(ssd1680, 2, 8, SSD1680_HEIGHT-3, SSD1680_WIDTH-3, color, false);
+    char hello[] = "QMK";
+    int16_t               hello_width = qp_textwidth(qp_fonts[0], hello);
+    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-hello_width-10, qp_fonts[0]->line_height, qp_fonts[0],hello,color,HSV_WHITE);
+    qp_drawimage_recolor(ssd1680, 40, 20, qp_images[7], color, HSV_WHITE);
+    qp_drawimage_recolor(ssd1680, 110, 30, qp_images[8], HSV_WHITE, HSV_BLACK);
+    int16_t               bh_width = qp_textwidth(qp_fonts[1], bh);
+    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-bh_width-10, SSD1680_WIDTH-1.25*qp_fonts[1]->line_height , qp_fonts[1], bh, HSV_BLACK, HSV_WHITE);
+#endif
+    eink_panel_dc_reset_painter_device_t *eink = (eink_panel_dc_reset_painter_device_t *)ssd1680;
+    defer_exec(eink->timeout, flush_display, (void *)ssd1680);
+    dprint("Quantum painter ready\n");
+#endif // QUANTUM_PAINTER_ENABLE
+
+
+    dprint("\n---------- User code ----------\n");
+
+    // =======
+    // Call user code
+    keyboard_post_init_user();
+
+    return 0;
 }
+void toggle_leds(const bool toggle_lwr, const bool toggle_rse) {
+#if defined(QUANTUM_PAINTER_ENABLE)
+    static uint32_t last_draw = 0;
+    if (timer_elapsed32(last_draw) > 10000) { // Throttle to 30fps
+        last_draw = timer_read32();
+    switch (get_highest_layer(layer_state)) {
+        case _QW:
+          {
+    char hello[] = "Layer: default";
+    int16_t               hello_width = qp_textwidth(qp_fonts[1], hello);
+    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-hello_width-10, SSD1680_WIDTH-5*qp_fonts[1]->line_height , qp_fonts[1], hello, HSV_BLACK, HSV_WHITE);
+                 }
+    break;
+        case _LWR:
+            {
+    char hello[] = "Layer: lower";
+    int16_t               hello_width = qp_textwidth(qp_fonts[1], hello);
+    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-hello_width-10, SSD1680_WIDTH-5*qp_fonts[1]->line_height , qp_fonts[1], hello, HSV_BLACK, HSV_WHITE);
+            }
+    break;
+        case _RSE:{
+    char hello[] = "Layer:raise";
+    int16_t               hello_width = qp_textwidth(qp_fonts[1], hello);
+    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-hello_width-10, SSD1680_WIDTH-5*qp_fonts[1]->line_height , qp_fonts[1], hello, HSV_BLACK, HSV_WHITE);
+    }
+    break;
+        case _ADJ:
+            {
+    char hello[] = "Layer: adjust";
+    int16_t               hello_width = qp_textwidth(qp_fonts[1], hello);
+    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-hello_width-10, SSD1680_WIDTH-5*qp_fonts[1]->line_height , qp_fonts[1], hello, HSV_BLACK, HSV_WHITE);
+   }
+    break;
+        default:
+    }
+    }
 
-void toggle_leds(void){
-
+#endif
     led_lwr(toggle_lwr);
     led_rse(toggle_rse);
-    led_t led_state = host_keyboard_led_state();
-    led_caps(led_state.caps_lock);
     if (layer_state_is(_ADJ)) {
         led_lwr(true);
         led_rse(true);
     }
-
 }
 
-#ifdef ENCODER_ENABLE
+void keyboard_post_init_kb(void) {
+    init_lwr_rse_led();
 
-#    define MEDIA_KEY_DELAY 10
-
-void my_encoders(const uint8_t index, const bool clockwise) {
-    if (index == 0) { /* First encoder */
-        if (IS_LAYER_ON(_LWR)) {
-            if (clockwise) {
-                rgblight_decrease_val_noeeprom();
-            } else {
-                rgblight_increase_val_noeeprom();
-            }
-        } else if (IS_LAYER_ON(_RSE)) {
-            if (clockwise) {
-                rgblight_decrease_hue_noeeprom();
-            } else {
-                rgblight_increase_hue_noeeprom();
-            }
-
-        } else {
-            if (clockwise) {
-                tap_code_delay(KC_VOLD, MEDIA_KEY_DELAY);
-            } else {
-                tap_code_delay(KC_VOLU, MEDIA_KEY_DELAY);
-            }
-        }
-    }
-}
-
-bool encoder_update_kb(uint8_t index, bool clockwise) {
-    if (!encoder_update_user(index, clockwise)) { return false; }
-    my_encoders(index, clockwise);
-    return false;
-}
-
+#if defined(QUANTUM_PAINTER_ENABLE)
+    defer_exec(INIT_DELAY, deferred_init, NULL);
 #endif
-
-#ifdef OLED_ENABLE
-
-void init_timer(void){
-   oled_logo_timer = timer_read32();
-};
-
-void user_oled_magic(void) {
-    // Host Keyboard Layer Status
-    oled_write_P(PSTR("Layer: "), false);
-
-    switch (get_highest_layer(layer_state)) {
-        case _QW:
-            oled_write_P(PSTR("Default\n"), false);
-            break;
-        case _LWR:
-            oled_write_P(PSTR("Lower\n"), false);
-            break;
-        case _RSE:
-            oled_write_P(PSTR("Raise\n"), false);
-            break;
-        case _ADJ:
-            oled_write_P(PSTR("ADJ\n"), false);
-            break;
-        default:
-            // Or use the write_ln shortcut over adding '\n' to the end of your string
-            oled_write_ln_P(PSTR("Undefined"), false);
-    }
-
-    // Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.num_lock ? PSTR("Lower ") : PSTR("    "), false);
-    oled_write_P(led_state.scroll_lock ? PSTR("Raise ") : PSTR("    "), false);
-    oled_write_P(led_state.caps_lock ? PSTR("CapsLock ") : PSTR("    "), false);
-#ifdef WPM_ENABLE
-    oled_write_P(PSTR("\nwpm: "), false);
-    uint8_t wpm = get_current_wpm();
-    oled_write_P(wpm != 0 ? get_u8_str(wpm,' ') : PSTR("   "), false);
-#endif
+    keyboard_post_init_user();
 }
-
-void render_logo(void) {
-    oled_write_P(m65_logo, false);
-}
-
-void clear_screen(void) {
-    if (clear_logo){
-      for (uint8_t i = 0; i < OLED_DISPLAY_HEIGHT; ++i) {
-        for (uint8_t j = 0; j < OLED_DISPLAY_WIDTH; ++j) {
-          oled_write_raw_byte(0x0, i*OLED_DISPLAY_WIDTH + j);
-        }
-      }
-      clear_logo = false;
-    }
-}
-
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-    return OLED_ROTATION_180;
-}
-
-#    define SHOW_LOGO 5000
-bool oled_task_kb(void) {
-    if (!oled_task_user()) { return false; }
-    if ((timer_elapsed32(oled_logo_timer) < SHOW_LOGO)){
-        render_logo();
-    }else{
-      clear_screen();
-      user_oled_magic();
-    }
-    return false;
-}
-
-#endif

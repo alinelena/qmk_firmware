@@ -86,7 +86,7 @@ static bool qp_surface_append_pixels_mono1bpp(painter_device_t device, uint8_t *
     for (uint32_t i = 0; i < pixel_count; ++i) {
         uint32_t pixel_num   = pixel_offset + i;
         uint32_t byte_offset = pixel_num / 8;
-        uint8_t  bit_offset  = pixel_num % 8;
+        uint8_t  bit_offset  = 7 - pixel_num % 8;
         if (palette[palette_indices[i]].mono) {
             target_buffer[byte_offset] |= (1 << bit_offset);
         } else {
