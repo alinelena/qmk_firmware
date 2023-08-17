@@ -77,3 +77,4 @@ void load_qp_resources(void) {
     load_image(gfx_qmk_icon_48);
     load_image(gfx_elephant);
 }
+

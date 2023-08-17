@@ -301,7 +301,7 @@ painter_device_t qp_ssd1680_make_spi_device(uint16_t panel_width, uint16_t panel
             driver->base.comms_config                              = &driver->spi_dc_reset_config;
             driver->spi_dc_reset_config.spi_config.chip_select_pin = chip_select_pin;
             driver->spi_dc_reset_config.spi_config.divisor         = spi_divisor;
-            driver->spi_dc_reset_config.spi_config.lsb_first       = true;
+            driver->spi_dc_reset_config.spi_config.lsb_first       = false;
             driver->spi_dc_reset_config.spi_config.mode            = spi_mode;
             driver->spi_dc_reset_config.dc_pin                     = dc_pin;
             driver->spi_dc_reset_config.reset_pin                  = reset_pin;
