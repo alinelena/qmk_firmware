@@ -12,13 +12,12 @@ def kle2qmk(kle):
         for key in row:
             if key['decal']:
                 continue
-
             qmk_key = OrderedDict(
                 label="",
                 x=key['column'],
                 y=key['row'],
             )
-
+            qmk_key['matrix']=key['matrix']
             if key['width'] != 1:
                 qmk_key['w'] = key['width']
             if key['height'] != 1:
