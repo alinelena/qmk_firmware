@@ -14,9 +14,14 @@ class KLE2xy(list):
         self.name = name
         self.invert_y = invert_y
         self.key_width = Decimal('19.05')
-        self.key_skel = {'decal': False, 'border_color': 'none', 'keycap_profile': '', 'keycap_color': 'grey', 'label_color': 'black', 'label_size': 3, 'label_style': 4, 'width': Decimal('1'), 'height': Decimal('1')}
+        self.key_height = Decimal('19.05')
+        self.key_skel = {'decal': False, 'border_color': 'none', 'keycap_profile': '', 'keycap_color': 'grey', 'label_color':
+                         'black', 'label_size': 3, 'label_style': 4, 'width': Decimal('1'), 'height': Decimal('1'),'matrix':
+                         [0,0], 'xmin':Decimal('1.0'),  'xmax':Decimal('1.0'), 'ymin':Decimal('1.0'), 'ymax':Decimal('1.0') }
         self.rows = Decimal(0)
         self.columns = Decimal(0)
+        self.no_rows = 0
+        self.no_cols = 0
 
         if layout:
             self.parse_layout(layout)
@@ -62,15 +67,17 @@ class KLE2xy(list):
 
         for row_num, row in enumerate(layout):
             self.append([])
-
             # Process the current row
             for key in row:
                 if isinstance(key, dict):
                     if 'w' in key and key['w'] != Decimal(1):
                         current_key['width'] = Decimal(key['w'])
-                    if 'w2' in key and 'h2' in key and key['w2'] == 1.5 and key['h2'] == 1:
+                    if ('w2' in key and 'h2' in key and key['w2'] == 1.5 and key['h2'] == 1) or ('w2' in key and 'h2' in key and key['w2'] == 1.25 and key['h2'] == 1):
                         # FIXME: ISO Key uses these params: {x:0.25,w:1.25,h:2,w2:1.5,h2:1,x2:-0.25}
                         current_key['isoenter'] = True
+                    if ('w2' in key and 'h2' in key and key['w2'] == 2.25 and key['h2'] == 1) :
+                        # FIXME: BAE Key uses these params: {w:1.5,h:2,w2:2.25,h2:1,x2:-0.75,y2:1}
+                        current_key['baeenter'] = True
                     if 'h' in key and key['h'] != Decimal(1):
                         current_key['height'] = Decimal(key['h'])
                     if 'a' in key:
@@ -94,17 +101,21 @@ class KLE2xy(list):
                         current_row += Decimal(key['y'])
                     if 'd' in key:
                         current_key['decal'] = True
-
                 else:
                     current_key['name'] = key
                     current_key['row'] = round(current_row, 2)
                     current_key['column'] = round(current_col, 2)
-
                     # x,y (units mm) is the center of the key
                     x_center = current_col + current_key['width'] / 2
                     y_center = current_row + current_key['height'] / 2
                     current_key['x'] = x_center * self.key_width
-                    current_key['y'] = y_center * self.key_width
+                    current_key['y'] = y_center * self.key_height
+
+                    current_key['matrix'] = [ row_num , int(x_center) ]
+                    current_key['xmin'] = current_col * self.key_width
+                    current_key['ymin'] = current_row * self.key_height
+                    current_key['xmax'] = (current_col + current_key['width']) * self.key_width
+                    current_key['ymax'] = (current_row + current_key['height']) * self.key_height
 
                     # Tend to our row/col count
                     current_col += current_key['width']
@@ -114,6 +125,8 @@ class KLE2xy(list):
                     # Invert the y-axis if neccesary
                     if self.invert_y:
                         current_key['y'] = -current_key['y']
+                        current_key['ymin'] = -current_key['ymin']
+                        current_key['ymax'] = -current_key['ymax']
 
                     # Store this key
                     self[-1].append(current_key)
@@ -124,3 +137,4 @@ class KLE2xy(list):
             current_row += Decimal(1)
             if current_row > self.rows:
                 self.rows = Decimal(current_row)
+
