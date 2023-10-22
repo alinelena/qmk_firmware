@@ -27,6 +27,10 @@
         "rgb_matrix": true,
         "wpm": true
     },
+    "matrix_pins":{
+       "rows": ["GP1", "GP26", "GP29", "GP28", "GP27" ],
+       "cols": ["NO_PIN", "NO_PIN", "NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN"]
+    },
     "encoder": {
         "rotary": [
             {"pin_a": "GP5", "pin_b": "GP4", "resolution": 4}

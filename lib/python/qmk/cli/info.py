@@ -76,15 +76,20 @@ def show_layouts(kb_info_json, title_caps=True):
 def show_matrix(kb_info_json, title_caps=True):
     """Render the layout with matrix labels in ascii art.
     """
+    is_split = False
+    if 'split' in kb_info_json:
+        is_split = kb_info_json['split']['enabled']
     for layout_name, layout in kb_info_json['layouts'].items():
         # Build our label list
         labels = []
+        no_rows = -1
         for key in layout['layout']:
             if 'matrix' in key:
-                row = ROW_LETTERS[key['matrix'][0]]
+                nr = key['matrix'][0]
+                row = ROW_LETTERS[nr]
                 col = COL_LETTERS[key['matrix'][1]]
-
                 labels.append(row + col)
+                no_rows = max(nr+1,no_rows)
             else:
                 labels.append('')
 
@@ -93,8 +98,12 @@ def show_matrix(kb_info_json, title_caps=True):
             cli.echo('{fg_blue}Matrix for "%s"{fg_reset}:', layout_name)
         else:
             cli.echo('{fg_blue}matrix_%s{fg_reset}:', layout_name)
-
-        print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii, labels))
+        if is_split and no_rows > 0:
+            print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii,
+                            labels,is_split=is_split,no_rows=no_rows//2,layout_name=layout_name))
+        else:
+            print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii,
+                            labels,layout_name=layout_name))
 
 
 def print_friendly_output(kb_info_json):
