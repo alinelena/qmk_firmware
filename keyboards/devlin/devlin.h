@@ -5,14 +5,7 @@
 
 #include "quantum.h"
 
-enum layer_names {
-    _QW = 0,
-    _LWR,
-    _RSE,
-    _ADJ,
-    _TST
-};
-
+enum layer_names { _QW = 0, _LWR, _RSE, _ADJ, _TST };
 
 void toggle_leds(const bool, const bool);
 void set_led_toggle(const uint8_t, const bool);
@@ -33,10 +26,9 @@ static inline void init_lwr_rse_led(void) {
 
 static inline void led_lwr(const bool on) {
 #ifdef LED_LWR_PIN
-    if ((PRODUCT_ID == 0x6064) || (PRODUCT_ID == 0x6065) ||
-        (PRODUCT_ID == 0x6066) || (PRODUCT_ID == 0x6067)) {
+    if ((PRODUCT_ID == 0x6064) || (PRODUCT_ID == 0x6065) || (PRODUCT_ID == 0x6066) || (PRODUCT_ID == 0x6067)) {
         writePin(LED_LWR_PIN, !on);
-    }else{
+    } else {
         writePin(LED_LWR_PIN, on);
     }
 #endif
@@ -44,10 +36,9 @@ static inline void led_lwr(const bool on) {
 
 static inline void led_rse(const bool on) {
 #ifdef LED_RSE_PIN
-    if ((PRODUCT_ID == 0x6064) || (PRODUCT_ID == 0x6065) ||
-        (PRODUCT_ID == 0x6066) || (PRODUCT_ID == 0x6067)) {
+    if ((PRODUCT_ID == 0x6064) || (PRODUCT_ID == 0x6065) || (PRODUCT_ID == 0x6066) || (PRODUCT_ID == 0x6067)) {
         writePin(LED_RSE_PIN, !on);
-    }else{
+    } else {
         writePin(LED_RSE_PIN, on);
     }
 #endif
