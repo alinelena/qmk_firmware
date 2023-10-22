@@ -4,13 +4,12 @@
 #include QMK_KEYBOARD_H
 
 void keyboard_post_init_kb(void) {
-
 #ifdef CONSOLE_ENABLE
-  debug_enable = true;
-  debug_matrix = true;
-  debug_keyboard = true;
+    debug_enable   = true;
+    debug_matrix   = true;
+    debug_keyboard = true;
 #endif
-  keyboard_post_init_user();
+    keyboard_post_init_user();
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t* record) {

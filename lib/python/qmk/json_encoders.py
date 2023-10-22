@@ -51,7 +51,7 @@ class QMKJSONEncoder(json.JSONEncoder):
         """Encode a list-like object.
         """
         if self.primitives_only(obj):
-            return "[" + ", ".join(self.encode(value, path + [index]) for index, value in enumerate(obj)) + "]"
+            return "[" + ", ".join(str(self.encode(value, path + [index])) for index, value in enumerate(obj)) + "]"
 
         else:
             self.indentation_level += 1

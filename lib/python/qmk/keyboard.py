@@ -6,11 +6,16 @@ from math import ceil
 from pathlib import Path
 import os
 from glob import glob
+from qmk.constants import COL_LETTERS, ROW_LETTERS
 
 import qmk.path
 from qmk.c_parse import parse_config_h_file
 from qmk.json_schema import json_load
 from qmk.makefile import parse_rules_mk_file
+
+from collections import defaultdict
+from draw_keyboard import draw_kb,rad,swx,swy,rox,roy,cox,coy,isoenter_key,baeenter_key
+from layers import get_key_labels
 
 BOX_DRAWING_CHARACTERS = {
     "unicode": {
@@ -240,18 +245,102 @@ def rules_mk(keyboard):
 
     return rules
 
+def render_layer_keymap(layout_data, render_ascii, layout_name="matrix", pins=None, is_split=False, no_rows=0):
 
-def render_layout(layout_data, render_ascii, key_labels=None):
+    labels = get_key_labels()
+    for i, layer in enumerate(labels):
+        ln = "keymap-"+str(i)
+        for x,y in zip(layout_data, layer):
+           x['label']  = y[0]
+        _ = render_layout(layout_data, render_ascii, layout_name=ln, pins=pins, is_split=is_split, no_rows=no_rows)
+
+
+def render_layout(layout_data, render_ascii, key_labels=None, layout_name="matrix", pins=None, is_split=False, no_rows=0):
     """Renders a single layout.
     """
     textpad = [array('u', ' ' * 200) for x in range(100)]
     style = 'ascii' if render_ascii else 'unicode'
 
+    rows = defaultdict(list)
+    cols = defaultdict(list)
+    circles = []
+    rectangles = []
+    iso = []
+    bae = []
+    labels = []
+    rlabels = {}
+    clabels = {}
+    tooltips = []
+    _xmin = _ymin = 1000000
+    _xmax = _ymax = 0
+    if is_split and no_rows == 0:
+        # we come from somewhere we did not know the number of rows per side.
+        no_rows = (max([key['matrix'][0] for key in layout_data])+1)//2
+        print(no_rows)
     for key in layout_data:
         x = key.get('x', 0)
         y = key.get('y', 0)
         w = key.get('w', 1)
         h = key.get('h', 1)
+        _xmin = min(x,_xmin)
+        _ymin = min(y,_ymin)
+        _xmax = max(x+w,_xmax)
+        _ymax = max(y+h,_ymax)
+        cr = key['matrix'][0]
+        cc = key['matrix'][1]
+        cx = x*swx + w*swx/2.0
+        cy = y*swy + h*swy/2.0
+        circles += [(cx,cy)]
+        split = 'left' if is_split and cr < no_rows else 'right'
+        if cr not in rlabels:
+             rlabels[cr] = cy
+        if cc not in clabels:
+            clabels[cc] = cx
+
+        rows[cr].append(cx+rox)
+        rows[cr].append(cy+roy)
+        lab=f"{ROW_LETTERS[cr]}-{COL_LETTERS[cc]}"
+        lpins=''
+        if pins:
+            if is_split:
+                if cr >= no_rows:
+                     # we are on the right side...
+                   if 'right' in pins:
+                       if 'cols' in pins:
+                          lpins += f"Col - {pins['right']['cols'][cc]}"
+                       if 'rows' in pins:
+                          lpins += f"\nRow - {pins['right']['rows'][cr-no_rows]}"
+                   else:
+                       if 'cols' in pins:
+                          lpins += f"Col - {pins['cols'][cc]}"
+                       if 'rows' in pins:
+                          lpins += f"\nRow - {pins['rows'][cr-no_rows]}"
+                else:
+                   if 'cols' in pins:
+                       lpins += f"Col - {pins['cols'][cc]}"
+                   if 'rows' in pins:
+                       lpins += f"\nRow - {pins['rows'][cr]}"
+            else:
+                if 'cols' in pins:
+                    lpins += f"Col - {pins['cols'][cc]}"
+                if 'rows' in pins:
+                   lpins += f"\nRow - {pins['rows'][cr]}"
+        if is_split:
+            if cr<no_rows:
+                split='left'
+                tooltips.append(f"left side\nmatrix {cr}-{cc}\n       {lab}\n{lpins}")
+            else:
+                split='right'
+                tooltips.append(f"right side\nmatrix {cr-no_rows}-{cc}\n       {lab}\n{lpins}")
+        else:
+            tooltips.append(f"\nmatrix {cr}-{cc}\n       {lab}\n{lpins}")
+
+        if is_split:
+            cols[cc,split].append(cx+cox)
+            cols[cc,split].append(cy+coy)
+        else:
+            cols[cc].append(cx+cox)
+            cols[cc].append(cy+coy)
 
         if key_labels:
             label = key_labels.pop(0)
@@ -259,20 +348,37 @@ def render_layout(layout_data, render_ascii, key_labels=None):
                 label = label[3:]
         else:
             label = key.get('label', '')
-
+        labels.append(label)
         if 'encoder' in key:
             render_encoder(textpad, x, y, w, h, label, style)
         elif x >= 0.25 and w == 1.25 and h == 2:
             render_key_isoenter(textpad, x, y, w, h, label, style)
+            iso.append(isoenter_key(x,y,w,h,swx,swy,rad))
         elif w == 1.5 and h == 2:
             render_key_baenter(textpad, x, y, w, h, label, style)
+            bae.append(baeenter_key(x,y,w,h,swx,swy,rad))
         else:
             render_key_rect(textpad, x, y, w, h, label, style)
+            rectangles += [(x*swx,y*swy,w*swx,h*swy)]
 
+    canvas_width = (_xmax -_xmin) * swx + 5
+    canvas_height = (_ymax - _ymin) * swy + 5
+
+
+#    for r in rlabels:
+#        d.append(draw.Text(ROW_LETTERS[r],fs,-5.0,rlabels[r],fill='black',center=True))
+#
+#    for c in clabels:
+#        d.append(draw.Text(str(COL_LETTERS[c]),fs,clabels[c],-5.0,fill='black',center=True))
+#    d.save_svg(f'{layout_name}.svg')
+#    d.save_png(f'{layout_name}.png')
+    draw_kb(canvas_width,canvas_height,keys=rectangles, centers=circles, labels=labels, iso=iso,
+            bae=bae,rows=rows,cols=cols,tooltips=tooltips,svg=f'{layout_name}.svg',png=f'{layout_name}.png')
     lines = []
     for line in textpad:
         if line.tounicode().strip():
             lines.append(line.tounicode().rstrip())
+
 
     return '\n'.join(lines)
 
@@ -280,11 +386,20 @@ def render_layout(layout_data, render_ascii, key_labels=None):
 def render_layouts(info_json, render_ascii):
     """Renders all the layouts from an `info_json` structure.
     """
-    layouts = {}
+    layouts={}
 
+    is_split = False
+    if 'split' in info_json:
+        is_split = info_json['split']['enabled']
+    pins = None
+    if 'matrix_pins' in info_json:
+        pins = info_json['matrix_pins']
+        if is_split and 'matrix_pins' in info_json['split']:
+            pins['right']= info_json['split']['matrix_pins']['right']
     for layout in info_json['layouts']:
         layout_data = info_json['layouts'][layout]['layout']
-        layouts[layout] = render_layout(layout_data, render_ascii)
+        layouts[layout] = render_layout(layout_data, render_ascii, layout_name=layout,pins=pins,is_split=is_split)
+        _ = render_layer_keymap(layout_data, render_ascii, layout_name=layout,pins=pins,is_split=is_split)
 
     return layouts
 

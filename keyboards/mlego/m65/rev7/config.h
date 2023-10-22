@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
-#define MATRIX_ROWS 5
-#define MATRIX_COLS 13
+//#define MATRIX_ROWS 5
+//#define MATRIX_COLS 13
 
 /*
 ShiftRegister SN74HC595N
@@ -37,7 +37,7 @@ It uses four pins from the MCU to provide 16 output pins */
 /* Shift Register SPI Data Out configuration (MCU to ShiftRegister.SER - 14) */
 /* Shift Register SPI Serial Clock configuration (MCU to ShiftRegister.SRCLK - 11) */
 
-#define ROWS {GP26, GP27, GP28, GP29, GP6}
+//#define ROWS {GP26, GP27, GP28, GP29, GP6}
 
 #define SPI_DRIVER SPID0
 
