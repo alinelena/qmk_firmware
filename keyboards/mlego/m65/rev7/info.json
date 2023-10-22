@@ -28,6 +28,11 @@
         "caps_lock": "GP25",
         "on_state": 0
     },
+    "matrix_pins": {
+        "rows": ["GP26", "GP27", "GP28", "GP29", "GP6"],
+        "cols": ["NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN"]
+    },
+
     "processor": "RP2040",
     "rgblight": {
         "animations": {

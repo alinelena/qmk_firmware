@@ -1,8 +1,9 @@
 // Copyright 2020-2023 alin m elena (@alinelena, @drFaustroll)
 // SPDX-License-Identifier: GPL-2.0-or-later
 #pragma once
-#define MATRIX_ROWS 8
-#define MATRIX_COLS 16
+
+#define MATRIX_ROWS 7
+#define MATRIX_COLS 14
 
 /*
 ShiftRegister SN74HC595N
@@ -58,14 +59,13 @@ SCK - Serial Clock (same as 595)
 QH - SPI Data in - MISO
 */
 
-
 #define SPI_MATRIX_CS_PIN GP21
 #define SPI_SCK_PIN GP22
 #define SPI_MISO_PIN GP20
 #define SPI_MOSI_PIN GP23
 
 #define SPI_PL_PIN GP26
-//rp2040 supports nothing else
+// rp2040 supports nothing else
 #define SPI_lsbFirst false
 
 #define N595 2
@@ -75,7 +75,7 @@ QH - SPI Data in - MISO
 #define SPI_MODE 3
 
 #if defined(CONSOLE_ENABLE)
-#define DEBUG_MATRIX_SCAN_RATE
+#    define DEBUG_MATRIX_SCAN_RATE
 #endif
 
 // 00000001
@@ -86,13 +86,15 @@ QH - SPI Data in - MISO
 // 00100000
 // 01000000
 // 10000000
-//0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000
+// 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000
 // 1QA     1QB     1QC     1QD     1QE     1QF     1QG     1QH     2QA     2QB     2QC     2QD     2QE     2QF     2QG     2QH
 // due to a mistake in circuit... c0 needs to be the last one
 //                 C0  |   C1     C2     C3     C4     C5     C6     C7     C8     C9    C10    C11    C12    C13  C0
 //                1QD  |  2QB    2QC    2QD    2QE    2QF    2QH    2QA    1QH    1QG    1QF    1QE    1QA    1QC 1QD
-#define COLS { 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000 }
-#define ROWS {7,6,5,4,3,2,1,0}
+#define COLS \
+    { 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000 }
+#define ROWS \
+    { 6, 5, 4, 3, 2, 1, 0 }
 
 /* Double tap reset button to enter bootloader */
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
