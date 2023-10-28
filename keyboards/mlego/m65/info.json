@@ -1,35 +1,21 @@
 {
     "manufacturer": "Alin Elena",
-    "keyboard_name": "mlego/m65 rev9",
     "maintainer": "alin elena",
-    "board": "GENERIC_RP_RP2040",
-    "bootloader": "rp2040",
     "diode_direction": "COL2ROW",
-    "encoder": {
-        "enabled": true,
-        "rotary": [
-            {"pin_a": "GP27", "pin_b": "GP26", "resolution": 4}
-        ]
-    },
     "features": {
         "audio": false,
         "backlight": false,
         "bootmagic": false,
         "command": false,
-        "console": true,
+        "console": false,
         "encoder": true,
         "extrakey": true,
         "mousekey": true,
         "nkro": true,
-        "oled": true,
+        "oled": false,
         "rgblight": true,
-        "wpm": true
+        "wpm": false
     },
-    "indicators": {
-        "caps_lock": "GP25",
-        "on_state": 0
-    },
-    "processor": "RP2040",
     "rgblight": {
         "animations": {
             "all": true
@@ -45,16 +31,10 @@
     },
     "url": "mlego.elena.space/m65",
     "usb": {
-        "device_version": "0.0.1",
-        "pid": "0x6065",
         "vid": "0xBABA"
     },
-    "ws2812": {
-        "driver": "vendor",
-        "pin": "GP12"
-    },
     "layouts": {
-        "LAYOUT_ortho_5x13e": {
+        "LAYOUT_ortho_5x13": {
             "layout": [
                 {"label": "\u238b", "matrix": [0, 0], "x": 0, "y": 0},
                 {"label": "1", "matrix": [0, 1], "x": 1, "y": 0},
@@ -69,7 +49,6 @@
                 {"label": "0", "matrix": [0, 10], "x": 10, "y": 0},
                 {"label": "-", "matrix": [0, 11], "x": 11, "y": 0},
                 {"label": "\u232b", "matrix": [0, 12], "x": 12, "y": 0},
-                {"label": "\ud83d\udd07", "matrix": [0, 13], "x": 13, "y": 0},
                 {"label": "\u21b9 ", "matrix": [1, 0], "x": 0, "y": 1},
                 {"label": "q", "matrix": [1, 1], "x": 1, "y": 1},
                 {"label": "w", "matrix": [1, 2], "x": 2, "y": 1},
