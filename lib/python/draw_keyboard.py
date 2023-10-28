@@ -16,7 +16,7 @@ rad=2.5
 radius = 1.0
 
 def draw_kb(canvas_width=600, canvas_height=300,keys=None, centers=None, labels=None, iso=None, bae=None, rows=None,
-            cols=None, output_path=None, png=None, svg=None, tooltips=None ):
+            cols=None, output_path=None, svg=None, tooltips=None ):
 
     d = draw.Drawing(canvas_width+5, canvas_height+5, origin=(-5,-5))
     d.set_pixel_scale(5)
@@ -27,9 +27,11 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, centers=None, labels=
     if keys:
         for ir in keys:
             d.append(draw.Rectangle(*ir, rx=rad,ry=rad,fill='none',stroke='deeppink',stroke_width=sw))
-    if centers:
+    if centers and rows:
         for c in centers:
             d.append(draw.Circle(c[0]+cox,c[1]+coy,r=radius,fill='mediumspringgreen',stroke_width=sw))
+
+    if centers and cols:
         for c in centers:
             d.append(draw.Circle(c[0]+rox,c[1]+roy,r=radius,fill='orchid',stroke_width=sw))
     if rows:
@@ -64,8 +66,6 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, centers=None, labels=
 
     if svg:
       save_svg(d,output_path,svg)
-    if png:
-      save_png(d,output_path,png)
 
 def isoenter_key(x,y,w=1.25,h=2,swx=19.05,swy=19.05,rad=2.5):
     return [(x*swx-0.25*swx+rad,y*swy,x*swx+w*swx-rad,y*swy),
@@ -99,12 +99,8 @@ def save_svg(d,out_path,file_name):
     f = file_name
     if out_path:
         f= Path(out_path,f)
+    else:
+        out_path='.'
     d.save_svg(f)
-    cli.log.info('Wrote out {fg_cyan}%s/%s', out_path,file_name)
 
-def save_png(d,out_path,file_name):
-    f = file_name
-    if out_path:
-        f= Path(out_path,f)
-    d.save_png(f)
     cli.log.info('Wrote out {fg_cyan}%s/%s', out_path,file_name)

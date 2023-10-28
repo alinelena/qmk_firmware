@@ -15,16 +15,21 @@ from qmk.makefile import parse_rules_mk_file
 
 from collections import defaultdict
 from draw_keyboard import draw_kb,rad,swx,swy,rox,roy,cox,coy,isoenter_key,baeenter_key
-from layers import get_key_labels
+import unicodedata
 
 BOX_DRAWING_CHARACTERS = {
     "unicode": {
         "tl": "┌",
         "tr": "┐",
+        "tm": "┬",
         "bl": "└",
+        "bm": "┴",
         "br": "┘",
+        "ml": "├",
+        "mr": "┤",
+        "mm":"┼",
         "v": "│",
-        "h": "─",
+        "h": "─"
     },
     "ascii": {
         "tl": " ",
@@ -245,17 +250,8 @@ def rules_mk(keyboard):
 
     return rules
 
-def render_layer_keymap(layout_data, render_ascii, layout_name="matrix", pins=None, is_split=False, no_rows=0):
-
-    labels = get_key_labels()
-    for i, layer in enumerate(labels):
-        ln = "keymap-"+str(i)
-        for x,y in zip(layout_data, layer):
-           x['label']  = y[0]
-        _ = render_layout(layout_data, render_ascii, layout_name=ln, pins=pins, is_split=is_split, no_rows=no_rows)
-
-
-def render_layout(layout_data, render_ascii, key_labels=None, layout_name="matrix", pins=None, is_split=False, no_rows=0):
+def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somedefault", keycodes=None, pins=None, is_split=False,
+                  show_wires=False):
     """Renders a single layout.
     """
     textpad = [array('u', ' ' * 200) for x in range(100)]
@@ -268,15 +264,21 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="matri
     iso = []
     bae = []
     labels = []
-    rlabels = {}
-    clabels = {}
     tooltips = []
     _xmin = _ymin = 1000000
     _xmax = _ymax = 0
-    if is_split and no_rows == 0:
+    mrows = max([key['matrix'][0] for key in layout_data])
+    if is_split:
         # we come from somewhere we did not know the number of rows per side.
-        no_rows = (max([key['matrix'][0] for key in layout_data])+1)//2
-        print(no_rows)
+        no_rows = (mrows+1)//2
+    last_col_row = []
+    for r in range(mrows+1):
+        last_col_row.append(max([key['matrix'][1] for key in layout_data if key['matrix'][0] == r ]))
+    extra = False
+    ccr = 0
+    rcr = 0
+    sp = ''
+
     for key in layout_data:
         x = key.get('x', 0)
         y = key.get('y', 0)
@@ -292,14 +294,21 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="matri
         cy = y*swy + h*swy/2.0
         circles += [(cx,cy)]
         split = 'left' if is_split and cr < no_rows else 'right'
-        if cr not in rlabels:
-             rlabels[cr] = cy
-        if cc not in clabels:
-            clabels[cc] = cx
+
+        if key_labels:
+            label = key_labels.pop(0)
+        else:
+            label = key.get('label', '')
+
+        if keycodes:
+            tlabel = "  code " + keycodes.pop(0)
+        else:
+            tlabel = "  code "
 
         rows[cr].append(cx+rox)
         rows[cr].append(cy+roy)
         lab=f"{ROW_LETTERS[cr]}-{COL_LETTERS[cc]}"
+
         lpins=''
         if pins:
             if is_split:
@@ -307,33 +316,34 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="matri
                      # we are on the right side...
                    if 'right' in pins:
                        if 'cols' in pins:
-                          lpins += f"Col - {pins['right']['cols'][cc]}"
+                          lpins += f"   col {pins['right']['cols'][cc]}"
                        if 'rows' in pins:
-                          lpins += f"\nRow - {pins['right']['rows'][cr-no_rows]}"
+                          lpins += f"\n   row {pins['right']['rows'][cr-no_rows]}"
                    else:
                        if 'cols' in pins:
-                          lpins += f"Col - {pins['cols'][cc]}"
+                          lpins += f"   col {pins['cols'][cc]}"
                        if 'rows' in pins:
-                          lpins += f"\nRow - {pins['rows'][cr-no_rows]}"
+                          lpins += f"\n   row {pins['rows'][cr-no_rows]}"
                 else:
                    if 'cols' in pins:
-                       lpins += f"Col - {pins['cols'][cc]}"
+                       lpins += f"   col {pins['cols'][cc]}"
                    if 'rows' in pins:
-                       lpins += f"\nRow - {pins['rows'][cr]}"
+                       lpins += f"\n   row {pins['rows'][cr]}"
             else:
                 if 'cols' in pins:
-                    lpins += f"Col - {pins['cols'][cc]}"
+                    lpins += f"   col {pins['cols'][cc]}"
                 if 'rows' in pins:
-                   lpins += f"\nRow - {pins['rows'][cr]}"
+                   lpins += f"\n   row {pins['rows'][cr]}"
+
         if is_split:
             if cr<no_rows:
                 split='left'
-                tooltips.append(f"left side\nmatrix {cr}-{cc}\n       {lab}\n{lpins}")
+                tooltips.append(f"left side\n{tlabel}\nmatrix {cr}-{cc}\n       {lab}\n{lpins}")
             else:
                 split='right'
-                tooltips.append(f"right side\nmatrix {cr-no_rows}-{cc}\n       {lab}\n{lpins}")
+                tooltips.append(f"right side\n{tlabel}\nmatrix {cr-no_rows}-{cc}\n       {lab}\n{lpins}")
         else:
-            tooltips.append(f"\nmatrix {cr}-{cc}\n       {lab}\n{lpins}")
+            tooltips.append(f"\n{tlabel}\nmatrix {cr}-{cc}\n       {lab}\n{lpins}")
 
         if is_split:
             cols[cc,split].append(cx+cox)
@@ -342,13 +352,11 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="matri
             cols[cc].append(cx+cox)
             cols[cc].append(cy+coy)
 
-        if key_labels:
-            label = key_labels.pop(0)
-            if label.startswith('KC_'):
-                label = label[3:]
-        else:
-            label = key.get('label', '')
+
         labels.append(label)
+        label = ''.join(c for c in label.replace('\n','') if unicodedata.east_asian_width(c) != 'W')
+        if len(label)>4:
+            label=label.replace('\n','')[0:4]
         if 'encoder' in key:
             render_encoder(textpad, x, y, w, h, label, style)
         elif x >= 0.25 and w == 1.25 and h == 2:
@@ -358,22 +366,39 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="matri
             render_key_baenter(textpad, x, y, w, h, label, style)
             bae.append(baeenter_key(x,y,w,h,swx,swy,rad))
         else:
-            render_key_rect(textpad, x, y, w, h, label, style)
+            if cr ==0:
+                position = 't'
+            elif cr == mrows:
+                position = 'b'
+            else:
+                position = 'm'
+            if cc == 0:
+                position = 'l'+position
+            elif cc == last_col_row[cr]:
+                position = 'r'+position
+                try:
+                    if last_col_row[cr] != last_col_row[cr+1]:
+                        sp = 'b'+position
+                        extra = True
+                        rcr = cr + 1
+                        ccr = last_col_row[cr+1]
+                except:
+                    pass
+
+            render_key(textpad, x, y, w, h, label, style,position)
+            if extra and rcr == cr and cc == ccr:
+                extra = False
+                render_key(textpad, x+1, y, w, h, label, style, sp)
             rectangles += [(x*swx,y*swy,w*swx,h*swy)]
 
     canvas_width = (_xmax -_xmin) * swx + 5
     canvas_height = (_ymax - _ymin) * swy + 5
+    if not show_wires:
+        rows = None
+        cols = None
 
-
-#    for r in rlabels:
-#        d.append(draw.Text(ROW_LETTERS[r],fs,-5.0,rlabels[r],fill='black',center=True))
-#
-#    for c in clabels:
-#        d.append(draw.Text(str(COL_LETTERS[c]),fs,clabels[c],-5.0,fill='black',center=True))
-#    d.save_svg(f'{layout_name}.svg')
-#    d.save_png(f'{layout_name}.png')
     draw_kb(canvas_width,canvas_height,keys=rectangles, centers=circles, labels=labels, iso=iso,
-            bae=bae,rows=rows,cols=cols,tooltips=tooltips,svg=f'{layout_name}.svg',png=f'{layout_name}.png')
+            bae=bae,rows=rows,cols=cols,tooltips=tooltips,svg=f'{layout_name}.svg')
     lines = []
     for line in textpad:
         if line.tounicode().strip():
@@ -383,7 +408,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="matri
     return '\n'.join(lines)
 
 
-def render_layouts(info_json, render_ascii):
+def render_layouts(info_json, render_ascii,kb_name=None):
     """Renders all the layouts from an `info_json` structure.
     """
     layouts={}
@@ -391,18 +416,95 @@ def render_layouts(info_json, render_ascii):
     is_split = False
     if 'split' in info_json:
         is_split = info_json['split']['enabled']
+
     pins = None
     if 'matrix_pins' in info_json:
         pins = info_json['matrix_pins']
         if is_split and 'matrix_pins' in info_json['split']:
             pins['right']= info_json['split']['matrix_pins']['right']
+
     for layout in info_json['layouts']:
+        ln = "-".join([kb_name,layout])
         layout_data = info_json['layouts'][layout]['layout']
-        layouts[layout] = render_layout(layout_data, render_ascii, layout_name=layout,pins=pins,is_split=is_split)
-        _ = render_layer_keymap(layout_data, render_ascii, layout_name=layout,pins=pins,is_split=is_split)
+        layouts[layout] = render_layout(layout_data, render_ascii, layout_name=ln,pins=pins,is_split=is_split)
 
     return layouts
 
+def render_key(textpad, x, y, w, h, label, style,position='m'):
+    box_chars = BOX_DRAWING_CHARACTERS[style]
+    x = ceil(x * 5)
+    y = ceil(y * 3)
+    w = ceil(w * 5)
+    h = ceil(h * 3)
+
+    top_line = bot_line = lab_line = mid_line = None
+
+    label_len = w - 1
+    label_leftover = label_len - len(label)
+
+    if len(label) > label_len:
+        label = label[:label_len]
+
+    label_blank = ' ' * label_len
+    label_border = box_chars['h'] * label_len
+    label_middle = label + ' ' * label_leftover
+    if len(label) == 1:
+        label_middle = ' ' + label + ' '*2
+    if len(label) == 2:
+        label_middle = ' '+ label + ' '
+
+    match  position:
+        case 'm':
+            top_line = array('u', box_chars['mm'] + label_border + box_chars['h'])
+            lab_line = array('u', box_chars['v'] + label_middle)
+            mid_line = array('u', box_chars['v'] + label_blank)
+        case 'rm':
+            top_line = array('u', box_chars['mm'] + label_border + box_chars['mr'])
+            lab_line = array('u', box_chars['v'] + label_middle  + box_chars['v'])
+            mid_line = array('u', box_chars['v'] + label_blank + box_chars['v'])
+        case 'lm':
+            top_line = array('u', box_chars['ml'] + label_border + box_chars['h'])
+            lab_line = array('u', box_chars['v'] + label_middle)
+            mid_line = array('u', box_chars['v'] + label_blank)
+        case 't':
+            top_line = array('u', box_chars['tm'] + label_border + box_chars['h'])
+            lab_line = array('u', box_chars['v'] + label_middle)
+            mid_line = array('u', box_chars['v'] + label_blank)
+        case 'rt':
+            top_line = array('u', box_chars['tm'] + label_border + box_chars['tr'])
+            lab_line = array('u', box_chars['v'] + label_middle + box_chars['v'] )
+            mid_line = array('u', box_chars['v'] + label_blank + box_chars['v'])
+        case 'brt':
+            top_line = array('u', box_chars['mm'] + label_border + box_chars['br'])
+        case 'lt':
+            top_line = array('u', box_chars['tl'] + label_border + box_chars['h'])
+            lab_line = array('u', box_chars['v'] + label_middle)
+            mid_line = array('u', box_chars['v'] + label_blank)
+        case 'b':
+            top_line = array('u', box_chars['mm'] + label_border + box_chars['h'])
+            lab_line = array('u', box_chars['v'] + label_middle)
+            mid_line = array('u', box_chars['v'] + label_blank)
+            bot_line = array('u', box_chars['bm'] + label_border + box_chars['h'])
+        case 'rb':
+            top_line = array('u', box_chars['mm'] + label_border + box_chars['mr'])
+            lab_line = array('u', box_chars['v'] + label_middle + box_chars['v'])
+            mid_line = array('u', box_chars['v'] + label_blank + box_chars['v'])
+            bot_line = array('u', box_chars['bm'] + label_border + box_chars['br'])
+        case 'lb':
+            top_line = array('u', box_chars['ml'] + label_border + box_chars['h'])
+            lab_line = array('u', box_chars['v'] + label_middle)
+            mid_line = array('u', box_chars['v'] + label_blank)
+            bot_line = array('u', box_chars['bl'] + label_border + box_chars['h'])
+
+    if top_line:
+        textpad[y][x:x + w] = top_line
+    if lab_line:
+        textpad[y + 1][x:x + w] = lab_line
+    for i in range(h - 3):
+        if mid_line:
+            textpad[y + i + 2][x:x + w] = mid_line
+    if bot_line:
+        textpad[y + h - 1][x:x + w] = bot_line
 
 def render_key_rect(textpad, x, y, w, h, label, style):
     box_chars = BOX_DRAWING_CHARACTERS[style]

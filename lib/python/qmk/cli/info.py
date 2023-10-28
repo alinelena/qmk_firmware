@@ -3,6 +3,7 @@
 Compile an info.json for a particular keyboard and pretty-print it.
 """
 import sys
+import os
 import json
 
 from milc import cli
@@ -12,8 +13,9 @@ from qmk.constants import COL_LETTERS, ROW_LETTERS
 from qmk.decorators import automagic_keyboard, automagic_keymap
 from qmk.keyboard import keyboard_completer, keyboard_folder, render_layouts, render_layout, rules_mk
 from qmk.info import info_json, keymap_json
-from qmk.keymap import locate_keymap
+from qmk.keymap import locate_keymap, c2json
 from qmk.path import is_keyboard
+from layers import get_key_labels
 
 UNICODE_SUPPORT = sys.stdout.encoding.lower().startswith('utf')
 
@@ -44,30 +46,63 @@ def _strip_api_content(info_json):
 
     return info_json
 
+def is_split(kb_info_json):
+    is_split = False
+    if 'split' in kb_info_json:
+        is_split = kb_info_json['split']['enabled']
+    return is_split
+
+def get_pins(kb_info_json):
+
+    pins = None
+    if 'matrix_pins' in kb_info_json:
+        pins = kb_info_json['matrix_pins']
+        if is_split(kb_info_json) and 'matrix_pins' in kb_info_json['split']:
+            pins['right']= kb_info_json['split']['matrix_pins']['right']
+    return pins
 
 def show_keymap(kb_info_json, title_caps=True):
     """Render the keymap in ascii art.
     """
     keymap_path = locate_keymap(cli.config.info.keyboard, cli.config.info.keymap)
+    split = is_split(kb_info_json)
+    pins = get_pins(kb_info_json)
 
-    if keymap_path and keymap_path.suffix == '.json':
-        keymap_data = json.load(keymap_path.open(encoding='utf-8'))
+    print(f"show keymap {keymap_path}")
+    if keymap_path:
+        if keymap_path.suffix == '.json':
+            keymap_data = json.load(keymap_path.open(encoding='utf-8'))
+        else:
+            try:
+                keymap_data = c2json(cli.config.info.keyboard, cli.config.info.keymap, keymap_path, use_cpp=True)
+            except:
+                print(f"cpp disabled in reading {keymap_path}")
+                keymap_data = c2json(cli.config.info.keyboard, cli.config.info.keymap, keymap_path, use_cpp=False)
+
         layout_name = keymap_data['layout']
         layout_name = kb_info_json.get('layout_aliases', {}).get(layout_name, layout_name)  # Resolve alias names
-
+        print(f"{layout_name=}")
+        labels, keycodes = get_key_labels(keymap_data,keymap_path)
         for layer_num, layer in enumerate(keymap_data['layers']):
             if title_caps:
                 cli.echo('{fg_cyan}Keymap %s Layer %s{fg_reset}:', cli.config.info.keymap, layer_num)
             else:
                 cli.echo('{fg_cyan}keymap.%s.layer.%s{fg_reset}:', cli.config.info.keymap, layer_num)
-
-            print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii, layer))
+            labs = []
+            for x,y in zip(kb_info_json['layouts'][layout_name]['layout'], labels[layer_num]):
+                labs.append(y[0] if y else '')
+            fk_name = "-".join(cli.config.info.keyboard.split(os.sep))
+            print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii,
+                                key_labels = labs,
+                                keycodes = keycodes[layer_num],layout_name="-".join([fk_name,layout_name,cli.config.info.keymap,str(layer_num)]),
+                                is_split=split, pins=pins))
 
 
 def show_layouts(kb_info_json, title_caps=True):
     """Render the layouts with info.json labels.
     """
-    for layout_name, layout_art in render_layouts(kb_info_json, cli.config.info.ascii).items():
+    fk_name = "-".join(cli.config.info.keyboard.split(os.sep))
+    for layout_name, layout_art in render_layouts(kb_info_json, cli.config.info.ascii,fk_name).items():
         title = f'Layout {layout_name.title()}' if title_caps else f'layouts.{layout_name}'
         cli.echo('{fg_cyan}%s{fg_reset}:', title)
         print(layout_art)  # Avoid passing dirty data to cli.echo()
@@ -76,20 +111,17 @@ def show_layouts(kb_info_json, title_caps=True):
 def show_matrix(kb_info_json, title_caps=True):
     """Render the layout with matrix labels in ascii art.
     """
-    is_split = False
-    if 'split' in kb_info_json:
-        is_split = kb_info_json['split']['enabled']
+    split = is_split(kb_info_json)
+    pins = get_pins(kb_info_json)
     for layout_name, layout in kb_info_json['layouts'].items():
         # Build our label list
         labels = []
-        no_rows = -1
         for key in layout['layout']:
             if 'matrix' in key:
                 nr = key['matrix'][0]
                 row = ROW_LETTERS[nr]
                 col = COL_LETTERS[key['matrix'][1]]
                 labels.append(row + col)
-                no_rows = max(nr+1,no_rows)
             else:
                 labels.append('')
 
@@ -98,12 +130,11 @@ def show_matrix(kb_info_json, title_caps=True):
             cli.echo('{fg_blue}Matrix for "%s"{fg_reset}:', layout_name)
         else:
             cli.echo('{fg_blue}matrix_%s{fg_reset}:', layout_name)
-        if is_split and no_rows > 0:
-            print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii,
-                            labels,is_split=is_split,no_rows=no_rows//2,layout_name=layout_name))
-        else:
-            print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii,
-                            labels,layout_name=layout_name))
+
+        fk_name = "-".join(cli.config.info.keyboard.split(os.sep))
+        ln = "-".join([fk_name,'matrix',layout_name])
+        print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii,
+                            key_labels=labels,is_split=split,layout_name=ln, pins=pins, show_wires=True))
 
 
 def print_friendly_output(kb_info_json):

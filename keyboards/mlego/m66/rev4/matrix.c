@@ -10,7 +10,7 @@
 #endif
 
 static const uint16_t col_values[MATRIX_COLS] = COLS;
-static const pin_t    row_pins[MATRIX_ROWS]   = ROWS;
+static const pin_t    row_pins[MATRIX_ROWS]   = MATRIX_ROW_PINS;
 
 static const int    msize = MATRIX_ROWS * sizeof(matrix_row_t);
 static matrix_row_t prev_matrix[MATRIX_ROWS];

@@ -1,0 +1,23 @@
+{
+    "keyboard_name": "mlego/m66 rev2",
+    "board": "GENERIC_RP_RP2040",
+    "bootloader": "rp2040",
+    "encoder": {
+        "rotary": [
+            {"pin_a": "GP27", "pin_b": "GP26", "resolution": 4}
+        ]
+    },
+    "indicators": {
+        "caps_lock": "GP25",
+        "on_state": 0
+    },
+    "processor": "RP2040",
+    "usb": {
+        "device_version": "0.0.1",
+        "pid": "0x6066"
+    },
+    "ws2812": {
+        "driver": "vendor",
+        "pin": "GP12"
+    }
+}
