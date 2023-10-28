@@ -30,8 +30,6 @@ c7 QH |7    10| SRCLR - 3v3
 
 */
 
-//#define ROWS \
-//    { GP1, GP26, GP29, GP28, GP27 }
 
 #define SPI_DRIVER SPID0
 #define SPI_MODE 3
