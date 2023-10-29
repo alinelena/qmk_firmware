@@ -2,6 +2,9 @@
     "keyboard_name": "mlego/m66 rev3",
     "board": "GENERIC_RP_RP2040",
     "bootloader": "rp2040",
+    "features": {
+      "oled":true
+    },
     "encoder": {
         "enabled": true,
         "rotary": [

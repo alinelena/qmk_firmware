@@ -366,33 +366,39 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
             render_key_baenter(textpad, x, y, w, h, label, style)
             bae.append(baeenter_key(x,y,w,h,swx,swy,rad))
         else:
-            if cr ==0:
-                position = 't'
-            elif cr == mrows:
-                position = 'b'
-            else:
-                position = 'm'
-            if cc == 0:
-                position = 'l'+position
-            elif cc == last_col_row[cr]:
-                position = 'r'+position
-                try:
-                    if last_col_row[cr] != last_col_row[cr+1]:
-                        sp = 'b'+position
-                        extra = True
-                        rcr = cr + 1
-                        ccr = last_col_row[cr+1]
-                except:
-                    pass
 
-            render_key(textpad, x, y, w, h, label, style,position)
-            if extra and rcr == cr and cc == ccr:
-                extra = False
-                render_key(textpad, x+1, y, w, h, label, style, sp)
+            if layout_name.startswith('mlego'):
+                if cr ==0:
+                    position = 't'
+                elif cr == mrows:
+                    position = 'b'
+                else:
+                    position = 'm'
+                if cc == 0:
+                    position = 'l'+position
+                elif cc == last_col_row[cr]:
+                    position = 'r'+position
+                    try:
+                        if last_col_row[cr] != last_col_row[cr+1]:
+                            sp = 'b'+position
+                            extra = True
+                            rcr = cr + 1
+                            ccr = last_col_row[cr+1]
+                    except:
+                        pass
+
+                render_key(textpad, x, y, w, h, label, style,position)
+                if extra and rcr == cr and cc == ccr:
+                    extra = False
+                    render_key(textpad, x+1, y, w, h, label, style, sp)
+            else:
+                render_key_rect(textpad, x, y, w, h, label, style)
+
             rectangles += [(x*swx,y*swy,w*swx,h*swy)]
 
     canvas_width = (_xmax -_xmin) * swx + 5
     canvas_height = (_ymax - _ymin) * swy + 5
+
     if not show_wires:
         rows = None
         cols = None
@@ -453,44 +459,43 @@ def render_key(textpad, x, y, w, h, label, style,position='m'):
     if len(label) == 2:
         label_middle = ' '+ label + ' '
 
-    match  position:
-        case 'm':
+    if position == 'm':
             top_line = array('u', box_chars['mm'] + label_border + box_chars['h'])
             lab_line = array('u', box_chars['v'] + label_middle)
             mid_line = array('u', box_chars['v'] + label_blank)
-        case 'rm':
+    elif position == 'rm':
             top_line = array('u', box_chars['mm'] + label_border + box_chars['mr'])
             lab_line = array('u', box_chars['v'] + label_middle  + box_chars['v'])
             mid_line = array('u', box_chars['v'] + label_blank + box_chars['v'])
-        case 'lm':
+    elif position == 'lm':
             top_line = array('u', box_chars['ml'] + label_border + box_chars['h'])
             lab_line = array('u', box_chars['v'] + label_middle)
             mid_line = array('u', box_chars['v'] + label_blank)
-        case 't':
+    elif position == 't':
             top_line = array('u', box_chars['tm'] + label_border + box_chars['h'])
             lab_line = array('u', box_chars['v'] + label_middle)
             mid_line = array('u', box_chars['v'] + label_blank)
-        case 'rt':
+    elif position == 'rt':
             top_line = array('u', box_chars['tm'] + label_border + box_chars['tr'])
             lab_line = array('u', box_chars['v'] + label_middle + box_chars['v'] )
             mid_line = array('u', box_chars['v'] + label_blank + box_chars['v'])
-        case 'brt':
+    elif position == 'brt':
             top_line = array('u', box_chars['mm'] + label_border + box_chars['br'])
-        case 'lt':
+    elif position == 'lt':
             top_line = array('u', box_chars['tl'] + label_border + box_chars['h'])
             lab_line = array('u', box_chars['v'] + label_middle)
             mid_line = array('u', box_chars['v'] + label_blank)
-        case 'b':
+    elif position == 'b':
             top_line = array('u', box_chars['mm'] + label_border + box_chars['h'])
             lab_line = array('u', box_chars['v'] + label_middle)
             mid_line = array('u', box_chars['v'] + label_blank)
             bot_line = array('u', box_chars['bm'] + label_border + box_chars['h'])
-        case 'rb':
+    elif position == 'rb':
             top_line = array('u', box_chars['mm'] + label_border + box_chars['mr'])
             lab_line = array('u', box_chars['v'] + label_middle + box_chars['v'])
             mid_line = array('u', box_chars['v'] + label_blank + box_chars['v'])
             bot_line = array('u', box_chars['bm'] + label_border + box_chars['br'])
-        case 'lb':
+    elif position == 'lb':
             top_line = array('u', box_chars['ml'] + label_border + box_chars['h'])
             lab_line = array('u', box_chars['v'] + label_middle)
             mid_line = array('u', box_chars['v'] + label_blank)

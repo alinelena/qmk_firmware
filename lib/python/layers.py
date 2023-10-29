@@ -17,16 +17,18 @@ def get_key_labels(keymap, keymap_c):
                 'KC_ESC':['⎋'],'KC_LSFT':['⇧'],'KC_RSFT':['⇧'],
                 'KC_TAB':['↹'],'KC_LCTL':['⎈'],'KC_RCTL':['⎈'],'KC_RALT':['⎇'],'KC_LALT':['⎇'],'KC_BSPC':['⌫'],'KC_DEL':['⌦'],
                 'KC_DOWN':['↓'],'KC_RGHT':['→'],'KC_UP':['↑'],'KC_LEFT':['←'],
-                'KC_ENT':['⏎'],'KC_LGUI':[''],'KC_SPC':[' '],'KC_CAPS':['⇪'],
+                'KC_ENT':['⏎'],'KC_PENT':['⏎'],'KC_LGUI':[''],'KC_RGUI':[''],'KC_APP':[''],'KC_SPC':[' '],
                 'KC_VOLU':['🕪'],'KC_VOLD':['🕩'],'KC_MPLY':['⏯'],'KC_MPRV':['⏮'],'KC_MNXT':['⏭'],'KC_MUTE':['🕨'],
                 'KC_SLEP':['⏾'],'KC_WAKE':['⏽'],
-                'KC_WH_L':['🖰','⇠'],'KC_WH_R':['🖰','⇢'],'KC_WH_U':['🖰','⇡'],'KC_WH_D':['🖰','⇣'],
-                'KC_MS_L':['🖰','↞'],'KC_MS_R':['🖰','↠'],'KC_MS_U':['🖰','↟'],'KC_MS_D':['🖰','↡'],
+                'KC_SCRL':['⇳'],'KC_PAUS':['⎉'],'KC_NUM':['⇭'],'KC_CAPS':['⇪'], 'KC_INS': ['Ins'],
+                'KC_HOME':['⇱'],'KC_PGUP':['PgUp'],'KC_PGDN':['PgDn'],'KC_END':['⇲'],
+                'KC_WH_L':['⇠','🖰'],'KC_WH_R':['🖰','⇢'],'KC_WH_U':['⇡','🖰'],'KC_WH_D':['🖰','⇣'],
+                'KC_MS_L':['↞','🖰'],'KC_MS_R':['🖰','↠'],'KC_MS_U':['↟','🖰'],'KC_MS_D':['🖰','↡'],
                 'KC_BTN1':['🖰','1'],'KC_BTN2':['🖰','2'],'KC_BTN3':['🖰','3'],'KC_BTN4':['🖰','4'],
                 'RGB_TOG':['l','☀','☼'],'QK_BOOT':['b','♽'],'QK_RBT':['r','♲'],
                 'UC_LINX':['u',''],'UC_WIN':['u',''],'UC_WINC':['u','❖'],'UC_MAC':['u',''],
                 'UC_NEXT':['u','⎘'], 'UC_PREV':['u','⎗'],
-                'RGB_RMOD':['l','⎘'], 'RGB_MOD':['l','⎗']}
+                'RGB_RMOD':['l','⎘'], 'RGB_MOD':['l','⎗'],'DB_TOGG':['⚛'],'EE_CLR':['␥']}
 # in theory this can be provided by the user with the keymaps
     q = Path("specials.json")
     if q.exists():
