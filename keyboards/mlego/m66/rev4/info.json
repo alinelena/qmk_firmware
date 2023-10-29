@@ -7,6 +7,13 @@
         "device_version": "0.0.1",
         "pid": "0x6068"
     },
+    "features": {
+        "backlight": true,
+        "rgblight": false,
+        "quantum_painter": true,
+        "oled":false,
+        "rgb_matrix": true
+    },
     "matrix_pins":{
        "rows": ["GP1", "GP26", "GP29", "GP28", "GP27" ],
        "cols": ["NO_PIN", "NO_PIN", "NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN","NO_PIN"]
@@ -139,10 +146,15 @@
             {"x": 6 , "y": 5, "flags": 2},
             {"x": 7 , "y": 5, "flags": 2}
         ],
-        "max_brightness": 32
+        "max_brightness": 128
      },
     "ws2812": {
       "driver": "vendor",
       "pin": "GP0"
-    }
+    },
+  "backlight": {
+    "pin": "GP9",
+    "max_brightness": 144,
+    "levels": 4
+  }
 }
