@@ -27,10 +27,12 @@ static inline uint8_t read_rows(void) {
 static inline void shift_out(uint16_t value) {
     uint8_t message[2] = {(value >> 8) & 0xFF, (uint8_t)(value & 0xFF)};
 
-    writePinLow(SPI_MATRIX_CS_PIN);
+    //writePinLow(SPI_MATRIX_CS_PIN);
+    spi_start(SPI_MATRIX_CS_PIN, SPI_lsbFirst, SPI_MODE, SPI_DIVISOR);
     spi_transmit(message, 2);
-    writePinHigh(SPI_MATRIX_CS_PIN);
-    matrix_output_select_delay();
+    spi_stop();
+    //writePinHigh(SPI_MATRIX_CS_PIN);
+    //matrix_output_select_delay();
 }
 
 static inline void select_col(uint8_t col) {
@@ -45,11 +47,11 @@ void matrix_init_custom(void) {
         setPinInputLow(row_pins[row]);
     }
     matrix_io_delay();
-    spi_init();
+    //spi_init();
     matrix_io_delay();
 
     setPinOutput(SPI_MATRIX_CS_PIN);
-    spi_start(SPI_MATRIX_CS_PIN, SPI_lsbFirst, SPI_MODE, SPI_DIVISOR);
+//writePinHigh(SPI_MATRIX_CS_PIN);
     matrix_io_delay();
 }
 
