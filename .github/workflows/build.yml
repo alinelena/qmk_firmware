@@ -8,7 +8,7 @@ on:
 jobs:
   build-firmware:
     runs-on: ubuntu-latest
-    container: qmkfm/qmk_cli
+    container: ghcr.io/qmk/qmk_cli:latest
     strategy:
       fail-fast: false
       matrix:

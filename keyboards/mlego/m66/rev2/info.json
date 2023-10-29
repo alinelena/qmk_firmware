@@ -2,6 +2,9 @@
     "keyboard_name": "mlego/m66 rev2",
     "board": "GENERIC_RP_RP2040",
     "bootloader": "rp2040",
+    "features": {
+      "oled":true
+    },
     "encoder": {
         "rotary": [
             {"pin_a": "GP27", "pin_b": "GP26", "resolution": 4}
