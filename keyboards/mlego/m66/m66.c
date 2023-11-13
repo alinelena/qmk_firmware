@@ -34,9 +34,9 @@ static bool             clear_lcd_logo  = true;
 static bool             update_lcd_logo = true;
 static uint8_t          current_layer   = 42;
 
-#    if defined(RGB_MATRIX_ENABLE)
-static bool  current_rgb    = false;
 static led_t last_led_state = {42};
+#    if defined(RGB_MATRIX_ENABLE)
+static bool current_rgb = false;
 #    endif
 
 #    if defined(UNICODE_COMMON_ENABLE)
@@ -167,25 +167,25 @@ void user_oled_magic(void) {
     oled_write_P(PSTR(get_layer_name(get_highest_layer(layer_state))), false);
     oled_write_P(PSTR("\n"), false);
 
-    // Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.num_lock ? PSTR(" NumLock") : PSTR("    "), false);
-    oled_write_P(led_state.scroll_lock ? PSTR(" ScrollLock") : PSTR("    "), false);
-    oled_write_P(led_state.caps_lock ? PSTR(" CapsLock") : PSTR("    "), false);
-
 #    if defined(UNICODE_COMMON_ENABLE)
-    oled_write_P(PSTR("\nuni: "), false);
-    oled_write_P(PSTR(get_unicode_name(get_unicode_input_mode())), false);
-    oled_write_P(PSTR("\n"), false);
+    oled_write_P(PSTR("uni: "), false);
+    oled_write_ln_P(PSTR(get_unicode_name(get_unicode_input_mode())), false);
+    // oled_write_P(PSTR("\n"), false);
+    //  Host Keyboard LED Status
 #    endif
+    led_t led_state = host_keyboard_led_state();
+    oled_write_P("Lock:", false);
+    oled_write_P(led_state.num_lock ? PSTR("Num") : PSTR("   "), false);
+    oled_write_P(led_state.scroll_lock ? PSTR(" Scroll") : PSTR("       "), false);
+    oled_write_ln_P(led_state.caps_lock ? PSTR(" Caps") : PSTR("     "), false);
 
 #    if defined(WPM_ENABLE)
-    oled_write_P(PSTR("\nwpm: "), false);
+    oled_write_P(PSTR("wpm: "), false);
     uint8_t wpm = get_current_wpm();
-    oled_write_P(wpm != 0 ? get_u8_str(wpm, ' ') : PSTR("    "), false);
+    oled_write_P(wpm != 0 ? get_u8_str(wpm, ' ') : PSTR("   "), false);
 #    endif
     oled_write_P(PSTR(" "), false);
-    oled_write_P(PSTR(hash), false);
+    oled_write_ln_P(PSTR(hash), false);
 }
 
 void render_oled_logo(void) {
@@ -274,15 +274,13 @@ void init_lcd_timer(void) {
     lcd_logo_timer = timer_read32();
 };
 
-void show_icons_lcd(void){
+void show_icons_lcd(void) {
+    const int h = 45;
 
-        const int h=45;
-
-        last_led_state.raw = host_keyboard_led_state().raw;
-        draw_lcd_icon(4, h, last_led_state.caps_lock, 2, HSV_PINK, HSV_BLACK);
-        draw_lcd_icon(40, h, last_led_state.scroll_lock, 3, HSV_YELLOW, HSV_BLACK);
-        draw_lcd_icon(76, h, last_led_state.num_lock, 4, HSV_CYAN, HSV_BLACK);
-
+    last_led_state.raw = host_keyboard_led_state().raw;
+    draw_lcd_icon(4, h, last_led_state.caps_lock, 2, HSV_PINK, HSV_BLACK);
+    draw_lcd_icon(40, h, last_led_state.scroll_lock, 4, HSV_YELLOW, HSV_BLACK);
+    draw_lcd_icon(76, h, last_led_state.num_lock, 3, HSV_CYAN, HSV_BLACK);
 }
 
 void render_lcd_logo(void) {
@@ -407,8 +405,8 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                 rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
                 rgb_matrix_set_flags_noeeprom(LED_FLAG_NONE);
                 int index;
-                for (index=0;index<RGB_MATRIX_LED_COUNT;++index) {
-                  rgb_matrix_set_color(index, 0,0,0);
+                for (index = 0; index < RGB_MATRIX_LED_COUNT; ++index) {
+                    rgb_matrix_set_color(index, 0, 0, 0);
                 }
                 rgb_matrix_check_finished_leds(RGB_MATRIX_LED_COUNT);
             }
@@ -471,10 +469,9 @@ layer_state_t default_layer_state_set_kb(layer_state_t state) {
 #endif
 
 #if defined(RGB_MATRIX_ENABLE)
-//bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
+// bool rgb_matrix_indicators_advanced_kb(uint8_t led_min, uint8_t led_max) {
 
 bool rgb_matrix_indicators_kb(void) {
-
     if (!rgb_matrix_indicators_user()) {
         return false;
     }
@@ -488,18 +485,18 @@ bool rgb_matrix_indicators_kb(void) {
     uint8_t layer = get_highest_layer(layer_state | default_layer_state);
 
     if (layer != current_rgb_layer || (toggle_rse || toggle_lwr)) {
-        dprintf("layer %2d c layer %2d \n",layer, current_rgb_layer);
+        dprintf("layer %2d c layer %2d \n", layer, current_rgb_layer);
         switch (layer) {
             case _RSE:
                 if (toggle_rse) {
-                    //toggle_rgb(RGB_MATRIX_LWR_I, false, HSV_PINK);
+                    // toggle_rgb(RGB_MATRIX_LWR_I, false, HSV_PINK);
                     toggle_rgb(RGB_MATRIX_RSE_I, toggle_rse, HSV_GREEN);
                 }
                 break;
             case _LWR:
                 if (toggle_lwr) {
                     toggle_rgb(RGB_MATRIX_LWR_I, toggle_lwr, HSV_RED);
-                    //toggle_rgb(RGB_MATRIX_RSE_I, false, HSV_PINK);
+                    // toggle_rgb(RGB_MATRIX_RSE_I, false, HSV_PINK);
                 }
                 break;
             case _ADJ:
@@ -509,8 +506,8 @@ bool rgb_matrix_indicators_kb(void) {
                 }
                 break;
             default:
-                    toggle_rgb(RGB_MATRIX_RSE_I, false, HSV_PINK);
-                    toggle_rgb(RGB_MATRIX_LWR_I, false, HSV_PINK);
+                toggle_rgb(RGB_MATRIX_RSE_I, false, HSV_PINK);
+                toggle_rgb(RGB_MATRIX_LWR_I, false, HSV_PINK);
                 break;
         }
         current_rgb_layer = layer;
@@ -599,11 +596,16 @@ void keyboard_post_init_kb(void) {
     writePinHigh(RGB_ENABLE_PIN);
     wait_ms(30);
 #endif
-#    if defined(RGB_MATRIX_ENABLE)
-    rgb_matrix_enable_noeeprom();
+#if defined(RGB_MATRIX_ENABLE)
+    rgblight_enable_noeeprom();
     rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
-    rgb_matrix_sethsv_noeeprom(HSV_CYAN);
-#    endif
+    rgb_matrix_set_flags_noeeprom(LED_FLAG_NONE);
+    int index;
+    for (index = 0; index < RGB_MATRIX_LED_COUNT; ++index) {
+        rgb_matrix_set_color(index, 0, 0, 0);
+    }
+    rgb_matrix_check_finished_leds(RGB_MATRIX_LED_COUNT);
+#endif
 
 #if defined(OLED_ENABLE)
     init_oled_timer();
