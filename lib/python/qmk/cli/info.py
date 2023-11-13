@@ -119,9 +119,10 @@ def show_matrix(kb_info_json, title_caps=True):
         for key in layout['layout']:
             if 'matrix' in key:
                 nr = key['matrix'][0]
+                nc = key['matrix'][1]
                 row = ROW_LETTERS[nr]
-                col = COL_LETTERS[key['matrix'][1]]
-                labels.append(row + col)
+                col = COL_LETTERS[nc]
+                labels.append(f"({nr},{nc})\n{row+col}")
             else:
                 labels.append('')
 
