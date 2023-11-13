@@ -124,9 +124,9 @@ LSB                  <-- LSBFIRST
 #        define QUANTUM_PAINTER_DEBUG
 #    endif
 
+#define QUANTUM_PAINTER_NUM_IMAGES 16
 #endif
 
-#define QUANTUM_PAINTER_NUM_IMAGES 16
 
 #if defined(RGB_MATRIX_ENABLE)
 
