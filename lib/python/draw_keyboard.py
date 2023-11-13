@@ -7,10 +7,10 @@ from pathlib import Path
 swx=19.025
 swy=19.025
 
-cox=-5
-coy=-2
-rox=5
-roy=-5
+cox=-7.5
+coy=-6.0
+rox=-7.5
+roy=-7.5
 
 rad=2.5
 radius = 1.0
@@ -36,7 +36,7 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, centers=None, labels=
             d.append(draw.Circle(c[0]+rox,c[1]+roy,r=radius,fill='orchid',stroke_width=sw))
     if rows:
         for ir in rows:
-            e = draw.Lines(*rows[ir],stroke='orangered',close=False,fill='none',stroke_width=sw)
+            e = draw.Lines(*rows[ir],stroke='orchid',close=False,fill='none',stroke_width=sw)
             e.append_title(f"row {ir}")
             d.append(e)
     if cols:
