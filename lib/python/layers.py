@@ -28,7 +28,8 @@ def get_key_labels(keymap, keymap_c):
                 'RGB_TOG':['l','☀','☼'],'QK_BOOT':['b','♽'],'QK_RBT':['r','♲'],
                 'UC_LINX':['u',''],'UC_WIN':['u',''],'UC_WINC':['u','❖'],'UC_MAC':['u',''],
                 'UC_NEXT':['u','⎘'], 'UC_PREV':['u','⎗'],
-                'RGB_RMOD':['l','⎘'], 'RGB_MOD':['l','⎗'],'DB_TOGG':['⚛'],'EE_CLR':['␥']}
+                'RGB_RMOD':['l','⎘'], 'RGB_MOD':['l','⎗'],'DB_TOGG':['d','⚛'],'EE_CLR':['e','␥'],
+                'RGB_ON_EFF':['l','☀'],'RGB_OFF_EFF':['l','☼'],'RGB_IND':['l','⌧'],'RGB_LSD': ['l','⏹'],'RGB_HEAT':['l','⌇']}
 # in theory this can be provided by the user with the keymaps
     q = Path("specials.json")
     if q.exists():

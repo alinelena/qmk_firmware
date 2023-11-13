@@ -303,7 +303,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         if keycodes:
             tlabel = "  code " + keycodes.pop(0)
         else:
-            tlabel = "  code "
+            tlabel = "       "
 
         rows[cr].append(cx+rox)
         rows[cr].append(cy+roy)
@@ -338,12 +338,12 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         if is_split:
             if cr<no_rows:
                 split='left'
-                tooltips.append(f"left side\n{tlabel}\nmatrix {cr}-{cc}\n       {lab}\n{lpins}")
+                tooltips.append(f"left side\n{tlabel}\nmatrix ({cr},{cc})\n       {lab}\n{lpins}")
             else:
                 split='right'
-                tooltips.append(f"right side\n{tlabel}\nmatrix {cr-no_rows}-{cc}\n       {lab}\n{lpins}")
+                tooltips.append(f"right side\n{tlabel}\nmatrix ({cr-no_rows},{cc})\n       {lab}\n{lpins}")
         else:
-            tooltips.append(f"\n{tlabel}\nmatrix {cr}-{cc}\n       {lab}\n{lpins}")
+            tooltips.append(f"\n{tlabel}\nmatrix ({cr},{cc})\n       {lab}\n{lpins}")
 
         if is_split:
             cols[cc,split].append(cx+cox)

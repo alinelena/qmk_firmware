@@ -112,9 +112,8 @@ rp2040 will do MSB regardless of what you pass
 #define COLS {  0x0200,0x0400,0x0800,0x1000,0x2000,0x4000,0x8000,0x0100,0x0008,0x0010,0x0020,0x0040,0x0002,0x0004}
 #define ROWS {0, 1, 2, 3, 4}
 
-#define RGB_ENABLE_PIN GP11
-#define LED_LWR_PIN GP16
-#define LED_RSE_PIN GP17
+#define LED_LWR_PIN GP17
+#define LED_RSE_PIN GP16
 
 /* Double tap reset button to enter bootloader */
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET
@@ -130,3 +129,65 @@ rp2040 will do MSB regardless of what you pass
 #define OLED_UPDATE_INTERVAL 10
 #endif
 
+#if defined(QUANTUM_PAINTER_ENABLE)
+
+#    define SPI_DISP_CS_PIN GP6
+#    define DISP_ROT QP_ROTATION_90
+#    if defined(QUANTUM_PAINTER_ST7735_ENABLE)
+#        define ST7735_NUM_DEVICES 1
+#        define SPI_DISP_DC_PIN GP7
+#        define SPI_DISP_RST_PIN GP29
+#        define DISP_WIDTH 160
+#        define DISP_HEIGHT 80
+#        define ST7735_NO_AUTOMATIC_VIEWPORT_OFFSETS
+#    endif
+
+#    if defined(QUANTUM_PAINTER_LS0XX_ENABLE)
+#        define SPI_DISP_BL_PIN GP9
+// version ls013b7dh05
+#        define DISP_WIDTH 144
+#        define DISP_HEIGHT 168
+/*
+// version ls013b7dh03
+#    define DISP_WIDTH 128
+#    define DISP_HEIGHT 128
+ */
+#    endif
+
+#    if defined(CONSOLE_ENABLE)
+#        define INIT_DELAY 3000
+#        define QUANTUM_PAINTER_DEBUG
+#    endif
+
+#define QUANTUM_PAINTER_NUM_IMAGES 16
+#endif
+
+#if defined(BACKLIGHT_ENABLE)
+#    define BACKLIGHT_PWM_CHANNEL 1
+#endif
+
+#if defined(RGB_MATRIX_ENABLE)
+
+#    define RGB_ENABLE_PIN GP11
+#    define RGB_CURREN_FAULT_PIN GP13
+
+#    define RGB_MATRIX_TIMEOUT 15000
+
+#    define RGB_MATRIX_CAPSLOCK_I 0
+#    define RGB_MATRIX_LWR_I 0
+#    define RGB_MATRIX_RSE_I 0
+
+#    define RGB_DISABLE_WHEN_USB_SUSPENDED
+#    define RGB_MATRIX_FRAMEBUFFER_EFFECTS
+#    define RGB_MATRIX_KEYPRESSES
+#    define ENABLE_RGB_MATRIX_TYPING_HEATMAP
+
+#    define RGB_MATRIX_TYPING_HEATMAP_DECREASE_DELAY_MS 50
+#    define RGB_MATRIX_TYPING_HEATMAP_SPREAD 40
+#    define RGB_MATRIX_TYPING_HEATMAP_SLIM
+#    define RGB_MATRIX_TYPING_HEATMAP_INCREASE_STEP 32
+
+#    define RGB_MATRIX_HUE_STEP 4
+#    define RGB_MATRIX_SAT_STEP 4
+#    define RGB_MATRIX_VAL_STEP 4
+#endif
