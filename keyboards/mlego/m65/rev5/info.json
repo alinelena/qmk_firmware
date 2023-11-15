@@ -7,6 +7,9 @@
             {"pin_a": "GP4", "pin_b": "GP5", "resolution": 4}
         ]
     },
+    "features": {
+      "oled": true
+    },
     "indicators": {
         "caps_lock": "GP25"
     },
