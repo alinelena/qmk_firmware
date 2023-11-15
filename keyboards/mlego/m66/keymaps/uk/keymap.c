@@ -209,14 +209,15 @@ adj layer
 ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
 │ l⎗ │ l⎘ │ ⌕  │ l☀ │ l☼ │ u │ u │ u❖ │ u │EMAC│    │M_T │M_SW│l☀☼ │
 ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┘
-│HUI │HUD │M_P │ l⌧ │ r♲ │    │    │    │    │    │    │ d⚛ │M_SN│
+│HUI │HUD │M_P │ e␥ │ r♲ │    │    │    │ l⌧ │    │    │    │M_SN│
 ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
-│SAI │SAD │M_B │ l⏹│ u⎘ │    │    │    │    │    │    │ e␥ │M_K │
+│SAI │SAD │M_B │ d⚛ │ u⎘ │    │ l⌇ │    │    │    │    │ e␥ │M_K │
 ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
-│VAI │VAD │M_R │ l⌇ │ u⎗ │    │ b♽ │    │    │    │    │    │M_X │
+│VAI │VAD │M_R │    │ u⎗ │    │ b♽ │    │    │    │    │    │M_X │
 ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
 │    │    │    │    │    │    │    │    │    │    │    │M_TW│M_G │
 └────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┴────┘
+
 
 l - rgb
 u - unicode
@@ -225,11 +226,11 @@ e - eeprom
 
 */
   [_ADJ] = LAYOUT_ortho_5x14(
-      RGB_MOD, RGB_RMOD, A(KC_F2), RGB_ON_EFF, RGB_OFF_EFF, UC_LINX,  UC_WIN, UC_WINC,  UC_MAC, UC_EMAC, _______,  RGB_M_T, RGB_M_SW, RGB_TOG,
-      RGB_HUI, RGB_HUD , RGB_M_P ,    RGB_IND,      QK_RBT, _______, _______, _______, _______, _______, _______,  DB_TOGG, RGB_M_SN,
-      RGB_SAI, RGB_SAD , RGB_M_B ,    RGB_LSD,     UC_NEXT, _______, _______, _______, _______, _______, _______,   EE_CLR, RGB_M_K ,
-      RGB_VAI, RGB_VAD , RGB_M_R ,   RGB_HEAT,     UC_PREV, _______, QK_BOOT, _______, _______, _______, _______, _______ , RGB_M_X ,
-      _______, _______ , _______ ,    _______,     _______, _______, _______, _______, _______, _______, _______, RGB_M_TW, RGB_M_G),
+      RGB_MOD, RGB_RMOD,  A(KC_F2), RGB_ON_EFF, RGB_OFF_EFF, UC_LINX,   UC_WIN, UC_WINC,  UC_MAC, UC_EMAC, _______,  RGB_M_T, RGB_M_SW, RGB_TOG,
+      RGB_HUI,  RGB_HUD,   RGB_M_P,     EE_CLR,      QK_RBT, _______,  _______, _______, RGB_IND, _______, _______,  _______,  RGB_M_B,
+      RGB_SAI,  RGB_SAD,  RGB_M_SN,    DB_TOGG,     UC_NEXT, _______, RGB_HEAT, _______, _______, RGB_LSD, _______,   EE_CLR,  RGB_M_K,
+      RGB_VAI,  RGB_VAD,   RGB_M_R,    _______,     UC_PREV, _______,  QK_BOOT, _______, _______, _______, _______, _______ ,  RGB_M_X,
+      _______,  _______,   _______,    _______,     _______, _______,  _______, _______, _______, _______, _______, RGB_M_TW, RGB_M_G),
 };
 // clang-format on
 
