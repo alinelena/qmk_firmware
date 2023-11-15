@@ -20,28 +20,28 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, centers=None, labels=
 
     d = draw.Drawing(canvas_width+5, canvas_height+5, origin=(-5,-5))
     d.set_pixel_scale(5)
-    r=draw.Rectangle(-5,-5,canvas_width+5,canvas_height+5,fill="midnightblue",rx=rad,ry=rad)
+    r=draw.Rectangle(-5,-5,canvas_width+5,canvas_height+5,fill="black",rx=rad,ry=rad)
     d.append(r)
     sw = 0.5
     fs=6
     if keys:
         for ir in keys:
-            d.append(draw.Rectangle(*ir, rx=rad,ry=rad,fill='none',stroke='deeppink',stroke_width=sw))
+            d.append(draw.Rectangle(*ir, rx=rad,ry=rad,fill='darkslategray',stroke='deeppink',stroke_width=sw))
     if centers and rows:
         for c in centers:
-            d.append(draw.Circle(c[0]+cox,c[1]+coy,r=radius,fill='mediumspringgreen',stroke_width=sw))
+            d.append(draw.Circle(c[0]+cox,c[1]+coy,r=radius,fill='fuchsia',stroke_width=sw))
 
     if centers and cols:
         for c in centers:
             d.append(draw.Circle(c[0]+rox,c[1]+roy,r=radius,fill='orchid',stroke_width=sw))
     if rows:
         for ir in rows:
-            e = draw.Lines(*rows[ir],stroke='orchid',close=False,fill='none',stroke_width=sw)
+            e = draw.Lines(*rows[ir],stroke='fuchsia',close=False,fill='none',stroke_width=sw)
             e.append_title(f"row {ir}")
             d.append(e)
     if cols:
         for c in cols:
-            e = draw.Lines(*cols[c],stroke='lightseagreen',close=False,fill='none',stroke_width=sw)
+            e = draw.Lines(*cols[c],stroke='orchid',close=False,fill='none',stroke_width=sw)
             e.append_title(f"column {c}")
             d.append(e)
     if iso:
@@ -56,11 +56,11 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, centers=None, labels=
                 d.append(draw.ArcLine(*e[2*i+1],stroke='deeppink',fill='none',stroke_width=sw))
     if labels and centers:
         for c,l in zip(centers,labels):
-            d.append(draw.Text(l,fs,c[0],c[1],fill='mediumspringgreen',center=True))
+            d.append(draw.Text(l,fs,c[0],c[1],fill='peachpuff',center=True))
 
     if tooltips and centers:
         for c,t in zip(centers,tooltips):
-            e = draw.Circle(c[0],c[1],r=5,fill='chartreuse',stroke='none',opacity='0.16' ,stroke_width=sw)
+            e = draw.Circle(c[0],c[1],r=5,fill='lightpink',stroke='none',opacity='0.16' ,stroke_width=sw)
             e.append_title(t)
             d.append(e)
 
