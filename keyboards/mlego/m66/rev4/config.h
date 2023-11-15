@@ -97,8 +97,8 @@ LSB                  <-- LSBFIRST
 #if defined(QUANTUM_PAINTER_ENABLE)
 
 #    define SPI_DISP_CS_PIN GP6
-#    define DISP_ROT QP_ROTATION_90
 #    if defined(QUANTUM_PAINTER_ST7735_ENABLE)
+#    define DISP_ROT QP_ROTATION_90
 #        define ST7735_NUM_DEVICES 1
 #        define SPI_DISP_DC_PIN GP7
 #        define SPI_DISP_RST_PIN GP8
@@ -108,15 +108,21 @@ LSB                  <-- LSBFIRST
 #    endif
 
 #    if defined(QUANTUM_PAINTER_LS0XX_ENABLE)
+/*
 #        define SPI_DISP_BL_PIN GP9
 // version ls013b7dh05
+#    define DISP_ROT QP_ROTATION_90
 #        define DISP_WIDTH 144
 #        define DISP_HEIGHT 168
-/*
 // version ls013b7dh03
+#    define DISP_ROT QP_ROTATION_270
 #    define DISP_WIDTH 128
 #    define DISP_HEIGHT 128
- */
+// version LS011B7DH03
+#    define DISP_ROT QP_ROTATION_180
+#    define DISP_WIDTH  160
+#    define DISP_HEIGHT 68
+*/
 #    endif
 
 #    if defined(CONSOLE_ENABLE)
