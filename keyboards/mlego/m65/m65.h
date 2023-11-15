@@ -10,6 +10,8 @@ enum unicode_names { la = 0, lA, lb, lB, lc, lC, ld, lD, le, lE, lf, lF, lg, lG,
 #endif
 
 enum layer_names { _QW = 0, _LWR, _RSE, _ADJ };
+const char *get_layer_name(const uint8_t);
+const char *get_unicde_name(const uint8_t);
 
 #if defined(OLED_ENABLE)
 void user_oled_magic(void);

@@ -73,6 +73,45 @@ void toggle_leds(const bool toggle_lwr, const bool toggle_rse) {
     }
 }
 
+const char *get_layer_name(const uint8_t layer) {
+    switch (layer) {
+        case _QW:
+            return "qwerty";
+        case _LWR:
+            return "lower ";
+        case _RSE:
+            return "raise ";
+        case _ADJ:
+            return "adjust";
+        default:
+            return "none  ";
+    }
+}
+
+const char *get_unicode_name(const uint8_t uni) {
+#if defined(UNICODE_COMMON_ENABLE)
+    switch (uni) {
+        case UNICODE_MODE_LINUX:
+            return "linux";
+        case UNICODE_MODE_MACOS:
+            return "apple";
+        case UNICODE_MODE_WINDOWS:
+            return "win  ";
+        case UNICODE_MODE_WINCOMPOSE:
+            return "win c";
+        case UNICODE_MODE_BSD:
+            return "bsd  ";
+        case UNICODE_MODE_EMACS:
+            return "emacs";
+        default:
+            return "none ";
+    }
+#else
+    return "none ";
+#endif
+}
+
+
 #if defined(OLED_ENABLE)
 
 void init_timer(void) {
@@ -82,64 +121,28 @@ void init_timer(void) {
 void user_oled_magic(void) {
     // Host Keyboard Layer Status
     oled_write_P(PSTR("Layer: "), false);
-
-    switch (get_highest_layer(layer_state)) {
-        case _QW:
-            oled_write_P(PSTR("Default\n"), false);
-            break;
-        case _LWR:
-            oled_write_P(PSTR("Lower\n"), false);
-            break;
-        case _RSE:
-            oled_write_P(PSTR("Raise\n"), false);
-            break;
-        case _ADJ:
-            oled_write_P(PSTR("ADJ\n"), false);
-            break;
-        default:
-            // Or use the write_ln shortcut over adding '\n' to the end of your string
-            oled_write_ln_P(PSTR("Undefined"), false);
-    }
-
-    // Host Keyboard LED Status
-    led_t led_state = host_keyboard_led_state();
-    oled_write_P(led_state.num_lock ? PSTR(" NumLock") : PSTR("    "), false);
-    oled_write_P(led_state.scroll_lock ? PSTR(" ScrollLock") : PSTR("    "), false);
-    oled_write_P(led_state.caps_lock ? PSTR(" CapsLock") : PSTR("    "), false);
+    oled_write_P(PSTR(get_layer_name(get_highest_layer(layer_state))), false);
+    oled_write_P(PSTR("\n"), false);
 
 #    if defined(UNICODE_COMMON_ENABLE)
-    oled_write_P(PSTR("\nunicode: "), false);
-    switch (get_unicode_input_mode()) {
-        case UNICODE_MODE_LINUX:
-            oled_write_P(PSTR("Linux"), false);
-            break;
-        case UNICODE_MODE_MACOS:
-            oled_write_P(PSTR("apple"), false);
-            break;
-        case UNICODE_MODE_WINDOWS:
-            oled_write_P(PSTR("windows"), false);
-            break;
-        case UNICODE_MODE_WINCOMPOSE:
-            oled_write_P(PSTR("windows c"), false);
-            break;
-        case UNICODE_MODE_BSD:
-            oled_write_P(PSTR("bsd"), false);
-            break;
-        case UNICODE_MODE_EMACS:
-            oled_write_P(PSTR("emacs"), false);
-            break;
-        default:
-            oled_write_ln_P(PSTR("not supported"), false);
-    }
+    oled_write_P(PSTR("uni: "), false);
+    oled_write_ln_P(PSTR(get_unicode_name(get_unicode_input_mode())), false);
+    // oled_write_P(PSTR("\n"), false);
+    //  Host Keyboard LED Status
 #    endif
+    led_t led_state = host_keyboard_led_state();
+    oled_write_P("Lock:", false);
+    oled_write_P(led_state.num_lock ? PSTR("Num") : PSTR("   "), false);
+    oled_write_P(led_state.scroll_lock ? PSTR(" Scroll") : PSTR("       "), false);
+    oled_write_ln_P(led_state.caps_lock ? PSTR(" Caps") : PSTR("     "), false);
 
 #    if defined(WPM_ENABLE)
-    oled_write_P(PSTR("\nwpm: "), false);
+    oled_write_P(PSTR("wpm: "), false);
     uint8_t wpm = get_current_wpm();
-    oled_write_P(wpm != 0 ? get_u8_str(wpm, ' ') : PSTR("    "), false);
+    oled_write_P(wpm != 0 ? get_u8_str(wpm, ' ') : PSTR("   "), false);
 #    endif
     oled_write_P(PSTR(" "), false);
-    oled_write_P(PSTR(hash), false);
+    oled_write_ln_P(PSTR(hash), false);
 }
 
 void render_logo(void) {
