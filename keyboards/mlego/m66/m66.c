@@ -107,8 +107,6 @@ void set_led_toggle(const uint8_t layer, const bool state) {
 }
 
 void toggle_leds(const bool toggle_lwr, const bool toggle_rse) {
-#if defined(RGB_MATRIX_ENABLE)
-#endif
     led_lwr(toggle_lwr);
     led_rse(toggle_rse);
     if (layer_state_is(_ADJ)) {
@@ -235,7 +233,12 @@ void user_lcd_magic(void) {
         const char *layer_name = get_layer_name(layer);
         snprintf(buf, sizeof(buf), "layer: %s", layer_name);
         qp_drawtext_recolor(lcd, 0, 0.5 * h, qp_fonts[0], buf, HSV_ORANGE, HSV_BLACK);
-        draw_lcd_icon(110, 5, true, 5 + layer, HSV_BLACK, HSV_ORANGE);
+        if (DISP_WIDTH < 130) {
+            draw_lcd_icon(20, 72, true, 5 + layer, HSV_BLACK, HSV_ORANGE);
+
+        } else {
+            draw_lcd_icon(110, 5, true, 5 + layer, HSV_BLACK, HSV_ORANGE);
+        }
         current_layer = layer;
     }
 
@@ -249,7 +252,7 @@ void user_lcd_magic(void) {
     }
 #    endif
 
-    h = 45;
+    h = 36;
     // this is lifted from djinn
     if (last_led_state.raw != host_keyboard_led_state().raw) {
         show_icons_lcd();
@@ -257,7 +260,11 @@ void user_lcd_magic(void) {
 #    if defined(RGB_MATRIX_ENABLE)
     bool rgb = rgb_matrix_is_enabled();
     if (current_rgb != rgb) {
-        draw_lcd_icon(110, h, rgb, 13, HSV_CHARTREUSE, HSV_BLACK);
+        if (DISP_WIDTH < 130) {
+            draw_lcd_icon(60, 2 * h, rgb, 13, HSV_CHARTREUSE, HSV_BLACK);
+        } else {
+            draw_lcd_icon(110, h, rgb, 13, HSV_CHARTREUSE, HSV_BLACK);
+        }
         current_rgb = rgb;
     }
 #    endif
@@ -275,7 +282,7 @@ void init_lcd_timer(void) {
 };
 
 void show_icons_lcd(void) {
-    const int h = 45;
+    const int h = 36;
 
     last_led_state.raw = host_keyboard_led_state().raw;
     draw_lcd_icon(4, h, last_led_state.caps_lock, 2, HSV_PINK, HSV_BLACK);
@@ -285,13 +292,18 @@ void show_icons_lcd(void) {
 
 void render_lcd_logo(void) {
     if (update_lcd_logo) {
-        qp_drawimage_recolor(lcd, 35, 20, qp_images[1], HSV_BLACK, HSV_PINK);
-        qp_drawimage_recolor(lcd, 0, 20, qp_images[0], HSV_CYAN, HSV_BLACK);
+        if (DISP_HEIGHT > 81) {
+            qp_drawimage_recolor(lcd, 0, 72, qp_images[1], HSV_BLACK, HSV_PINK);
+            qp_drawimage_recolor(lcd, 0, 20, qp_images[0], HSV_CYAN, HSV_BLACK);
+        } else {
+            qp_drawimage_recolor(lcd, 35, 20, qp_images[1], HSV_BLACK, HSV_PINK);
+            qp_drawimage_recolor(lcd, 0, 20, qp_images[0], HSV_CYAN, HSV_BLACK);
+        }
         int     h          = qp_fonts[0]->line_height;
         int16_t hash_width = qp_textwidth(qp_fonts[0], hash);
-        qp_drawtext_recolor(lcd, DISP_WIDTH - hash_width - 10, DISP_HEIGHT - 1.25 * h, qp_fonts[0], hash, HSV_ORANGE, HSV_BLACK);
+        qp_drawtext_recolor(lcd, DISP_WIDTH - hash_width - 5, DISP_HEIGHT - 1.25 * h, qp_fonts[0], hash, HSV_ORANGE, HSV_BLACK);
         int16_t build_width = qp_textwidth(qp_fonts[0], bdate);
-        qp_drawtext_recolor(lcd, DISP_WIDTH - build_width - 10, 5, qp_fonts[0], bdate, HSV_ORANGE, HSV_BLACK);
+        qp_drawtext_recolor(lcd, DISP_WIDTH - build_width - 10, 10, qp_fonts[0], bdate, HSV_ORANGE, HSV_BLACK);
         update_lcd_logo = false;
     }
 }
@@ -301,7 +313,11 @@ void clear_lcd_display(void) {
         qp_rect(lcd, 0, 0, DISP_WIDTH, DISP_HEIGHT, HSV_BLACK, true);
         show_icons_lcd();
 #    if defined(RGB_MATRIX_ENABLE)
-        draw_lcd_icon(110, 45, current_rgb, 13, HSV_CHARTREUSE, HSV_BLACK);
+        if (DISP_WIDTH < 130) {
+            draw_lcd_icon(60, 72, current_rgb, 13, HSV_CHARTREUSE, HSV_BLACK);
+        } else {
+            draw_lcd_icon(110, 36, current_rgb, 13, HSV_CHARTREUSE, HSV_BLACK);
+        }
 #    endif
         clear_lcd_logo = false;
     }
@@ -409,6 +425,10 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                     rgb_matrix_set_color(index, 0, 0, 0);
                 }
                 rgb_matrix_check_finished_leds(RGB_MATRIX_LED_COUNT);
+    rgb_matrix_decrease_val_noeeprom();
+    rgb_matrix_decrease_val_noeeprom();
+    rgb_matrix_decrease_val_noeeprom();
+    rgb_matrix_decrease_val_noeeprom();
             }
             return false;
         case (RGB_LSD):
@@ -485,18 +505,17 @@ bool rgb_matrix_indicators_kb(void) {
     uint8_t layer = get_highest_layer(layer_state | default_layer_state);
 
     if (layer != current_rgb_layer || (toggle_rse || toggle_lwr)) {
-        dprintf("layer %2d c layer %2d \n", layer, current_rgb_layer);
         switch (layer) {
             case _RSE:
                 if (toggle_rse) {
-                    // toggle_rgb(RGB_MATRIX_LWR_I, false, HSV_PINK);
+                    toggle_rgb(RGB_MATRIX_LWR_I, false, HSV_PINK);
                     toggle_rgb(RGB_MATRIX_RSE_I, toggle_rse, HSV_GREEN);
                 }
                 break;
             case _LWR:
                 if (toggle_lwr) {
                     toggle_rgb(RGB_MATRIX_LWR_I, toggle_lwr, HSV_RED);
-                    // toggle_rgb(RGB_MATRIX_RSE_I, false, HSV_PINK);
+                    toggle_rgb(RGB_MATRIX_RSE_I, false, HSV_PINK);
                 }
                 break;
             case _ADJ:
@@ -605,6 +624,10 @@ void keyboard_post_init_kb(void) {
         rgb_matrix_set_color(index, 0, 0, 0);
     }
     rgb_matrix_check_finished_leds(RGB_MATRIX_LED_COUNT);
+    rgb_matrix_decrease_val_noeeprom();
+    rgb_matrix_decrease_val_noeeprom();
+    rgb_matrix_decrease_val_noeeprom();
+    rgb_matrix_decrease_val_noeeprom();
 #endif
 
 #if defined(OLED_ENABLE)
