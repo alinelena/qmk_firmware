@@ -40,7 +40,7 @@ c7 QH |7    10| SRCLR - 3v3
 #define SPI_MISO_PIN GP20
 #define SPI_MOSI_PIN GP23
 
-#define SPI_DIVISOR 8
+#define SPI_DIVISOR 128
 
 // 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000
 //  1QA     1QB     1QC     1QD     1QE     1QF     1QG     1QH     2QA     2QB     2QC     2QD     2QE     2QF     2QG     2QH

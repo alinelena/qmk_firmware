@@ -36,11 +36,13 @@ __attribute__((weak)) bool qp_sharp_panel_init(painter_device_t device, painter_
 
     mip_dev->base.rotation = rotation;
     surface->rotation      = rotation;
-
     writePinHigh(mip_dev->spi_config.chip_select_pin);
+     wait_ms(20);
     const uint8_t ls0xx_init_sequence[] = { LS0XX_CLEAR, 0 };
     spi_transmit(ls0xx_init_sequence, ARRAY_SIZE(ls0xx_init_sequence));
-    writePinLow(mip_dev->spi_config.chip_select_pin);
+  wait_ms(20);
+  writePinLow(mip_dev->spi_config.chip_select_pin);
+  wait_ms(20);
 
     return true;
 }
@@ -81,9 +83,10 @@ bool qp_sharp_panel_flush(painter_device_t device) {
     uint8_t bytes_per_line = (mip_dev->base.panel_width + 7) / 8 * mip_dev->base.native_bits_per_pixel;
     // offset used to access such data
     uint16_t buffer_offset = top * bytes_per_line;
-
+    dprintf("bytes per line %3d, offset %3d\n",bytes_per_line,buffer_offset );
     // start sending
     writePinHigh(mip_dev->spi_config.chip_select_pin);
+    wait_ms(3);
     uint8_t cmd = LS0XX_WRITE | LS0XX_VCOM;
     spi_transmit(&cmd, 1);
 
@@ -101,10 +104,13 @@ bool qp_sharp_panel_flush(painter_device_t device) {
         buffer_offset += bytes_per_line;
 
         spi_transmit(&dummy, 1);
+    wait_ms(3);
     }
 
     spi_transmit(&dummy, 1);
+    wait_ms(3);
     writePinLow(mip_dev->spi_config.chip_select_pin);
+    wait_ms(3);
 
     // clear surface's dirty area, no API to prevent extra prints
     surface->base.driver_vtable->flush(surface);

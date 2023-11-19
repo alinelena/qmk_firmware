@@ -513,7 +513,6 @@ bool rgb_matrix_indicators_kb(void) {
     uint8_t layer = get_highest_layer(layer_state | default_layer_state);
 
     if (layer != current_rgb_layer || (toggle_rse || toggle_lwr)) {
-        dprintf("layer %2d c layer %2d \n",layer, current_rgb_layer);
         switch (layer) {
             case _RSE:
                 if (toggle_rse) {
@@ -570,6 +569,10 @@ bool lcd_sharp_mip_init(void) {
     writePinHigh(SPI_DISP_BL_PIN);
     wait_ms(300);
 #        endif
+    setPinOutput(SPI_DISP_CS_PIN);
+    writePinHigh(SPI_DISP_CS_PIN);
+    wait_ms(300);
+
     // needs spi mode 0 or 1
     lcd = qp_ls0xx_device_t_make_spi_device(DISP_WIDTH, DISP_HEIGHT, SPI_DISP_CS_PIN, SPI_DIVISOR, 0, (void *)buf);
     if (!qp_init(lcd, DISP_ROT) || !qp_power(lcd, true)) {
