@@ -265,6 +265,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
     bae = []
     labels = []
     tooltips = []
+    encoders = []
     _xmin = _ymin = 1000000
     _xmax = _ymax = 0
     mrows = max([key['matrix'][0] for key in layout_data])
@@ -358,7 +359,8 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         if len(label)>4:
             label=label.replace('\n','')[0:4]
         if 'encoder' in key:
-            render_encoder(textpad, x, y, w, h, label, style)
+            render_encoder(textpad, x+1, y, w, h, label, style)
+            encoders += [(x*swx+w*swx/2.0,y*swy+h*swy/2.0,h*swy/2.0)]
         elif x >= 0.25 and w == 1.25 and h == 2:
             render_key_isoenter(textpad, x, y, w, h, label, style)
             iso.append(isoenter_key(x,y,w,h,swx,swy,rad))
@@ -403,7 +405,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         rows = None
         cols = None
 
-    draw_kb(canvas_width,canvas_height,keys=rectangles, centers=circles, labels=labels, iso=iso,
+    draw_kb(canvas_width,canvas_height,keys=rectangles, encoders=encoders, centers=circles, labels=labels, iso=iso,
             bae=bae,rows=rows,cols=cols,tooltips=tooltips,svg=f'{layout_name}.svg')
     lines = []
     for line in textpad:
@@ -606,12 +608,12 @@ def render_key_baenter(textpad, x, y, w, h, label, style):
 
 def render_encoder(textpad, x, y, w, h, label, style):
     box_chars = ENC_DRAWING_CHARACTERS[style]
-    x = ceil(x * 4)
+    x = ceil(x * 5)
     y = ceil(y * 3)
-    w = ceil(w * 4)
+    w = ceil(w * 5)
     h = ceil(h * 3)
 
-    label_len = w - 2
+    label_len = w - 1
     label_leftover = label_len - len(label)
 
     if len(label) > label_len:
