@@ -10,7 +10,7 @@ swy=19.025
 
 cox=-7.5
 coy=-6.0
-rox=-7.5
+rox=-5.0
 roy=-7.5
 
 rad=2.5
@@ -40,19 +40,19 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, encoders=None, center
             a = 45 * math.pi/180.0
             d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
                                enc[0]+enc[2]*math.cos(a+da),
-                               enc[1]+(math.sin(da+a))*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowcw))
+                               enc[1]+math.sin(da+a)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowcw))
             a = 225 * math.pi/180.0
             d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
                                enc[0]+enc[2]*math.cos(a+da),
-                               enc[1]+(math.sin(da+a))*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowcw))
+                               enc[1]+math.sin(da+a)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowcw))
             a = 135 * math.pi/180.0
             d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
                                enc[0]+enc[2]*math.cos(a-da),
-                               enc[1]+(math.sin(-da+a))*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
+                               enc[1]+math.sin(-da+a)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
             a = 315 * math.pi/180.0
             d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
                                enc[0]+enc[2]*math.cos(a-da),
-                               enc[1]+(math.sin(-da+a))*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
+                               enc[1]+math.sin(a-da)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
 
     if centers and rows:
         for c in centers:
@@ -63,7 +63,11 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, encoders=None, center
             d.append(draw.Circle(c[0]+rox,c[1]+roy,r=radius,fill='orchid',stroke_width=sw))
     if rows:
         for ir in rows:
-            e = draw.Lines(*rows[ir],stroke='fuchsia',close=False,fill='none',stroke_width=sw)
+            z = [(rows[ir][i],rows[ir][i+1]) for i in range(0,len(rows[ir]),2)]
+            z = sorted(z,key=lambda x: x[0])
+            z = sorted(z,key=lambda y: y[1])
+            w = list(sum(z, ()))
+            e = draw.Lines(*w,stroke='fuchsia',close=False,fill='none',stroke_width=sw)
             e.append_title(f"row {ir}")
             d.append(e)
     if cols:
