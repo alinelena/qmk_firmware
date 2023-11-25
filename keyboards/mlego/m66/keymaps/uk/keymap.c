@@ -228,7 +228,7 @@ e - eeprom
   [_ADJ] = LAYOUT_ortho_5x14(
       RGB_MOD, RGB_RMOD,  A(KC_F2), RGB_ON_EFF, RGB_OFF_EFF, UC_LINX,   UC_WIN, UC_WINC,  UC_MAC, UC_EMAC, _______,  RGB_M_T, RGB_M_SW, RGB_TOG,
       RGB_HUI,  RGB_HUD,   RGB_M_P,     EE_CLR,      QK_RBT, _______,  _______, _______, RGB_IND, _______, _______,  _______,  RGB_M_B,
-      RGB_SAI,  RGB_SAD,  RGB_M_SN,    DB_TOGG,     UC_NEXT, _______, RGB_HEAT, _______, _______, RGB_LSD, _______,   EE_CLR,  RGB_M_K,
+      RGB_SAI,  RGB_SAD,  RGB_M_SN,    DB_TOGG,     UC_NEXT, _______, RGB_HEAT, _______, _______, RGB_LSD, _______,  _______,  RGB_M_K,
       RGB_VAI,  RGB_VAD,   RGB_M_R,    _______,     UC_PREV, _______,  QK_BOOT, _______, _______, _______, _______, _______ ,  RGB_M_X,
       _______,  _______,   _______,    _______,     _______, _______,  _______, _______, _______, _______, _______, RGB_M_TW, RGB_M_G),
 };
