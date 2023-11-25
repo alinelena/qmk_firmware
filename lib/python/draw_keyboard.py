@@ -3,6 +3,7 @@
 import drawsvg as draw
 from milc import cli
 from pathlib import Path
+import math
 
 swx=19.025
 swy=19.025
@@ -15,7 +16,7 @@ roy=-7.5
 rad=2.5
 radius = 1.0
 
-def draw_kb(canvas_width=600, canvas_height=300,keys=None, centers=None, labels=None, iso=None, bae=None, rows=None,
+def draw_kb(canvas_width=600, canvas_height=300,keys=None, encoders=None, centers=None, labels=None, iso=None, bae=None, rows=None,
             cols=None, output_path=None, svg=None, tooltips=None ):
 
     d = draw.Drawing(canvas_width+5, canvas_height+5, origin=(-5,-5))
@@ -27,6 +28,32 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, centers=None, labels=
     if keys:
         for ir in keys:
             d.append(draw.Rectangle(*ir, rx=rad,ry=rad,fill='darkslategray',stroke='deeppink',stroke_width=sw))
+    if encoders:
+        arrowcw = draw.Marker(-0.1, -0.51, 0.9, 0.5, scale=4, orient='auto')
+        arrowcw.append(draw.Lines(-0.1, 0.5, -0.1, -0.5, 0.9, 0, fill='orchid', close=True))
+
+        arrowccw = draw.Marker(-0.1, -0.51, 0.9, 0.5, scale=4, orient='auto')
+        arrowccw.append(draw.Lines(-0.1, 0.5, -0.1, -0.5, 0.9, 0, fill='teal', close=True))
+        for enc in encoders:
+            d.append(draw.Circle(enc[0],enc[1],r=enc[2],stroke='fuchsia',stroke_width=sw))
+            da = 0.0005*math.pi/180.0
+            a = 45 * math.pi/180.0
+            d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
+                               enc[0]+enc[2]*math.cos(a+da),
+                               enc[1]+(math.sin(da+a))*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowcw))
+            a = 225 * math.pi/180.0
+            d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
+                               enc[0]+enc[2]*math.cos(a+da),
+                               enc[1]+(math.sin(da+a))*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowcw))
+            a = 135 * math.pi/180.0
+            d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
+                               enc[0]+enc[2]*math.cos(a-da),
+                               enc[1]+(math.sin(-da+a))*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
+            a = 315 * math.pi/180.0
+            d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
+                               enc[0]+enc[2]*math.cos(a-da),
+                               enc[1]+(math.sin(-da+a))*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
+
     if centers and rows:
         for c in centers:
             d.append(draw.Circle(c[0]+cox,c[1]+coy,r=radius,fill='fuchsia',stroke_width=sw))
