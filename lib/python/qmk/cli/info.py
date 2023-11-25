@@ -82,7 +82,7 @@ def show_keymap(kb_info_json, title_caps=True):
         layout_name = keymap_data['layout']
         layout_name = kb_info_json.get('layout_aliases', {}).get(layout_name, layout_name)  # Resolve alias names
         print(f"{layout_name=}")
-        labels, keycodes = get_key_labels(keymap_data,keymap_path)
+        labels, keycodes, _  = get_key_labels(keymap_data,keymap_path)
         for layer_num, layer in enumerate(keymap_data['layers']):
             if title_caps:
                 cli.echo('{fg_cyan}Keymap %s Layer %s{fg_reset}:', cli.config.info.keymap, layer_num)
@@ -122,7 +122,7 @@ def show_matrix(kb_info_json, title_caps=True):
                 nc = key['matrix'][1]
                 row = ROW_LETTERS[nr]
                 col = COL_LETTERS[nc]
-                labels.append(f"({nr},{nc})\n{row+col}")
+                labels.append(f"{nr},{nc}\n {row+col}")
             else:
                 labels.append('')
 

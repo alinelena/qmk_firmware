@@ -274,7 +274,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         no_rows = (mrows+1)//2
     last_col_row = []
     for r in range(mrows+1):
-        last_col_row.append(max([key['matrix'][1] for key in layout_data if key['matrix'][0] == r ]))
+        last_col_row.append(max([key['matrix'][1] for key in layout_data if key['matrix'][0] == r and 'encoder' not in key ]))
     extra = False
     ccr = 0
     rcr = 0
@@ -359,7 +359,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         if len(label)>4:
             label=label.replace('\n','')[0:4]
         if 'encoder' in key:
-            render_encoder(textpad, x+1, y, w, h, label, style)
+            render_encoder(textpad, x, y, w, h, label, style)
             encoders += [(x*swx+w*swx/2.0,y*swy+h*swy/2.0,h*swy/2.0)]
         elif x >= 0.25 and w == 1.25 and h == 2:
             render_key_isoenter(textpad, x, y, w, h, label, style)
@@ -378,10 +378,11 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
                     position = 'm'
                 if cc == 0:
                     position = 'l'+position
-                elif cc == last_col_row[cr]:
+                elif cc == last_col_row[cr] :
                     position = 'r'+position
                     try:
                         if last_col_row[cr] != last_col_row[cr+1]:
+
                             sp = 'b'+position
                             extra = True
                             rcr = cr + 1
@@ -396,7 +397,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
             else:
                 render_key_rect(textpad, x, y, w, h, label, style)
 
-            rectangles += [(x*swx,y*swy,w*swx,h*swy)]
+            rectangles += [(x*swx,y*swy,w*swx*0.95,h*swy*0.95)]
 
     canvas_width = (_xmax -_xmin) * swx + 5
     canvas_height = (_ymax - _ymin) * swy + 5
