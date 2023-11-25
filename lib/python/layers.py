@@ -37,18 +37,27 @@ def get_key_labels(keymap, keymap_c):
         specs = hjson.load(open(q))
         specials.update(specs)
 # up codes⇪
+    n = len(keymap['layers'])
     ups = {}
+    enc = {}
     if keymap_c.suffix == '.c':
         fup = open(keymap_c).read()
 
         x = re.findall("(?xs) unicode_map.+?{(.+?)}", fup)
         if x:
-            for x in x[0].split("\n"):
-                if len(x) > 0:
-                    k = re.findall("\[(.+?)\]",x)[0]
-                    v = re.findall("=(.+?),",x)[0]
+            for t in x[0].split("\n"):
+                if len(t) > 0:
+                    k = re.findall("\[(.+?)\]",t)[0]
+                    v = re.findall("=(.+?),",t)[0]
                     ups[k]=v
-    n = len(keymap['layers'])
+
+        z = re.findall("(?xs) .+?{(ENCODER_CCW_CW.+?)}", fup)
+        if z:
+            k = 0
+            for t in z:
+                if k < n:
+                  enc[k] = re.findall("\((.+?)\)",t)[0].replace(" ","").split(",")
+                  k += 1
     labels = [defaultdict(list) for i in range(n)]
 
 
@@ -115,4 +124,4 @@ def get_key_labels(keymap, keymap_c):
             if len(l) > 1 :
                 x = ["\n".join(l)]
             o_labels[layer].append(x)
-    return o_labels, keymap['layers']
+    return o_labels, keymap['layers'], enc
