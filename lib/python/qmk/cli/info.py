@@ -107,6 +107,17 @@ def show_layouts(kb_info_json, title_caps=True):
         cli.echo('{fg_cyan}%s{fg_reset}:', title)
         print(layout_art)  # Avoid passing dirty data to cli.echo()
 
+def has_rgb(kb_info_json_rgb_matrix,nr,nc):
+   for led in kb_info_json_rgb_matrix['layout']:
+       if 'matrix' in led:
+           x = led['matrix'][0]
+           y = led['matrix'][1]
+           if (nr,nc) == (x,y):
+              try:
+                  return True, led['x'], led['y'], led['flags']
+              except:
+                  return True, led['x'], led['y'], 0
+   return False, None, None, None
 
 def show_matrix(kb_info_json, title_caps=True):
     """Render the layout with matrix labels in ascii art.
@@ -116,16 +127,31 @@ def show_matrix(kb_info_json, title_caps=True):
     for layout_name, layout in kb_info_json['layouts'].items():
         # Build our label list
         labels = []
+        rgb_layout = {}
+        rgb_back = []
         for key in layout['layout']:
             if 'matrix' in key:
                 nr = key['matrix'][0]
                 nc = key['matrix'][1]
                 row = ROW_LETTERS[nr]
                 col = COL_LETTERS[nc]
-                labels.append(f"{nr},{nc}\n {row+col}")
+                try:
+                    rgb, x,y,flag = has_rgb(kb_info_json['rgb_matrix'],nr,nc)
+                    if rgb:
+                        rgb_layout[(nr,nc)] = {'x':x,'y':y,'flags':flag}
+                except:
+                    pass
+                labels.append(f"{row+col}\n  {nr},{nc}")
             else:
                 labels.append('')
-
+        try:
+            for led in kb_info_json['rgb_matrix']['layout']:
+                try:
+                    x = led['matrix'][0]
+                except:
+                    rgb_back += [(led['x'],led['y'],led['flags'])]
+        except:
+            pass
         # Print the header
         if title_caps:
             cli.echo('{fg_blue}Matrix for "%s"{fg_reset}:', layout_name)
@@ -135,7 +161,8 @@ def show_matrix(kb_info_json, title_caps=True):
         fk_name = "-".join(cli.config.info.keyboard.split(os.sep))
         ln = "-".join([fk_name,'matrix',layout_name])
         print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii,
-                            key_labels=labels,is_split=split,layout_name=ln, pins=pins, show_wires=True))
+                            key_labels=labels,is_split=split,layout_name=ln, pins=pins, show_wires=True,
+                            show_rgb=True,rgb_layout=rgb_layout,rgb_back=rgb_back))
 
 
 def print_friendly_output(kb_info_json):

@@ -3,6 +3,7 @@
     "keyboard_name": "tipro32",
     "maintainer": "alinelena",
     "bootloader": "stm32-dfu",
+    "processor": "STM32G431",
     "diode_direction": "COL2ROW",
     "features": {
         "bootmagic": true,
@@ -16,7 +17,6 @@
         "cols": ["A6", "C4", "B1", "B11"],
         "rows": ["B12", "B14", "A2", "A9", "A15", "C11","B4","A4"]
     },
-    "processor": "STM32G431",
     "url": "",
     "usb": {
         "device_version": "1.0.0",

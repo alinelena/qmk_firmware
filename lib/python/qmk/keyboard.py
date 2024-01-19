@@ -251,7 +251,7 @@ def rules_mk(keyboard):
     return rules
 
 def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somedefault", keycodes=None, pins=None, is_split=False,
-                  show_wires=False):
+                  show_wires=False,show_rgb=False,rgb_layout=None,rgb_back=None):
     """Renders a single layout.
     """
     textpad = [array('u', ' ' * 200) for x in range(100)]
@@ -260,12 +260,14 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
     rows = defaultdict(list)
     cols = defaultdict(list)
     circles = []
+    rgbs = []
     rectangles = []
     iso = []
     bae = []
     labels = []
     tooltips = []
     encoders = []
+    backlights = []
     _xmin = _ymin = 1000000
     _xmax = _ymax = 0
     mrows = max([key['matrix'][0] for key in layout_data])
@@ -279,6 +281,9 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
     ccr = 0
     rcr = 0
     sp = ''
+    if show_rgb:
+        for b in rgb_back:
+            backlights += [(b[0]*swx,b[1]*swy,b[2])]
 
     for key in layout_data:
         x = key.get('x', 0)
@@ -358,6 +363,14 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         label = ''.join(c for c in label.replace('\n','') if unicodedata.east_asian_width(c) != 'W')
         if len(label)>4:
             label=label.replace('\n','')[0:4]
+        if show_rgb:
+            try:
+                flag = rgb_layout[(cr,cc)]['flags']
+                rgbs += [(x*swx + w*swx-rad,y*swy + h*swy-rad,flag)]
+                label = label.strip()+'☼'
+            except:
+                pass
+
         if 'encoder' in key:
             render_encoder(textpad, x, y, w, h, label, style)
             encoders += [(x*swx+w*swx/2.0,y*swy+h*swy/2.0,h*swy/2.0)]
@@ -397,7 +410,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
             else:
                 render_key_rect(textpad, x, y, w, h, label, style)
 
-            rectangles += [(x*swx,y*swy,w*swx*0.95,h*swy*0.95)]
+            rectangles += [(x*swx,y*swy,w*swx,h*swy)]
 
     canvas_width = (_xmax -_xmin) * swx + 5
     canvas_height = (_ymax - _ymin) * swy + 5
@@ -407,7 +420,8 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         cols = None
 
     draw_kb(canvas_width,canvas_height,keys=rectangles, encoders=encoders, centers=circles, labels=labels, iso=iso,
-            bae=bae,rows=rows,cols=cols,tooltips=tooltips,svg=f'{layout_name}.svg')
+            bae=bae,rows=rows,cols=cols,tooltips=tooltips,svg=f'{layout_name}.svg',rgbs=rgbs if show_rgb else None,
+            backlights=backlights if show_rgb else None)
     lines = []
     for line in textpad:
         if line.tounicode().strip():
