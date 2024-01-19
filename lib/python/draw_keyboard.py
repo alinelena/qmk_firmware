@@ -3,21 +3,39 @@
 import drawsvg as draw
 from milc import cli
 from pathlib import Path
+from math import log
 import math
 
-swx=19.025
-swy=19.025
+css4_colours = ['aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue', 'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue', 'cornsilk', 'crimson', 'cyan', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen', 'darkgrey', 'darkkhaki', 'darkmagenta', 'darkolivegreen', 'darkorange', 'darkorchid', 'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue', 'darkslategray', 'darkslategrey', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dimgrey', 'dodgerblue', 'firebrick', 'floralwhite', 'forestgreen', 'fuchsia', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'green', 'greenyellow', 'grey', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki', 'lavender', 'lavenderblush', 'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral', 'lightcyan', 'lightgoldenrodyellow', 'lightgray', 'lightgreen', 'lightgrey', 'lightpink', 'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightslategrey', 'lightsteelblue', 'lightyellow', 'lime', 'limegreen', 'linen', 'magenta', 'maroon', 'mediumaquamarine', 'mediumblue', 'mediumorchid', 'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen', 'mediumturquoise', 'mediumvioletred', 'midnightblue', 'mintcream', 'mistyrose', 'moccasin', 'navajowhite', 'navy', 'oldlace', 'olive', 'olivedrab', 'orange', 'orangered', 'orchid', 'palegoldenrod', 'palegreen', 'paleturquoise', 'palevioletred', 'papayawhip', 'peachpuff', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'rebeccapurple', 'red', 'rosybrown', 'royalblue', 'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'seashell', 'sienna', 'silver', 'skyblue', 'slateblue', 'slategray', 'slategrey', 'snow', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet', 'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgreen']
 
-cox=-7.5
-coy=-6.0
-rox=-5.0
-roy=-7.5
+row_colours = ['aqua','bisque','deepskyblue','hotpink','chartreuse','cornflowerblue','crimson','gold','darkorange','orchid','hotpink','fuchsia']
+col_colours = ['lightpink','aquamarine','moccasin','turquoise','lime','khaki','greenyellow','yellow','pink','peachpuff','orange',
+               'skyblue','white','goldenrod','lavenderblush','lavender','lightyellow','lightsalmon']
 
-rad=2.5
+rgb_type = ["modifier","underglow","keylight","indicator","n/a","n/a","n/a","n/a","none","all"]
+rgb_colours = ["lime","aqua","gold","crimson","lightsalmon","lavender","orange","pink","peachpuff","moccasin"]
+swx = 19.05
+swy = 19.05
+
+cox = -7.5
+coy = -7.0
+rox = -7.5
+roy = -7.0
+
+rad = 2.5
 radius = 1.0
 
+def flag2x(c):
+    if c not in [0,255]:
+       x = int(log(c,2))
+    elif c == 0:
+       x = 8
+    else:
+       x = 9
+    return x
+
 def draw_kb(canvas_width=600, canvas_height=300,keys=None, encoders=None, centers=None, labels=None, iso=None, bae=None, rows=None,
-            cols=None, output_path=None, svg=None, tooltips=None ):
+            cols=None, output_path=None, svg=None, tooltips=None, rgbs=None, backlights=None):
 
     d = draw.Drawing(canvas_width+5, canvas_height+5, origin=(-5,-5))
     d.set_pixel_scale(5)
@@ -60,19 +78,23 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, encoders=None, center
 
     if centers and cols:
         for c in centers:
-            d.append(draw.Circle(c[0]+rox,c[1]+roy,r=radius,fill='orchid',stroke_width=sw))
+            d.append(draw.Circle(c[0]+rox,c[1]+roy,r=radius,fill='limegreen',stroke_width=sw))
     if rows:
         for ir in rows:
             z = [(rows[ir][i],rows[ir][i+1]) for i in range(0,len(rows[ir]),2)]
+            z = sorted(z,key=lambda y: y[1],reverse=False)
             z = sorted(z,key=lambda x: x[0])
-            z = sorted(z,key=lambda y: y[1])
             w = list(sum(z, ()))
-            e = draw.Lines(*w,stroke='fuchsia',close=False,fill='none',stroke_width=sw)
+            e = draw.Lines(*w,stroke=row_colours[ir%len(row_colours)],close=False,fill='none',stroke_width=sw)
             e.append_title(f"row {ir}")
             d.append(e)
     if cols:
         for c in cols:
-            e = draw.Lines(*cols[c],stroke='orchid',close=False,fill='none',stroke_width=sw)
+            try:
+                ic = c[0]
+            except:
+                ic = c
+            e = draw.Lines(*cols[c],stroke=col_colours[ic%len(col_colours)],close=False,fill='none',stroke_width=sw)
             e.append_title(f"column {c}")
             d.append(e)
     if iso:
@@ -93,6 +115,18 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, encoders=None, center
         for c,t in zip(centers,tooltips):
             e = draw.Circle(c[0],c[1],r=5,fill='lightpink',stroke='none',opacity='0.16' ,stroke_width=sw)
             e.append_title(t)
+            d.append(e)
+    if rgbs:
+        for c in rgbs:
+            x = flag2x(c[2])
+            e = draw.Circle(c[0],c[1],r=radius,fill=rgb_colours[x],stroke_width=sw)
+            e.append_title("rgb role: "+rgb_type[x])
+            d.append(e)
+    if backlights:
+        for c in backlights:
+            x = flag2x(c[2])
+            e = draw.Circle(c[0],c[1],r=radius*2,fill="orangered",stroke_width=sw)
+            e.append_title("underglow flag: "+rgb_type[x])
             d.append(e)
 
     if svg:

@@ -3,6 +3,8 @@
     "keyboard_name": "m96",
     "maintainer": "qmk",
     "bootloader": "tinyuf2",
+    "board": "BLACKPILL_STM32_F401",
+    "processor": "STM32F401",
     "debounce": 5,
     "diode_direction": "COL2ROW",
     "features": {
@@ -20,11 +22,6 @@
     "matrix_pins": {
         "cols": ["B9", "B8", "B7", "B6", "B5", "B4", "C14", "C15", "A0", "A1", "A2", "A3"],
         "rows": ["B12", "B13", "B14", "B15", "A8", "A10", "A15", "B3"]
-    },
-    "platform": "STM32",
-    "processor": "STM32F401",
-    "tapping": {
-        "toggle": 2
     },
     "usb": {
         "device_version": "0.0.2",

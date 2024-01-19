@@ -6,7 +6,7 @@
 
 const uint32_t PROGMEM unicode_map[] = {
     [la]  = 0x03B1 , // α
-    [lA]  = 0x0307 , //
+    [lA]  = 0x0391 , // Α
     [lb]  = 0x03B2 , // β
     [lB]  = 0x2229 , // ∩
     [lc]  = 0x03C7 , // χ
@@ -148,7 +148,7 @@ altgr shift symbols
  *
 */
   [_QW] = LAYOUT_ortho_6x13(
-      KC_ESC ,    KC_F1  ,   KC_F2  , KC_F3  ,  KC_F4  ,  KC_F5  , KC_F6  , KC_F7  ,  KC_F8  , KC_F9  , KC_F10 , KC_F11 , KC_F12  ,
+      KC_ESC , KC_F1  , KC_F2   , KC_F3  , KC_F4   , KC_F5 , KC_F6 , KC_F7 , KC_F8  , KC_F9  , KC_F10 , KC_F11 , KC_F12  ,
        KC_GRV, UK_1   , UK_2    , UK_3   , UK_4    , UK_5  , UK_6  , UK_7  , UK_8   , UK_9   , UK_0   , UK_MINS, KC_BSPC ,
        KC_TAB, UK_Q   , UK_W    , UK_E   , UK_R    , UK_T  , UK_Y  , UK_U  , UK_I   , UK_O   , UK_P   , UK_LBRC, UK_RBRC ,
       UK_HASH, UK_A   , UK_S    , UK_D   , UK_F    , UK_G  , UK_H  , UK_J  , UK_K   , UK_L   , UK_SCLN, UK_QUOT, KC_ENT  ,

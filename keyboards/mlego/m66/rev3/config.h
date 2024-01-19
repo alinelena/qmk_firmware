@@ -169,7 +169,6 @@ rp2040 will do MSB regardless of what you pass
 #if defined(RGB_MATRIX_ENABLE)
 
 #    define RGB_ENABLE_PIN GP11
-#    define RGB_CURREN_FAULT_PIN GP13
 
 #    define RGB_MATRIX_TIMEOUT 15000
 
