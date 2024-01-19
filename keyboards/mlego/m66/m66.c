@@ -55,10 +55,10 @@ static bool toggle_rse = false;
 
 #if defined(RGBLIGHT_ENABLE)
 
-const rgblight_segment_t PROGMEM my_qwerty_layer[] = RGBLIGHT_LAYER_SEGMENTS({0, RGBLED_NUM, HSV_OFF});
-const rgblight_segment_t PROGMEM my_lwr_layer[]    = RGBLIGHT_LAYER_SEGMENTS({0, RGBLED_NUM, HSV_GREEN});
-const rgblight_segment_t PROGMEM my_rse_layer[]    = RGBLIGHT_LAYER_SEGMENTS({0, RGBLED_NUM, HSV_RED});
-const rgblight_segment_t PROGMEM my_adj_layer[]    = RGBLIGHT_LAYER_SEGMENTS({0, RGBLED_NUM, HSV_CORAL});
+const rgblight_segment_t PROGMEM my_qwerty_layer[] = RGBLIGHT_LAYER_SEGMENTS({0, RGBLIGHT_LED_COUNT, HSV_OFF});
+const rgblight_segment_t PROGMEM my_lwr_layer[]    = RGBLIGHT_LAYER_SEGMENTS({0, RGBLIGHT_LED_COUNT, HSV_AZURE});
+const rgblight_segment_t PROGMEM my_rse_layer[]    = RGBLIGHT_LAYER_SEGMENTS({0, RGBLIGHT_LED_COUNT, HSV_CORAL});
+const rgblight_segment_t PROGMEM my_adj_layer[]    = RGBLIGHT_LAYER_SEGMENTS({0, RGBLIGHT_LED_COUNT, HSV_RED});
 
 const rgblight_segment_t *const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(my_qwerty_layer, my_lwr_layer, my_rse_layer, my_adj_layer);
 
@@ -425,10 +425,10 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                     rgb_matrix_set_color(index, 0, 0, 0);
                 }
                 rgb_matrix_check_finished_leds(RGB_MATRIX_LED_COUNT);
-    rgb_matrix_decrease_val_noeeprom();
-    rgb_matrix_decrease_val_noeeprom();
-    rgb_matrix_decrease_val_noeeprom();
-    rgb_matrix_decrease_val_noeeprom();
+                rgb_matrix_decrease_val_noeeprom();
+                rgb_matrix_decrease_val_noeeprom();
+                rgb_matrix_decrease_val_noeeprom();
+                rgb_matrix_decrease_val_noeeprom();
             }
             return false;
         case (RGB_LSD):
@@ -514,8 +514,8 @@ bool rgb_matrix_indicators_kb(void) {
                 break;
             case _LWR:
                 if (toggle_lwr) {
-                    toggle_rgb(RGB_MATRIX_LWR_I, toggle_lwr, HSV_RED);
                     toggle_rgb(RGB_MATRIX_RSE_I, false, HSV_PINK);
+                    toggle_rgb(RGB_MATRIX_LWR_I, toggle_lwr, HSV_RED);
                 }
                 break;
             case _ADJ:
