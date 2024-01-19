@@ -47,7 +47,7 @@ def get_key_labels(keymap, keymap_c):
         if x:
             for t in x[0].split("\n"):
                 if len(t) > 0:
-                    k = re.findall("\[(.+?)\]",t)[0]
+                    k = re.findall(r"\[(.+?)\]",t)[0]
                     v = re.findall("=(.+?),",t)[0]
                     ups[k]=v
 
@@ -56,7 +56,7 @@ def get_key_labels(keymap, keymap_c):
             k = 0
             for t in z:
                 if k < n:
-                  enc[k] = re.findall("\((.+?)\)",t)[0].replace(" ","").split(",")
+                  enc[k] = re.findall(r"\((.+?)\)",t)[0].replace(" ","").split(",")
                   k += 1
     labels = [defaultdict(list) for i in range(n)]
 
@@ -94,7 +94,7 @@ def get_key_labels(keymap, keymap_c):
         found = []
         for key in left:
             if "UP(" in key:
-                k = re.findall("\((.+?)\)",key)[0].split(",")
+                k = re.findall(r"\((.+?)\)",key)[0].split(",")
                 l1 = ups[k[0]].strip(" ").replace('0x',r'\u')
                 l2 = ups[k[1]].strip(" ").replace('0x',r'\u')
                 labels[layer][key]=[codecs.unicode_escape_decode(l1)[0], codecs.unicode_escape_decode(l2)[0]]
