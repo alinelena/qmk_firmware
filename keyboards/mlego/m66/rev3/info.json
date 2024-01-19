@@ -1,7 +1,5 @@
 {
     "keyboard_name": "mlego/m66 rev3",
-    "board": "GENERIC_RP_RP2040",
-    "bootloader": "rp2040",
     "features": {
         "quantum_painter": true,
         "rgblight": false,
@@ -10,7 +8,6 @@
         "oled": false
     },
     "encoder": {
-        "enabled": true,
         "rotary": [
             {"pin_a": "GP27", "pin_b": "GP26", "resolution": 4}
         ]
@@ -78,7 +75,9 @@
         },
         "driver": "ws2812",
         "layout": [
-            {"matrix": [0, 0] , "x": 0 , "y": 0, "flags": 8}
+            {"matrix": [2, 0] , "x": 2 , "y": 0, "flags": 8},
+            {"matrix": [4, 2] , "x": 4 , "y": 2, "flags": 8},
+            {"matrix": [4, 4] , "x": 4 , "y": 4, "flags": 8}
         ],
         "max_brightness": 32
      },
