@@ -22,6 +22,9 @@
     },
     "processor": "STM32F401",
     "rgblight": {
+        "led_count": 16,
+        "max_brightness": 128,
+        "split_count": [8, 8],
         "animations": {
             "alternating": true,
             "breathing": true,
