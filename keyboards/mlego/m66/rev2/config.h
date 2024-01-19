@@ -121,8 +121,8 @@ QH - SPI Data in - MISO
 #define OLED_UPDATE_INTERVAL 10
 #endif
 
-#define LED_LWR_PIN GP16
-#define LED_RSE_PIN GP17
+#define LED_LWR_PIN GP17
+#define LED_RSE_PIN GP16
 
 #if defined(CONSOLE_ENABLE)
 #define DEBUG_MATRIX_SCAN_RATE
@@ -131,7 +131,6 @@ QH - SPI Data in - MISO
 #if defined(RGB_MATRIX_ENABLE)
 
 #    define RGB_ENABLE_PIN GP11
-#    define RGB_CURREN_FAULT_PIN GP13
 
 #    define RGB_MATRIX_TIMEOUT 15000
 
