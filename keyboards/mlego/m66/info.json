@@ -2,6 +2,9 @@
     "manufacturer": "Alin Elena",
     "maintainer": "alin elena",
     "diode_direction": "COL2ROW",
+    "processor": "RP2040",
+    "board": "GENERIC_RP_RP2040",
+    "bootloader": "rp2040",
     "features": {
         "audio": false,
         "bootmagic": false,
@@ -13,7 +16,6 @@
         "nkro": true,
         "wpm": true
     },
-    "processor": "RP2040",
     "url": "mlego.elena.space/m65",
     "usb": {
         "vid": "0xBABA"
