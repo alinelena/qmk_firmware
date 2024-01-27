@@ -107,6 +107,7 @@ LSB                  <-- LSBFIRST
 #        define ST7735_NO_AUTOMATIC_VIEWPORT_OFFSETS
 #    endif
 
+
 #    if defined(QUANTUM_PAINTER_LS0XX_ENABLE)
 /*
 #        define SPI_DISP_BL_PIN GP9
@@ -124,6 +125,14 @@ LSB                  <-- LSBFIRST
 #    define DISP_HEIGHT 68
 */
 #    endif
+
+#if defined(QUANTUM_PAINTER_SSD1680_ENABLE)
+#define EINK_RST_PIN GP29
+#define EINK_CS_PIN GP6
+#define EINK_DC_PIN GP7
+#define EINK_BUSY_PIN GP0
+#define EINK_BWR
+#endif
 
 #    if defined(CONSOLE_ENABLE)
 #        define INIT_DELAY 3000

@@ -545,6 +545,12 @@ int16_t qp_drawtext_recolor(painter_device_t device, uint16_t x, uint16_t y, pai
 #    define SH1106_NUM_DEVICES 0
 #endif // QUANTUM_PAINTER_SH1106_ENABLE
 
+#ifdef QUANTUM_PAINTER_SSD1680_ENABLE
+#    include "qp_ssd1680.h"
+#else // QUANTUM_PAINTER_SSD1680_ENABLE
+#    define SH1106_NUM_DEVICES 0
+#endif // QUANTUM_PAINTER_SSD1680_ENABLE
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Quantum Painter Extras
 

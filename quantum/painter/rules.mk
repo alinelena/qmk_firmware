@@ -15,7 +15,8 @@ VALID_QUANTUM_PAINTER_DRIVERS := \
     gc9a01_spi \
     ssd1351_spi \
     sh1106_i2c \
-    sh1106_spi
+    sh1106_spi \
+    ssd1680_spi 
 
 #-------------------------------------------------------------------------------
 
@@ -157,6 +158,19 @@ define handle_quantum_painter_driver
         SRC += \
             $(DRIVER_PATH)/painter/oled_panel/qp_oled_panel.c \
             $(DRIVER_PATH)/painter/sh1106/qp_sh1106.c
+    else ifeq ($$(strip $$(CURRENT_PAINTER_DRIVER)),ssd1680_spi)
+        DEFERRED_EXEC_ENABLE := yes # for timeout that prevents damaging screen
+        QUANTUM_PAINTER_NEEDS_SURFACE := yes
+        QUANTUM_PAINTER_NEEDS_COMMS_SPI := yes
+        QUANTUM_PAINTER_NEEDS_COMMS_SPI_DC_RESET := yes
+        OPT_DEFS += -DQUANTUM_PAINTER_SSD1680_ENABLE -DQUANTUM_PAINTER_SSD1680_SPI_ENABLE
+        COMMON_VPATH += \
+            $(DRIVER_PATH)/painter/eink_panel \
+            $(DRIVER_PATH)/painter/ssd1680
+        SRC += \
+            $(DRIVER_PATH)/painter/eink_panel/qp_eink_panel.c \
+            $(DRIVER_PATH)/painter/ssd1680/qp_ssd1680.c
+
 
     endif
 endef

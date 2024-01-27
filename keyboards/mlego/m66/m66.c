@@ -552,6 +552,55 @@ void init_lcd_test(void) {
     qp_rect(lcd, 0, 0, DISP_WIDTH, DISP_HEIGHT, HSV_BLACK, true);
 }
 
+bool lcd_eink_init(void){
+#    if defined(QUANTUM_PAINTER_SSD1680_ENABLE)
+    wait_ms(1500); //Let screens draw some power
+    load_qp_resources();
+
+    ssd1680 = qp_ssd1680_make_spi_device(_SSD1680_WIDTH, _SSD1680_HEIGHT, EINK_CS_PIN, EINK_DC_PIN, EINK_RST_PIN, SPI_DIVISOR, SPI_MODE, (void *)ssd1680_buffer);
+    load_display(ssd1680);
+    qp_init(ssd1680, SSD1680_ROTATION);
+
+#ifdef EINK_BWR
+#define color HSV_RED
+#else
+#define color HSV_BLACK
+#endif
+
+#if (SSD1680_ROTATION == 0 || SSD1680_ROTATION == 2)
+
+    qp_rect(ssd1680, 0, 0, SSD1680_WIDTH-7, SSD1680_HEIGHT-1, HSV_WHITE, true);
+    qp_drawimage_recolor(ssd1680, 40, SSD1680_HEIGHT/2-70, qp_images[7], color, HSV_WHITE);
+    qp_drawimage_recolor(ssd1680, 0, 110, qp_images[8], HSV_WHITE, HSV_BLACK);
+    qp_rect(ssd1680, 0, 0, SSD1680_WIDTH-7, SSD1680_HEIGHT-1, HSV_BLACK, false);
+    char hello[] = "QMK";
+    int16_t               hello_width = qp_textwidth(qp_fonts[0], hello);
+    qp_drawtext_recolor(ssd1680, SSD1680_WIDTH-hello_width-10, 5, qp_fonts[0],hello,color,HSV_WHITE);
+    int16_t               hash_width = qp_textwidth(qp_fonts[0], commit_hash);
+    qp_drawtext_recolor(ssd1680, SSD1680_WIDTH-hash_width-10, 5+qp_fonts[0]->line_height, qp_fonts[0], commit_hash, HSV_BLACK, HSV_WHITE);
+    int16_t               build_width = qp_textwidth(qp_fonts[1], build_date);
+    qp_drawtext_recolor(ssd1680, SSD1680_WIDTH-build_width-10, 5+2.25*qp_fonts[1]->line_height,qp_fonts[1], build_date, color, HSV_WHITE);
+#else
+    qp_rect(ssd1680, 0, 6, SSD1680_WIDTH-1, SSD1680_HEIGHT-1, HSV_WHITE, true);
+    qp_rect(ssd1680, 0, 6, SSD1680_HEIGHT-1, SSD1680_WIDTH-1, HSV_BLACK, false);
+    qp_rect(ssd1680, 2, 8, SSD1680_HEIGHT-3, SSD1680_WIDTH-3, color, false);
+    char hello[] = "QMK";
+    int16_t               hello_width = qp_textwidth(qp_fonts[0], hello);
+    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-hello_width-10, qp_fonts[0]->line_height, qp_fonts[0],hello,color,HSV_WHITE);
+    qp_drawimage_recolor(ssd1680, 40, 20, qp_images[7], color, HSV_WHITE);
+    qp_drawimage_recolor(ssd1680, 110, 30, qp_images[8], HSV_WHITE, HSV_BLACK);
+    int16_t               bh_width = qp_textwidth(qp_fonts[1], bh);
+    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-bh_width-10, SSD1680_WIDTH-1.25*qp_fonts[1]->line_height , qp_fonts[1], bh, HSV_BLACK, HSV_WHITE);
+#endif
+    eink_panel_dc_reset_painter_device_t *eink = (eink_panel_dc_reset_painter_device_t *)ssd1680;
+    defer_exec(eink->timeout, flush_display, (void *)ssd1680);
+    dprint("Quantum painter ready\n");
+
+#    endif
+
+
+}
+
 bool lcd_sharp_mip_init(void) {
 #    if defined(QUANTUM_PAINTER_LS0XX_ENABLE)
     load_qp_resources();
