@@ -20,7 +20,7 @@
 #if defined (QUANTUM_PAINTER_SSD1680_ENABLE)
 #include "qp_eink_panel.h"
 painter_device_t ssd1680;
-uint8_t ssd1680_buffer[EINK_BYTES_REQD(SSD1680_WIDTH, SSD1680_HEIGHT)] = {0};
+uint8_t ssd1680_buffer[EINK_BYTES_REQD(DISP_WIDTH, DISP_HEIGHT)] = {0};
 #define QMK_BH  QMK_BUILDDATE "-" QMK_GIT_HASH
 char build_date[] = QMK_BUILDDATE;
 char commit_hash[] = QMK_GIT_HASH;
@@ -569,14 +569,14 @@ void init_lcd_test(void) {
     qp_rect(lcd, 0, 0, DISP_WIDTH, DISP_HEIGHT, HSV_BLACK, true);
 }
 
-void lcd_eink_init(void){
+  uint32_t eink_init(uint32_t trigger_time, void *cb_arg) {
 #    if defined(QUANTUM_PAINTER_SSD1680_ENABLE)
     wait_ms(1500); //Let screens draw some power
     load_qp_resources();
 
-    ssd1680 = qp_ssd1680_make_spi_device(_SSD1680_WIDTH, _SSD1680_HEIGHT, EINK_CS_PIN, EINK_DC_PIN, EINK_RST_PIN, SPI_DIVISOR, SPI_MODE, (void *)ssd1680_buffer);
+    ssd1680 = qp_ssd1680_make_spi_device(DISP_WIDTH,DISP_HEIGHT, SPI_DISP_CS_PIN, SPI_DISP_DC_PIN, SPI_DISP_RST_PIN, SPI_DIVISOR, SPI_MODE, (void *)ssd1680_buffer);
     load_display(ssd1680);
-    qp_init(ssd1680, SSD1680_ROTATION);
+    qp_init(ssd1680, DISP_ROTATION);
 
 #ifdef EINK_BWR
 #define color HSV_RED
@@ -584,38 +584,25 @@ void lcd_eink_init(void){
 #define color HSV_BLACK
 #endif
 
-#if (SSD1680_ROTATION == 0 || SSD1680_ROTATION == 2)
-
-    qp_rect(ssd1680, 0, 0, SSD1680_WIDTH-7, SSD1680_HEIGHT-1, HSV_WHITE, true);
-    qp_drawimage_recolor(ssd1680, 40, SSD1680_HEIGHT/2-70, qp_images[7], color, HSV_WHITE);
-    qp_drawimage_recolor(ssd1680, 0, 110, qp_images[8], HSV_WHITE, HSV_BLACK);
-    qp_rect(ssd1680, 0, 0, SSD1680_WIDTH-7, SSD1680_HEIGHT-1, HSV_BLACK, false);
+    qp_rect(ssd1680, 0, 0, DISP_WIDTH-7, DISP_HEIGHT-1, HSV_WHITE, true);
+    qp_rect(ssd1680, 0, 0, DISP_WIDTH-7, DISP_HEIGHT-1, HSV_BLACK, false);
+    //qp_rect(ssd1680, 2, 2, SSD1680_WIDTH-3, SSD1680_HEIGHT-10, color, false);
     char hello[] = "QMK";
     int16_t               hello_width = qp_textwidth(qp_fonts[0], hello);
-    qp_drawtext_recolor(ssd1680, SSD1680_WIDTH-hello_width-10, 5, qp_fonts[0],hello,color,HSV_WHITE);
-    int16_t               hash_width = qp_textwidth(qp_fonts[0], commit_hash);
-    qp_drawtext_recolor(ssd1680, SSD1680_WIDTH-hash_width-10, 5+qp_fonts[0]->line_height, qp_fonts[0], commit_hash, HSV_BLACK, HSV_WHITE);
-    int16_t               build_width = qp_textwidth(qp_fonts[1], build_date);
-    qp_drawtext_recolor(ssd1680, SSD1680_WIDTH-build_width-10, 5+2.25*qp_fonts[1]->line_height,qp_fonts[1], build_date, color, HSV_WHITE);
-#else
-    qp_rect(ssd1680, 0, 6, SSD1680_WIDTH-1, SSD1680_HEIGHT-1, HSV_WHITE, true);
-    qp_rect(ssd1680, 0, 6, SSD1680_HEIGHT-1, SSD1680_WIDTH-1, HSV_BLACK, false);
-    qp_rect(ssd1680, 2, 8, SSD1680_HEIGHT-3, SSD1680_WIDTH-3, color, false);
-    char hello[] = "QMK";
-    int16_t               hello_width = qp_textwidth(qp_fonts[0], hello);
-    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-hello_width-10, qp_fonts[0]->line_height, qp_fonts[0],hello,color,HSV_WHITE);
-    qp_drawimage_recolor(ssd1680, 40, 20, qp_images[7], color, HSV_WHITE);
-    qp_drawimage_recolor(ssd1680, 110, 30, qp_images[8], HSV_WHITE, HSV_BLACK);
+    qp_drawtext_recolor(ssd1680, DISP_HEIGHT-hello_width-10, qp_fonts[0]->line_height, qp_fonts[0],hello,color,HSV_WHITE);
+    qp_drawimage_recolor(ssd1680, 30, 20, qp_images[0], color, HSV_WHITE);
+    qp_drawimage_recolor(ssd1680, 50, 60, qp_images[1], HSV_WHITE, HSV_BLACK);
     int16_t               bh_width = qp_textwidth(qp_fonts[1], bh);
-    qp_drawtext_recolor(ssd1680, SSD1680_HEIGHT-bh_width-10, SSD1680_WIDTH-1.25*qp_fonts[1]->line_height , qp_fonts[1], bh, HSV_BLACK, HSV_WHITE);
-#endif
+    qp_drawtext_recolor(ssd1680, DISP_HEIGHT-bh_width-10, DISP_WIDTH-1.25*qp_fonts[1]->line_height , qp_fonts[1], bh, HSV_BLACK, HSV_WHITE);
+
     eink_panel_dc_reset_painter_device_t *eink = (eink_panel_dc_reset_painter_device_t *)ssd1680;
     defer_exec(eink->timeout, flush_display, (void *)ssd1680);
     dprint("Quantum painter ready\n");
 
 #    endif
 
-}
+return 0;
+  }
 
 bool lcd_sharp_mip_init(void) {
 #    if defined(QUANTUM_PAINTER_LS0XX_ENABLE)
@@ -699,16 +686,17 @@ void keyboard_post_init_kb(void) {
     init_oled_timer();
 #endif
 
-#if defined(QUANTUM_PAINTER_ENABLE)
-    lcd_st7735_init();
-    lcd_sharp_mip_init();
-
-    init_lcd_timer();
-#endif
-
 #if defined(RGBLIGHT_ENABLE)
     // Enable the LED layers
     rgblight_layers = my_rgb();
+#endif
+
+#if defined(QUANTUM_PAINTER_ENABLE)
+    lcd_st7735_init();
+    lcd_sharp_mip_init();
+    defer_exec(INIT_DELAY, eink_init, NULL);
+
+    init_lcd_timer();
 #endif
 
     keyboard_post_init_user();

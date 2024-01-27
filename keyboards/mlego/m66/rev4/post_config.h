@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
-
+/*
 #define SSD1680_ROTATION 1
 #define _SSD1680_WIDTH 128
 #define _SSD1680_HEIGHT 250
@@ -24,3 +24,4 @@
 #if !defined(INIT_DELAY)
 #    define INIT_DELAY 5
 #endif // INIT_DELAY
+      */

@@ -30,6 +30,7 @@ painter_image_handle_t qp_images[QUANTUM_PAINTER_NUM_IMAGES] = {};
 #include "zero.qgf.h"
 #include "led.qgf.h"
 
+
 // =======
 // Load resources
 void _load_display(painter_device_t display) {
