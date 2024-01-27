@@ -14,9 +14,22 @@
 #    include "qp.h"
 #    include "qp_comms.h"
 #    include "graphics.h"
-#    if defined(QUANTUM_PAINTER_LS0XX_ENABLE)
+#    if defined(QUANTUM_PAINTER_LS0XX_ENABLE) || defined(QUANTUM_PAINTER_SSD1680_ENABLE)
 #        include "qp_surface.h"
 #    endif
+#if defined (QUANTUM_PAINTER_SSD1680_ENABLE)
+#include "qp_eink_panel.h"
+painter_device_t ssd1680;
+uint8_t ssd1680_buffer[EINK_BYTES_REQD(SSD1680_WIDTH, SSD1680_HEIGHT)] = {0};
+#define QMK_BH  QMK_BUILDDATE "-" QMK_GIT_HASH
+char build_date[] = QMK_BUILDDATE;
+char commit_hash[] = QMK_GIT_HASH;
+char bh[] = QMK_BH;
+uint32_t flush_display(uint32_t trigger_time, void *device) {
+    qp_flush((painter_device_t *)device);
+    return 0;
+}
+#endif
 #endif
 
 #if defined(RGB_MATRIX_ENABLE)
@@ -325,12 +338,16 @@ void clear_lcd_display(void) {
 
 #    define SHOW_LCD_LOGO 5000
 void housekeeping_task_kb(void) {
+#if defined(LCD_ENABLE)
     if ((timer_elapsed32(lcd_logo_timer) < SHOW_LCD_LOGO)) {
         render_lcd_logo();
     } else {
         clear_lcd_display();
         user_lcd_magic();
     }
+#endif
+#if defined(EINK_ENABLE)
+#endif
 }
 #endif
 
@@ -552,7 +569,7 @@ void init_lcd_test(void) {
     qp_rect(lcd, 0, 0, DISP_WIDTH, DISP_HEIGHT, HSV_BLACK, true);
 }
 
-bool lcd_eink_init(void){
+void lcd_eink_init(void){
 #    if defined(QUANTUM_PAINTER_SSD1680_ENABLE)
     wait_ms(1500); //Let screens draw some power
     load_qp_resources();
@@ -597,7 +614,6 @@ bool lcd_eink_init(void){
     dprint("Quantum painter ready\n");
 
 #    endif
-
 
 }
 

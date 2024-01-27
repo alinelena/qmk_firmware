@@ -279,7 +279,7 @@ painter_device_t qp_ssd1680_make_spi_device(uint16_t panel_width, uint16_t panel
         eink_panel_dc_reset_painter_device_t *driver = &ssd1680_drivers[i];
         if (!driver->base.driver_vtable) {
             driver->base.driver_vtable = (const painter_driver_vtable_t *)&ssd1680_driver_vtable;
-            driver->base.comms_vtable  = (const painter_comms_vtable_t *)&spi_comms_with_dc_single_byte_vtable;
+            driver->base.comms_vtable  = (const painter_comms_vtable_t *)&spi_comms_with_dc_vtable;
 
             driver->base.native_bits_per_pixel = 1;
             driver->base.panel_width           = panel_width;
