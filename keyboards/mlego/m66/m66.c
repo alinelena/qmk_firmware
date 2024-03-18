@@ -431,6 +431,19 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
                 rgb_matrix_decrease_val_noeeprom();
             }
             return false;
+        case (RGB_UON):
+            if (record->event.pressed) {
+                rgblight_enable_noeeprom();
+                rgb_matrix_set_flags_noeeprom(LED_FLAG_UNDERGLOW);
+                rgb_matrix_mode_noeeprom(RGB_MATRIX_SOLID_COLOR);
+                rgb_matrix_sethsv_noeeprom(HSV_GREEN);
+            }
+            return false;
+        case (RGB_UOF):
+            if (record->event.pressed) {
+                rgblight_disable_noeeprom();
+            }
+            return false;
         case (RGB_LSD):
             if (record->event.pressed) {
                 rgblight_enable_noeeprom();
