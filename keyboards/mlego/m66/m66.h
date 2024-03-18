@@ -14,7 +14,7 @@ enum layer_names { _QW = 0, _LWR, _RSE, _ADJ };
 const char *get_layer_name(const uint8_t);
 const char *get_unicde_name(const uint8_t);
 
-enum custom_codes { RGB_HEAT = SAFE_RANGE, RGB_OFF_EFF, RGB_ON_EFF, RGB_IND, RGB_LSD };
+enum custom_codes { RGB_HEAT = SAFE_RANGE, RGB_OFF_EFF, RGB_ON_EFF, RGB_IND, RGB_LSD, RGB_UON, RGB_UOF };
 
 #if defined(QUANTUM_PAINTER_ENABLE)
 void user_display_magic(void);
