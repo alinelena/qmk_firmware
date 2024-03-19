@@ -1,6 +1,12 @@
 {
+    "keyboard_name": "m60",
+    "manufacturer": "alin elena",
+    "url": "https://gitlab.com/m-lego/m60",
+    "maintainer": "alin elena",
+    "diode_direction": "COL2ROW",
     "usb": {
         "pid": "0x6161",
+        "vid": "0xBABA",
         "device_version": "0.0.1"
     },
     "features": {
@@ -45,42 +51,7 @@
         "nkro": true,
         "rgblight": true
     },
-    "indicators": {
-        "caps_lock": "C13",
-        "on_state": 0
-    },
-    "matrix_pins": {
-        "cols": ["A10", "A15", "B3", "B4", "B5", "B7", "B6", "A1", "A2", "A3", "A4", "A5"],
-        "rows": ["A6", "A7", "B0", "B1", "B10"]
-    },
-    "processor": "STM32F401",
-    "rgblight": {
-        "animations": {
-            "alternating": true,
-            "breathing": true,
-            "christmas": true,
-            "knight": true,
-            "rainbow_mood": true,
-            "rainbow_swirl": true,
-            "rgb_test": true,
-            "snake": true,
-            "static_gradient": true,
-            "twinkle": true
-        },
-        "layers": {
-            "enabled": true
-        },
-        "led_count": 20
-    },
-    "url": "https://gitlab.com/m-lego/m60",
-    "usb": {
-        "device_version": "0.0.1",
-        "pid": "0x6161",
-        "vid": "0xBABA"
-    },
-    "ws2812": {
-        "pin": "B15"
-    },
+    "community_layouts": ["ortho_5x12"],
     "layouts": {
         "LAYOUT_ortho_5x12": {
             "layout": [
