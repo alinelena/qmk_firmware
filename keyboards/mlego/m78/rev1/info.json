@@ -30,6 +30,7 @@
         "pid": "0x6071",
         "vid": "0xBABA"
     },
+    "community_layouts": ["ortho_6x13"],
     "layouts": {
         "LAYOUT_ortho_6x13": {
             "layout": [
