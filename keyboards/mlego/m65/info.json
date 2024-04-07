@@ -32,6 +32,7 @@
     "usb": {
         "vid": "0xBABA"
     },
+    "community_layouts": ["ortho_5x13"],
     "layouts": {
         "LAYOUT_ortho_5x13": {
             "layout": [
