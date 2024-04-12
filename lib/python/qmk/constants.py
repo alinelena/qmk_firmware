@@ -41,6 +41,7 @@ MCU2BOOTLOADER = {
     "STM32F405": "stm32-dfu",
     "STM32F407": "stm32-dfu",
     "STM32F411": "stm32-dfu",
+    "STM32F412": "stm32-dfu",
     "STM32F446": "stm32-dfu",
     "STM32G0B1": "stm32-dfu",
     "STM32G431": "stm32-dfu",
