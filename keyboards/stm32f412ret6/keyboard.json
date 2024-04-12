@@ -1,0 +1,33 @@
+{
+    "manufacturer": "alin elena",
+    "keyboard_name": "stm32f412ret6",
+    "maintainer": "alinelena",
+    "diode_direction": "COL2ROW",
+    "processor": "STM32F412",
+    "bootloader": "stm32-dfu",
+    "features": {
+        "bootmagic": true,
+        "command": false,
+        "console": false,
+        "extrakey": true,
+        "mousekey": true,
+        "nkro": true
+    },
+    "matrix_pins": {
+        "cols": ["C2"],
+        "rows": ["C3"]
+    },
+    "url": "",
+    "usb": {
+        "device_version": "1.0.0",
+        "pid": "0x0000",
+        "vid": "0xFEED"
+    },
+    "layouts": {
+        "LAYOUT_ortho_1x1": {
+            "layout": [
+                {"matrix": [0, 0], "x": 0, "y": 0}
+            ]
+        }
+    }
+}
