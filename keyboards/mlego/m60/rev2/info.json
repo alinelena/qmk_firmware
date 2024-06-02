@@ -1,7 +1,8 @@
 {
     "keyboard_name": "m60 rev2 with rp2040 ",
-    "bootloader": "rp2040",
     "processor": "RP2040",
+    "board": "GENERIC_RP_RP2040",
+    "bootloader": "rp2040",
     "usb": {
         "device_version": "0.0.2"
     },
