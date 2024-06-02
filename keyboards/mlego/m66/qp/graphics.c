@@ -9,7 +9,7 @@ painter_font_handle_t qp_fonts[QUANTUM_PAINTER_NUM_FONTS] = {};
 painter_image_handle_t qp_images[QUANTUM_PAINTER_NUM_IMAGES] = {};
 
 // Fonts, in alphabetical order to easier checking
-#include "fira_code.qff.h"
+#include "myfont-14.qff.h"
 #include "thintel15.qff.h"
 
 // Images, in alphabetical order to easier checking
@@ -71,7 +71,7 @@ void _load_image(const uint8_t *img) {
 }
 
 void load_qp_resources(void) {
-    load_font(font_fira_code);
+    load_font(font_myfont_14);
     load_font(font_thintel15);
 
     load_image(gfx_qmk_icon_48);
