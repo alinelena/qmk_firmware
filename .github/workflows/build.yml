@@ -90,6 +90,7 @@ jobs:
       run: |
         git config --global --add safe.directory '*'
         python3 -m pip install -r requirements-dev.txt
+        python3 -m pip install fontTools
         make git-submodule
         #if [ -d keyboards/${{ matrix.keyboard}}/keymaps/${{ matrix.keymap }} ]; then
           qmk compile -kb ${{ matrix.keyboard}} -km ${{ matrix.keymap }}

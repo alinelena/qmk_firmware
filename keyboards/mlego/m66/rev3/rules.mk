@@ -8,7 +8,7 @@ VPATH += keyboards/mlego/m66/qp
 SRC += caps-lock.qgf.c \
 			 elephant.qgf.c  \
 			 elephant.qgf.c  \
-			 fira_code.qff.c  \
+			 myfont-14.qff.c \
 			 five.qgf.c  \
 			 four.qgf.c  \
 			 graphics.c  \

@@ -8,7 +8,7 @@ from qmk.painter import generate_subs, render_header, render_source, valid_forma
 from milc import cli
 
 
-@cli.argument('-f', '--font', required=True, help='Specify input font file.')
+@cli.argument('-f', '--font', required=True, nargs='*', help='Specify input font file(s).')
 @cli.argument('-o', '--output', required=True, help='Specify output image path.')
 @cli.argument('-s', '--size', default=12, help='Specify font size. Default 12.')
 @cli.argument('-n', '--no-ascii', arg_only=True, action='store_true', help='Disables output of the full ASCII character set (0x20..0x7E), exporting only the glyphs specified.')
@@ -19,7 +19,7 @@ def painter_make_font_image(cli):
     # Create the font object
     font = QFFFont(cli)
     # Read from the input file
-    cli.args.font = normpath(cli.args.font)
+    cli.args.font = [ normpath(x) for x in cli.args.font ]
     font.generate_image(cli.args.font, cli.args.size, include_ascii_glyphs=(not cli.args.no_ascii), unicode_glyphs=cli.args.unicode_glyphs, use_aa=(False if cli.args.no_aa else True))
     # Render out the data
     font.save_to_image(normpath(cli.args.output))
