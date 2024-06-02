@@ -232,7 +232,7 @@ void user_lcd_magic(void) {
     if (layer != current_layer) {
         const char *layer_name = get_layer_name(layer);
         snprintf(buf, sizeof(buf), "layer: %s", layer_name);
-        qp_drawtext_recolor(lcd, 0, 0.5 * h, qp_fonts[0], buf, HSV_ORANGE, HSV_BLACK);
+        qp_drawtext_recolor(lcd, 0, 0.0* h, qp_fonts[0], buf, HSV_ORANGE, HSV_BLACK);
         if (DISP_WIDTH < 130) {
             draw_lcd_icon(20, 72, true, 5 + layer, HSV_BLACK, HSV_ORANGE);
 
@@ -247,12 +247,15 @@ void user_lcd_magic(void) {
     if (uni != current_unicode) {
         const char *uni_name = get_unicode_name(uni);
         snprintf(buf, sizeof(buf), "uni: %s", uni_name);
-        qp_drawtext_recolor(lcd, 0, 1.5 * h, qp_fonts[0], buf, HSV_PINK, HSV_BLACK);
+        qp_drawtext_recolor(lcd, 0, 1.0 * h, qp_fonts[0], buf, HSV_PINK, HSV_BLACK);
         current_unicode = uni;
     }
+        // snprintf(buf, sizeof(buf), "%s", "↹qwertyuiop[]");
+        //snprintf(buf, sizeof(buf), "%s", "⎈⇓⎇ ⇑   ⎇ ⇧←↓→");
+        // qp_drawtext_recolor(lcd, 0, 2.0 * h, qp_fonts[0], buf, HSV_PINK, HSV_BLACK);
 #    endif
 
-    h = 36;
+    h = 40;
     // this is lifted from djinn
     if (last_led_state.raw != host_keyboard_led_state().raw) {
         show_icons_lcd();
@@ -282,7 +285,7 @@ void init_lcd_timer(void) {
 };
 
 void show_icons_lcd(void) {
-    const int h = 36;
+    const int h = 40;
 
     last_led_state.raw = host_keyboard_led_state().raw;
     draw_lcd_icon(4, h, last_led_state.caps_lock, 2, HSV_PINK, HSV_BLACK);
