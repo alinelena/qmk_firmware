@@ -13,7 +13,8 @@ def get_key_labels(keymap, keymap_c):
     rgb = hjson.load(open("data/constants/keycodes/keycodes_0.0.1_lighting.hjson"))
     quant = hjson.load(open("data/constants/keycodes/keycodes_0.0.1_quantum.hjson"))
 
-    specials = {'SC_LSPO': ['⇧','('],'SC_RSPC':['⇧',')'],'TT(_LWR)':['⇓'],'TT(_RSE)':['⇑'],'G(KC_P)':['🖵'],'KC_PSCR':['🖶'],'A(KC_F2)':['⌕'],
+    specials = {'SC_LSPO': ['⇧','('],'SC_RSPC':['⇧',')'],'TT(_LWR)':['⇓'],'TT(_RSE)':['⇑'],'G(KC_P)':['🖵'],
+                'KC_PSCR':['🖶'],'A(KC_F2)':['⌕'],
                 'KC_ESC':['⎋'],'KC_LSFT':['⇧'],'KC_RSFT':['⇧'],
                 'KC_TAB':['↹'],'KC_LCTL':['⎈'],'KC_RCTL':['⎈'],'KC_RALT':['⎇'],'KC_LALT':['⎇'],'KC_BSPC':['⌫'],'KC_DEL':['⌦'],
                 'KC_DOWN':['↓'],'KC_RGHT':['→'],'KC_UP':['↑'],'KC_LEFT':['←'],
