@@ -34,6 +34,64 @@ def flag2x(c):
        x = 9
     return x
 
+def summary_keymap(name,kb,output_path=None):
+    layers = { int(k.split("-")[-1]):k for k in kb.keys()}
+    print(f"Summary of layers, {len(layers)}, for selected keymap")
+    m = min(layers.keys())
+    l = layers[m]
+    canvas_width = kb[l]['width']
+    canvas_height = kb[l]['height']
+    d = draw.Drawing(canvas_width+5, canvas_height+5, origin=(-5,-5))
+    d.set_pixel_scale(5)
+    r=draw.Rectangle(-5,-5,canvas_width+5,canvas_height+5,fill="black",rx=rad,ry=rad)
+    d.append(r)
+    sw = 0.5
+    fs=6
+    for ir in kb[l]['keys']:
+        d.append(draw.Rectangle(*ir, rx=rad,ry=rad,fill='darkslategray',stroke='deeppink',stroke_width=sw))
+
+    arrowcw = draw.Marker(-0.1, -0.51, 0.9, 0.5, scale=4, orient='auto')
+    arrowcw.append(draw.Lines(-0.1, 0.5, -0.1, -0.5, 0.9, 0, fill='orchid', close=True))
+
+    arrowccw = draw.Marker(-0.1, -0.51, 0.9, 0.5, scale=4, orient='auto')
+    arrowccw.append(draw.Lines(-0.1, 0.5, -0.1, -0.5, 0.9, 0, fill='teal', close=True))
+    for enc in kb[layers[m]]['encoders']:
+        d.append(draw.Circle(enc[0],enc[1],r=enc[2],stroke='fuchsia',stroke_width=sw))
+        da = 0.0005*math.pi/180.0
+        a = 45 * math.pi/180.0
+        d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
+                           enc[0]+enc[2]*math.cos(a+da),
+                           enc[1]+math.sin(da+a)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowcw))
+        a = 225 * math.pi/180.0
+        d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
+                           enc[0]+enc[2]*math.cos(a+da),
+                           enc[1]+math.sin(da+a)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowcw))
+        a = 135 * math.pi/180.0
+        d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
+                           enc[0]+enc[2]*math.cos(a-da),
+                           enc[1]+math.sin(-da+a)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
+        a = 315 * math.pi/180.0
+        d.append(draw.Line(enc[0]+enc[2]*math.cos(a), enc[1]+enc[1]*math.sin(a),
+                           enc[0]+enc[2]*math.cos(a-da),
+                           enc[1]+math.sin(a-da)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
+    for c,la in zip(kb[l]['centers'],kb[l]['labels']):
+        if la[0]=="⇧":
+          d.append(draw.Text(la[0],fs,c[0],c[1],fill='peachpuff',center=True))
+          d.append(draw.Text(la[-1],fs-1,c[0]+6,c[1],fill='peachpuff',center=True))
+        else:
+          d.append(draw.Text(la,fs,c[0],c[1],fill='peachpuff',center=True))
+    l = layers[m+1]
+    for c,la in zip(kb[l]['centers'],kb[l]['labels']):
+        d.append(draw.Text(la,fs-1,c[0]-6,c[1]-5,fill='peachpuff',center=True))
+    l = layers[m+2]
+    for c,la in zip(kb[l]['centers'],kb[l]['labels']):
+        d.append(draw.Text(la,fs-1,c[0]+6,c[1]-5,fill='peachpuff',center=True))
+    l = layers[m+3]
+    for c,la in zip(kb[l]['centers'],kb[l]['labels']):
+        d.append(draw.Text(" ".join(la.split("\n")),fs-2,c[0],c[1]+6,fill='peachpuff',center=True))
+
+    save_svg(d,output_path,f"{name}.svg")
+
 def draw_kb(canvas_width=600, canvas_height=300,keys=None, encoders=None, centers=None, labels=None, iso=None, bae=None, rows=None,
             cols=None, output_path=None, svg=None, tooltips=None, rgbs=None, backlights=None):
 

@@ -237,7 +237,7 @@ def rules_mk(keyboard):
     return rules
 
 def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somedefault", keycodes=None, pins=None, is_split=False,
-                  show_wires=False,show_rgb=False,rgb_layout=None,rgb_back=None):
+                  show_wires=False,show_rgb=False,rgb_layout=None,rgb_back=None, kb=None):
     """Renders a single layout.
     """
     textpad = [array('u', ' ' * 200) for x in range(100)]
@@ -408,11 +408,25 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
     draw_kb(canvas_width,canvas_height,keys=rectangles, encoders=encoders, centers=circles, labels=labels, iso=iso,
             bae=bae,rows=rows,cols=cols,tooltips=tooltips,svg=f'{layout_name}.svg',rgbs=rgbs if show_rgb else None,
             backlights=backlights if show_rgb else None)
+    if kb is not None:
+      q = {}
+      q['width'] = canvas_width
+      q['height'] = canvas_height
+      q['keys'] = rectangles
+      q['encoders'] = encoders
+      q['labels'] = labels
+      q['centers'] = circles
+      q['iso'] = iso
+      q['bae'] = bae
+      q['rows'] = rows
+      q['cols'] = cols
+      q['rgbs'] = rgbs
+      q['backlights'] = backlights
+      kb[layout_name] = q
     lines = []
     for line in textpad:
         if line.tounicode().strip():
             lines.append(line.tounicode().rstrip())
-
 
     return '\n'.join(lines)
 
@@ -431,12 +445,10 @@ def render_layouts(info_json, render_ascii,kb_name=None):
         pins = info_json['matrix_pins']
         if is_split and 'matrix_pins' in info_json['split']:
             pins['right']= info_json['split']['matrix_pins']['right']
-
     for layout in info_json['layouts']:
         ln = "-".join([kb_name,layout])
         layout_data = info_json['layouts'][layout]['layout']
         layouts[layout] = render_layout(layout_data, render_ascii, layout_name=ln,pins=pins,is_split=is_split)
-
     return layouts
 
 def render_key(textpad, x, y, w, h, label, style,position='m'):

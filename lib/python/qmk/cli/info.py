@@ -16,6 +16,7 @@ from qmk.info import info_json, keymap_json
 from qmk.keymap import locate_keymap, c2json
 from qmk.path import is_keyboard
 from layers import get_key_labels
+from draw_keyboard import summary_keymap
 
 UNICODE_SUPPORT = sys.stdout.encoding.lower().startswith('utf')
 
@@ -90,6 +91,7 @@ def show_keymap(kb_info_json, title_caps=True):
         layout_name = kb_info_json.get('layout_aliases', {}).get(layout_name, layout_name)  # Resolve alias names
         print(f"{layout_name=}")
         labels, keycodes, _  = get_key_labels(keymap_data,keymap_path)
+        keyb = {}
         for layer_num, layer in enumerate(keymap_data['layers']):
             if title_caps:
                 cli.echo('{fg_cyan}Keymap %s Layer %s{fg_reset}:', cli.config.info.keymap, layer_num)
@@ -102,8 +104,9 @@ def show_keymap(kb_info_json, title_caps=True):
             print(render_layout(kb_info_json['layouts'][layout_name]['layout'], cli.config.info.ascii,
                                 key_labels = labs,
                                 keycodes = keycodes[layer_num],layout_name="-".join([fk_name,layout_name,cli.config.info.keymap,str(layer_num)]),
-                                is_split=split, pins=pins))
-
+                                is_split=split, pins=pins, kb=keyb))
+        name = "_".join(cli.config.info.keyboard.split("/"))+"_"+cli.config.info.keymap
+        summary_keymap(name,keyb)
 
 def show_layouts(kb_info_json, title_caps=True):
     """Render the layouts with info.json labels.
