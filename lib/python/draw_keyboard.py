@@ -75,17 +75,21 @@ def summary_keymap(name,kb,output_path=None):
                            enc[0]+enc[2]*math.cos(a-da),
                            enc[1]+math.sin(a-da)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
     for c,la in zip(kb[l]['centers'],kb[l]['labels']):
-        if la[0]=="⇧":
+        if la and la[0]=="⇧":
           d.append(draw.Text(la[0],fs,c[0],c[1],fill='peachpuff',center=True))
           d.append(draw.Text(la[-1],fs-1,c[0]+6,c[1],fill='peachpuff',center=True))
+        elif la and la[0] == "⇓" :
+          d.append(draw.Text(la,fs,c[0],c[1],fill='crimson',center=True))
+        elif la and la[0] == "⇑" :
+          d.append(draw.Text(la,fs,c[0],c[1],fill='plum',center=True))
         else:
           d.append(draw.Text(la,fs,c[0],c[1],fill='peachpuff',center=True))
     l = layers[m+1]
     for c,la in zip(kb[l]['centers'],kb[l]['labels']):
-        d.append(draw.Text(la,fs-1,c[0]-6,c[1]-5,fill='peachpuff',center=True))
+        d.append(draw.Text(la,fs-1,c[0]-6,c[1]-5,fill='crimson',center=True))
     l = layers[m+2]
     for c,la in zip(kb[l]['centers'],kb[l]['labels']):
-        d.append(draw.Text(la,fs-1,c[0]+6,c[1]-5,fill='peachpuff',center=True))
+        d.append(draw.Text(la,fs-1,c[0]+6,c[1]-5,fill='plum',center=True))
     l = layers[m+3]
     for c,la in zip(kb[l]['centers'],kb[l]['labels']):
         d.append(draw.Text(" ".join(la.split("\n")),fs-2,c[0],c[1]+6,fill='peachpuff',center=True))
