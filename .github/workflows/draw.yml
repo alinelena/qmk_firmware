@@ -1,4 +1,4 @@
-name: Build firmware for mlego
+name: draw for mlego
 on:
   push:
     paths-ignore:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-firmware:
+  draw-keymaps:
     runs-on: ubuntu-latest
     container: ghcr.io/qmk/qmk_cli:latest
     strategy:
@@ -81,29 +81,27 @@ jobs:
       with:
         fetch-depth: 1
         persist-credentials: false
-        submodules: true
+        submodules: false
 
-    - name: build
-      id: build
+    - name: draw
+      id: draw
       run: |
         git config --global --add safe.directory '*'
         python3 -m pip install -r requirements-dev.txt
         python3 -m pip install fontTools
-        make git-submodule
+        set -x
         #if [ -d keyboards/${{ matrix.keyboard}}/keymaps/${{ matrix.keymap }} ]; then
-          qmk compile -kb ${{ matrix.keyboard}} -km ${{ matrix.keymap }}
+          qmk info -lm -kb ${{ matrix.keyboard}} -km ${{ matrix.keymap }}
 
-          TARGET="$(echo "${{ matrix.keyboard }}" | sed 's#/#_#g')_${{matrix.keymap}}"
+          TARGET="$(echo '${{ matrix.keyboard }}' | sed 's#/#_#g')_${{matrix.keymap}}"
           echo "artifact-name=${TARGET}" >> $GITHUB_OUTPUT
-          echo "artifact-name: ${{ steps.build.outputs.artifact-name }}"
+          echo "artifact-name: ${{ steps.draw.outputs.artifact-name }}"
         #fi
 
     - name: Archive artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: "${{ steps.build.outputs.artifact-name }}"
+        name: "${{ steps.draw.outputs.artifact-name }}"
         path: |
-          *.hex
-          *.bin
-          *.uf2
+          *.svg
       continue-on-error: true

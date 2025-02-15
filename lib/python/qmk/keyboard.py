@@ -368,7 +368,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
             bae.append(baeenter_key(x,y,w,h,swx,swy,rad))
         else:
 
-            if layout_name.startswith('mlego'):
+            if layout_name.startswith('mlego') or layout_name.startswith('tipro'):
                 if cr ==0:
                     position = 't'
                 elif cr == mrows:
