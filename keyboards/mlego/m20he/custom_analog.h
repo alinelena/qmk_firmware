@@ -13,6 +13,7 @@ SPDX-License-Identifier: GPL-2.0-or-later */
 typedef struct {
     adcsample_t sampleBuffer1[SAMPLE_BUFFER_SIZE];
     adcsample_t sampleBuffer2[SAMPLE_BUFFER_SIZE];
+    adcsample_t sampleBuffer3[SAMPLE_BUFFER_SIZE];
     adcsample_t sampleBuffer4[SAMPLE_BUFFER_SIZE];
     volatile int completedConversions;
     semaphore_t sem;

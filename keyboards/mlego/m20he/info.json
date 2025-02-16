@@ -1,30 +1,11 @@
 {
     "manufacturer": "Alin Marin Elena",
-    "keyboard_name": "m20he",
-    "maintainer": "alinelena",
-    "bootloader": "stm32-dfu",
     "diode_direction": "COL2ROW",
-    "features": {
-        "bootmagic": true,
-        "command": false,
-        "console": false,
-        "extrakey": true,
-        "mousekey": true,
-        "quantum_painter": true,
-        "rgb_matrix": true,
-        "nkro": true
-    },
     "matrix_pins": {
         "cols": ["NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"],
         "rows": ["NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"]
     },
-    "processor": "STM32G431",
     "url": "",
-    "usb": {
-        "device_version": "1.0.0",
-        "pid": "0x0000",
-        "vid": "0xFEED"
-    },
     "community_layouts": ["ortho_6x4"],
     "layouts": {
         "LAYOUT_ortho_6x4": {
