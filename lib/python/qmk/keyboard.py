@@ -262,7 +262,11 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         no_rows = (mrows+1)//2
     last_col_row = []
     for r in range(mrows+1):
-        last_col_row.append(max([key['matrix'][1] for key in layout_data if key['matrix'][0] == r and 'encoder' not in key ]))
+        l =  [key['matrix'][1] for key in layout_data if key['matrix'][0] == r ]
+        if len(l) > 0:
+           last_col_row.append(max(l))
+        else:
+           last_col_row.append(0)
     extra = False
     ccr = 0
     rcr = 0
