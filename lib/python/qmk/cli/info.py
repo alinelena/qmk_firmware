@@ -73,6 +73,9 @@ def show_keymap(kb_info_json, title_caps=True):
     if keymap_path:
         if keymap_path.suffix == '.json':
             keymap_data = json.load(keymap_path.open(encoding='utf-8'))
+            # cater for layout-less keymap.json
+            if 'layout' not in keymap_data:
+                return
         else:
             try:
                 keymap_data = c2json(cli.config.info.keyboard, cli.config.info.keymap, keymap_path, use_cpp=True)
@@ -80,12 +83,6 @@ def show_keymap(kb_info_json, title_caps=True):
                 print(f"cpp disabled in reading {keymap_path}")
                 keymap_data = c2json(cli.config.info.keyboard, cli.config.info.keymap, keymap_path, use_cpp=False)
 
-    if keymap_path and keymap_path.suffix == '.json':
-        keymap_data = json.load(keymap_path.open(encoding='utf-8'))
-
-        # cater for layout-less keymap.json
-        if 'layout' not in keymap_data:
-            return
 
         layout_name = keymap_data['layout']
         layout_name = kb_info_json.get('layout_aliases', {}).get(layout_name, layout_name)  # Resolve alias names
