@@ -58,7 +58,7 @@ LDFLAGS  += -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref
 #---------------- C Compiler Options ----------------
 
 ifeq ($(strip $(LTO_ENABLE)), yes)
-    CDEFS += -flto
+    CDEFS += -flto=auto
     CDEFS += -DLTO_ENABLE
 endif
 
