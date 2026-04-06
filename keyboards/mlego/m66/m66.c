@@ -373,47 +373,47 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             }
             return true;
 #    endif
-        case (RGB_HUI):
+        case (RM_HUEU):
             if (record->event.pressed) {
                 rgb_matrix_increase_hue_noeeprom();
             }
             return false;
-        case (RGB_HUD):
+        case (RM_HUED):
             if (record->event.pressed) {
                 rgb_matrix_decrease_hue_noeeprom();
             }
             return false;
-        case (RGB_VAI):
+        case (RM_VALU):
             if (record->event.pressed) {
                 rgb_matrix_increase_val_noeeprom();
             }
             return false;
-        case (RGB_VAD):
+        case (RM_VALD):
             if (record->event.pressed) {
                 rgb_matrix_decrease_val_noeeprom();
             }
             return false;
-        case (RGB_SAI):
+        case (RM_SATU):
             if (record->event.pressed) {
                 rgb_matrix_increase_sat_noeeprom();
             }
             return false;
-        case (RGB_SAD):
+        case (RM_SATD):
             if (record->event.pressed) {
                 rgb_matrix_decrease_sat_noeeprom();
             }
             return false;
-        case (RGB_TOG):
+        case (RM_TOGG):
             if (record->event.pressed) {
                 rgb_matrix_toggle_noeeprom();
             }
             return false;
-        case (RGB_MOD):
+        case (RM_NEXT):
             if (record->event.pressed) {
                 rgb_matrix_step_noeeprom();
             }
             return false;
-        case (RGB_RMOD):
+        case (RM_PREV):
             if (record->event.pressed) {
                 rgb_matrix_step_reverse_noeeprom();
             }
@@ -627,8 +627,8 @@ void keyboard_post_init_kb(void) {
     init_lwr_rse_led();
 
 #if defined(RGB_ENABLE_PIN) && (defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE))
-    setPinOutput(RGB_ENABLE_PIN);
-    writePinHigh(RGB_ENABLE_PIN);
+    gpio_set_pin_output(RGB_ENABLE_PIN);
+    gpio_write_pin_high(RGB_ENABLE_PIN);
     wait_ms(30);
 #endif
 #if defined(RGB_MATRIX_ENABLE)
