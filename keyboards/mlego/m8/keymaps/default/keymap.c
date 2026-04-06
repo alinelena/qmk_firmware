@@ -30,9 +30,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       TT(_LWR),  TT(_RSE)),
 
   [_LWR] = LAYOUT_ortho_4x2(
-       RGB_TOG , KC_7,
-       RGB_TOG , KC_8,
-       RGB_TOG , KC_9,
+       RM_TOGG , KC_7,
+       RM_TOGG , KC_8,
+       RM_TOGG , KC_9,
        _______,  _______ ),
 
   [_RSE] = LAYOUT_ortho_4x2(
@@ -42,9 +42,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       _______, _______),
 
   [_ADJ] = LAYOUT_ortho_4x2(
-      RGB_TOG, QK_BOOT  ,
-      RGB_TOG, QK_BOOT  ,
-      RGB_TOG, QK_BOOT  ,
+      RM_TOGG, QK_BOOT  ,
+      RM_TOGG, QK_BOOT  ,
+      RM_TOGG, QK_BOOT  ,
        _______ , _______),
 
 };
@@ -54,8 +54,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [_QW]  = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
     [_LWR] = { ENCODER_CCW_CW(KC_BSPC, KC_DEL) },
-    [_RSE] = { ENCODER_CCW_CW(RGB_VAD, RGB_VAI) },
-    [_ADJ] = { ENCODER_CCW_CW(RGB_RMOD, RGB_MOD) },
+    [_RSE] = { ENCODER_CCW_CW(RM_VALD, RM_VALU) },
+    [_ADJ] = { ENCODER_CCW_CW(RM_PREV, RM_NEXT) },
 };
 #endif
 
