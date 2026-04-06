@@ -33,9 +33,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 
 [_ADJ] =  LAYOUT_ortho_5x12(
-    _______, QK_BOOT, _______, _______, _______, _______, RGB_TOG, RGB_MOD, RGB_RMOD,RGB_M_G, QK_BOOT, _______,
-    _______, _______, _______, _______, _______, _______, RGB_HUI, RGB_SAI, RGB_VAI, _______, _______, _______,
-    _______, _______, _______, _______, _______, _______, RGB_HUD, RGB_SAD, RGB_VAD, _______, _______, _______,
+    _______, QK_BOOT, _______, _______, _______, _______, RM_TOGG, RM_NEXT, RM_PREV,RGB_M_G, QK_BOOT, _______,
+    _______, _______, _______, _______, _______, _______, RM_HUEU, RM_SATU, RM_VALU, _______, _______, _______,
+    _______, _______, _______, _______, _______, _______, RM_HUED, RM_SATD, RM_VALD, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______
 )
@@ -47,9 +47,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
     [_QW]  = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
 #    ifdef RGBLIGHT_ENABLE
-    [_LWR] = {ENCODER_CCW_CW(RGB_HUD, RGB_HUI)},
-    [_RSE] = {ENCODER_CCW_CW(RGB_VAD, RGB_VAI)},
-    [_ADJ] = {ENCODER_CCW_CW(RGB_RMOD, RGB_MOD)},
+    [_LWR] = {ENCODER_CCW_CW(RM_HUED, RM_HUEU)},
+    [_RSE] = {ENCODER_CCW_CW(RM_VALD, RM_VALU)},
+    [_ADJ] = {ENCODER_CCW_CW(RM_PREV, RM_NEXT)},
 #    else
     [_LWR] = {ENCODER_CCW_CW(KC_MNXT, KC_MPRV)},
     [_RSE] = {ENCODER_CCW_CW(KC_MFFD, KC_MRWD)},

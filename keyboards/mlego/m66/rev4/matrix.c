@@ -16,10 +16,10 @@ static const int    msize = MATRIX_ROWS * sizeof(matrix_row_t);
 static matrix_row_t prev_matrix[MATRIX_ROWS];
 
 static inline uint8_t read_rows(void) {
-    uint8_t r = readPin(row_pins[0]);
+    uint8_t r = gpio_read_pin(row_pins[0]);
 
     for (uint8_t row = 1; row < MATRIX_ROWS; row++) {
-        r |= (readPin(row_pins[row]) << row);
+        r |= (gpio_read_pin(row_pins[row]) << row);
     }
     return r;
 }
@@ -44,13 +44,13 @@ void matrix_init_custom(void) {
     wait_ms(3000);
 #endif
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
-        setPinInputLow(row_pins[row]);
+        gpio_set_pin_input_low(row_pins[row]);
     }
     matrix_io_delay();
     //spi_init();
     matrix_io_delay();
 
-    setPinOutput(SPI_MATRIX_CS_PIN);
+    gpio_set_pin_output(SPI_MATRIX_CS_PIN);
 //writePinHigh(SPI_MATRIX_CS_PIN);
     matrix_io_delay();
 }
