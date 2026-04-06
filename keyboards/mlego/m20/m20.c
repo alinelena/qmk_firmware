@@ -235,55 +235,55 @@ bool process_record_kb(uint16_t keycode, keyrecord_t* record) {
             return true;
             break;
 #endif
-        case(RGB_HUI):
+        case(RM_HUEU):
             if (record->event.pressed){
               rgb_matrix_increase_hue_noeeprom();
             }
             return false;
             break;
-        case(RGB_HUD):
+        case(RM_HUED):
             if (record->event.pressed){
               rgb_matrix_decrease_hue_noeeprom();
             }
             return false;
             break;
-        case(RGB_VAI):
+        case(RM_VALU):
             if (record->event.pressed){
               rgb_matrix_increase_val_noeeprom();
             }
             return false;
             break;
-        case(RGB_VAD):
+        case(RM_VALD):
             if (record->event.pressed){
               rgb_matrix_decrease_val_noeeprom();
             }
             return false;
             break;
-        case(RGB_SAI):
+        case(RM_SATU):
             if (record->event.pressed){
               rgb_matrix_increase_sat_noeeprom();
             }
             return false;
             break;
-        case(RGB_SAD):
+        case(RM_SATD):
             if (record->event.pressed){
               rgb_matrix_decrease_sat_noeeprom();
             }
             return false;
             break;
-        case(RGB_TOG):
+        case(RM_TOGG):
             if (record->event.pressed){
               rgb_matrix_toggle_noeeprom();
             }
             return false;
             break;
-        case(RGB_MOD):
+        case(RM_NEXT):
             if (record->event.pressed){
               rgb_matrix_step_noeeprom();
             }
             return false;
             break;
-        case(RGB_RMOD):
+        case(RM_PREV):
             if (record->event.pressed){
               rgb_matrix_step_reverse_noeeprom();
             }

@@ -229,8 +229,8 @@ lower layer
       KC_ESC , KC_F1      , KC_F2    , KC_F3    , KC_F4    , KC_F5    , KC_F6    ,    KC_F7 , KC_F8    , KC_F9      , KC_F10     , KC_F11     , KC_F12     , _______,
       _______, UP(ra1,rA1), UP(rq,rQ), UP(re,rE), UP(rr,rR), UP(rt,rT), UP(ry,rY), UP(ru,rU), UP(ri,rI), UP(ro,rO)  , UP(rp,rP)  , UP(rbo,rBO), UP(rbc,rBC),
       KC_CAPS, UP(ra,rA)  , UP(rs,rS), UP(rd,rD), UP(rf,rF), UP(rg,rG), UP(rh,rH), UP(rj,rJ), UP(rk,rK), UP(rl,rL)  , UP(rdo,rDO), UP(rco,rCO),     _______,
-      _______, KC_F20     , UP(rz,rZ), UP(rx,rX), UP(rc,rC), UP(rv,rV), UP(rb,rB), UP(rn,rN), UP(rm,rM), UP(rlt,rLT), UP(rgt,rGT), KC_WH_U    , UP(rqm,rQM),
-      _______,     _______,   _______,   _______,   _______,   _______,   _______,   _______,   _______,     _______, KC_WH_L    , KC_WH_D    ,    KC_WH_R),
+      _______, KC_F20     , UP(rz,rZ), UP(rx,rX), UP(rc,rC), UP(rv,rV), UP(rb,rB), UP(rn,rN), UP(rm,rM), UP(rlt,rLT), UP(rgt,rGT), MS_WHLU    , UP(rqm,rQM),
+      _______,     _______,   _______,   _______,   _______,   _______,   _______,   _______,   _______,     _______, MS_WHLL    , MS_WHLD    ,    MS_WHLR),
 
 /*
 raise layer
@@ -253,10 +253,10 @@ second is the shifted chatacter
 */
  [_RSE] = LAYOUT_ortho_5x14(
      KC_GRV , KC_MUTE    , KC_VOLD  , KC_VOLU  , KC_MPRV  , KC_MPLY  , KC_MNXT  , G(KC_P)  , KC_SLEP  , KC_WAKE    , KC_PSCR    , KC_DEL       , UK_EQL       , _______,
-     KC_BTN3, UP(lq,lQ)  , UP(lw,lW), UP(le,lE), UP(lr,lR), UP(lt,lT), UP(ly,lY), UP(lu,lU), UP(li,lI), UP(lo,lO)  , UP(lp,lP)  , UP(lbo1,lbo2), UP(lbc1,lbc2),
-     KC_BTN2, UP(la,lA)  , UP(ls,lS), UP(ld,lD), UP(lf,lF), UP(lg,lG), UP(lh,lH), UP(lj,lJ), UP(lk,lK), UP(ll,lL)  , UP(ll1,lL1), UP(lk1,lK1)  ,      _______ ,
-     _______, UP(ls1,ls2), UP(lz,lZ), UP(lx,lX), UP(lc,lC), UP(lv,lV), UP(lb,lB), UP(ln,lN), UP(lm,lM), UP(lc1,lC1), UP(lp1,lP1), KC_MS_U      , UP(lq1,lQ1)  ,
-     KC_BTN1, KC_BTN4    ,   _______,   _______,   _______,   _______,   _______,   _______,   _______,     _______, KC_MS_L    , KC_MS_D      , KC_MS_R)     ,
+     MS_BTN3, UP(lq,lQ)  , UP(lw,lW), UP(le,lE), UP(lr,lR), UP(lt,lT), UP(ly,lY), UP(lu,lU), UP(li,lI), UP(lo,lO)  , UP(lp,lP)  , UP(lbo1,lbo2), UP(lbc1,lbc2),
+     MS_BTN2, UP(la,lA)  , UP(ls,lS), UP(ld,lD), UP(lf,lF), UP(lg,lG), UP(lh,lH), UP(lj,lJ), UP(lk,lK), UP(ll,lL)  , UP(ll1,lL1), UP(lk1,lK1)  ,      _______ ,
+     _______, UP(ls1,ls2), UP(lz,lZ), UP(lx,lX), UP(lc,lC), UP(lv,lV), UP(lb,lB), UP(ln,lN), UP(lm,lM), UP(lc1,lC1), UP(lp1,lP1), MS_UP      , UP(lq1,lQ1)  ,
+     MS_BTN1, MS_BTN4    ,   _______,   _______,   _______,   _______,   _______,   _______,   _______,     _______, MS_LEFT    , MS_DOWN      , MS_RGHT)     ,
 
 /*
 adj layer
@@ -283,10 +283,10 @@ e - eeprom
 
 */
   [_ADJ] = LAYOUT_ortho_5x14(
-      RGB_MOD, RGB_RMOD,  A(KC_F2), RGB_ON_EFF, RGB_OFF_EFF, UC_LINX, UC_WIN  , UC_WINC, UC_MAC ,UC_EMAC , _______, RGB_M_T , RGB_M_SW, RGB_TOG,
-      RGB_HUI, RGB_HUD ,  RGB_M_P , EE_CLR    , QK_RBT     , _______,  _______, RGB_UON, RGB_IND, _______, _______,  _______, RGB_M_B ,
-      RGB_SAI, RGB_SAD ,  RGB_M_SN, DB_TOGG   , UC_NEXT    , _______, RGB_HEAT, RGB_UOF, _______, RGB_LSD, _______,  _______, RGB_M_K ,
-      RGB_VAI, RGB_VAD ,  RGB_M_R ,    _______, UC_PREV    , _______, QK_BOOT , _______, _______, _______, _______,  _______, RGB_M_X ,
+      RM_NEXT, RM_PREV,  A(KC_F2), RGB_ON_EFF, RGB_OFF_EFF, UC_LINX, UC_WIN  , UC_WINC, UC_MAC ,UC_EMAC , _______, RGB_M_T , RGB_M_SW, RM_TOGG,
+      RM_HUEU, RM_HUED ,  RGB_M_P , EE_CLR    , QK_RBT     , _______,  _______, RGB_UON, RGB_IND, _______, _______,  _______, RGB_M_B ,
+      RM_SATU, RM_SATD ,  RGB_M_SN, DB_TOGG   , UC_NEXT    , _______, RGB_HEAT, RGB_UOF, _______, RGB_LSD, _______,  _______, RGB_M_K ,
+      RM_VALU, RM_VALD ,  RGB_M_R ,    _______, UC_PREV    , _______, QK_BOOT , _______, _______, _______, _______,  _______, RGB_M_X ,
       _______,  _______,   _______,    _______,     _______, _______,  _______, _______, _______, _______, _______, RGB_M_TW, RGB_M_G),
 };
 // clang-format on
@@ -295,9 +295,9 @@ e - eeprom
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [_QW] = {ENCODER_CCW_CW(KC_VOLD, KC_VOLU)},
 #    if defined(RGBLIGHT_ENABLE) || defined(RGB_MATRIX_ENABLE)
-    [_LWR] = {ENCODER_CCW_CW(RGB_HUD, RGB_HUI)},
-    [_RSE] = {ENCODER_CCW_CW(RGB_VAD, RGB_VAI)},
-    [_ADJ] = {ENCODER_CCW_CW(RGB_RMOD, RGB_MOD)},
+    [_LWR] = {ENCODER_CCW_CW(RM_HUED, RM_HUEU)},
+    [_RSE] = {ENCODER_CCW_CW(RM_VALD, RM_VALU)},
+    [_ADJ] = {ENCODER_CCW_CW(RM_PREV, RM_NEXT)},
 #    else
     [_LWR] = {ENCODER_CCW_CW(KC_MNXT, KC_MPRV)},
     [_RSE] = {ENCODER_CCW_CW(KC_MFFD, KC_MRWD)},
