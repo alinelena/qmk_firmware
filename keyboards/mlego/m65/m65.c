@@ -238,8 +238,8 @@ void keyboard_post_init_kb(void) {
     init_lwr_rse_led();
 
 #if defined(RGB_ENABLE_PIN) && (defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE))
-    setPinOutput(RGB_ENABLE_PIN);
-    writePin(RGB_ENABLE_PIN, true);
+    gpio_set_pin_output(RGB_ENABLE_PIN);
+    gpio_write_pin(RGB_ENABLE_PIN, true);
     wait_ms(30);
 #endif
 

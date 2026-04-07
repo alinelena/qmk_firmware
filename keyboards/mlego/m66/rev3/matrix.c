@@ -53,10 +53,10 @@ void matrix_init_custom(void) {
   spi_init();
   matrix_io_delay();
 
-  setPinOutput(SPI_CS_COL_PIN);
-  writePinHigh(SPI_CS_COL_PIN);
-  setPinOutput(SPI_CS_ROW_PIN);
-  writePinHigh(SPI_CS_ROW_PIN);
+  gpio_set_pin_output(SPI_CS_COL_PIN);
+  gpio_write_pin_high(SPI_CS_COL_PIN);
+  gpio_set_pin_output(SPI_CS_ROW_PIN);
+  gpio_write_pin_high(SPI_CS_ROW_PIN);
   matrix_io_delay();
 }
 

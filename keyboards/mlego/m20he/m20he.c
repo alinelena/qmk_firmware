@@ -493,8 +493,8 @@ bool lcd_sharp_mip_init(void) {
     load_qp_resources();
 
 #        if defined(SPI_DISP_BL_PIN)
-    setPinOutput(SPI_DISP_BL_PIN);
-    writePinHigh(SPI_DISP_BL_PIN);
+    gpio_set_pin_output(SPI_DISP_BL_PIN);
+    gpio_write_pin_high(SPI_DISP_BL_PIN);
     wait_ms(300);
 #        endif
     // needs spi mode 0
@@ -545,8 +545,8 @@ void keyboard_post_init_kb(void) {
 #endif
 
 #if defined(RGB_ENABLE_PIN) && (defined(RGB_MATRIX_ENABLE) || defined(RGBLIGHT_ENABLE))
-    setPinOutput(RGB_ENABLE_PIN);
-    writePinHigh(RGB_ENABLE_PIN);
+    gpio_set_pin_output(RGB_ENABLE_PIN);
+    gpio_write_pin_high(RGB_ENABLE_PIN);
     wait_ms(30);
 #endif
 #if defined(RGB_MATRIX_ENABLE)

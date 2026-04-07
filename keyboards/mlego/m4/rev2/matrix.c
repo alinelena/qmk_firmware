@@ -14,10 +14,10 @@ static const int msize = MATRIX_ROWS * sizeof(matrix_row_t);
 static matrix_row_t prev_matrix[MATRIX_ROWS];
 
 static inline uint8_t read_rows(void) {
-  uint8_t r = readPin(row_pins[0]);
+  uint8_t r = gpio_read_pin(row_pins[0]);
 
   for (uint8_t row = 1; row < MATRIX_ROWS; row++) {
-    r |= (readPin(row_pins[row]) << row);
+    r |= (gpio_read_pin(row_pins[row]) << row);
    }
   return r;
 }
@@ -26,11 +26,11 @@ static inline void shift_out(uint16_t value) {
 
   uint8_t message[2]  = {(value >> 8) & 0xFF ,(uint8_t)(value & 0xFF) };
 
-//  writePinLow(SPI_LATCH_PIN);
+//  gpio_write_pin_low(SPI_LATCH_PIN);
   spi_start(SPI_LATCH_PIN, SPI_lsbFirst, SPI_MODE, SPI_DIVISOR);
   spi_transmit(message,2);
   spi_stop();
-//  writePinHigh(SPI_LATCH_PIN);
+//  gpio_write_pin_high(SPI_LATCH_PIN);
 //  matrix_output_select_delay();
 }
 
@@ -44,13 +44,13 @@ void matrix_init_custom(void) {
   wait_ms(3000);
 #endif
   for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
-    setPinInputLow(row_pins[row]);
+    gpio_set_pin_input_low(row_pins[row]);
   }
   matrix_io_delay();
   spi_init();
   matrix_io_delay();
 
-  setPinOutput(SPI_LATCH_PIN);
+  gpio_set_pin_output(SPI_LATCH_PIN);
  // spi_start(SPI_LATCH_PIN, true, 3, SPI_DIVISOR);
   matrix_io_delay();
 }

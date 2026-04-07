@@ -9,14 +9,14 @@ const pin_t mux_selector_pins[MUX_SELECTOR_BITS] = MUX_SELECTOR_PINS;
 void multiplexer_init(void) {
     for (uint8_t i = 0; i < MUX_SELECTOR_BITS; i++) {
         pin_t pin = mux_selector_pins[i];
-        setPinOutput(pin);
+        gpio_set_pin_output(pin);
     }
 }
 
 bool select_mux(uint8_t channel) {
     if (channel > MUX_CHANNELS) return 0;
     for (uint8_t i = 0; i < MUX_SELECTOR_BITS; i++) {
-        writePin(mux_selector_pins[i], channel & (1 << i));
+        gpio_write_pin(mux_selector_pins[i], channel & (1 << i));
     }
     current_channel = channel;
     return 1;
