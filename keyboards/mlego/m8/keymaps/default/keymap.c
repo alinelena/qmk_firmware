@@ -119,8 +119,8 @@ layer_state_t default_layer_state_set_user(layer_state_t state) {
 void keyboard_post_init_user(void) {
 
 #ifdef RGBLIGHT_ENABLE
-    setPinOutput(RGB_ENABLE_PIN);
-    writePinHigh(RGB_ENABLE_PIN);
+    gpio_set_pin_output(RGB_ENABLE_PIN);
+    gpio_write_pin_high(RGB_ENABLE_PIN);
     wait_ms(20);
 
 
