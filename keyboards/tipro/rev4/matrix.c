@@ -17,7 +17,7 @@ static matrix_row_t prev_matrix[MATRIX_ROWS];
 
 static inline uint8_t read_rows(void) {
 
-    writePinLow(SPI_MATRIX_CS_PIN);
+    gpio_write_pin_low(SPI_MATRIX_CS_PIN);
  //   matrix_output_select_delay();
 
     spi_status_t read_result = spi_read();
@@ -35,9 +35,9 @@ static inline void shift_out(uint16_t value) {
 
   uint8_t message[2]  = {(value >> 8) & 0xFF ,(uint8_t)(value & 0xFF) };
 
-  writePinLow(SPI_MATRIX_CS_PIN);
+  gpio_write_pin_low(SPI_MATRIX_CS_PIN);
   spi_transmit(message,2);
-  writePinHigh(SPI_MATRIX_CS_PIN);
+  gpio_write_pin_high(SPI_MATRIX_CS_PIN);
   matrix_output_select_delay();
 
 
@@ -52,8 +52,8 @@ void matrix_init_custom(void) {
   spi_init();
   matrix_io_delay();
 
-  setPinOutput(SPI_MATRIX_CS_PIN);
-  writePinHigh(SPI_MATRIX_CS_PIN);
+  gpio_set_pin_output(SPI_MATRIX_CS_PIN);
+  gpio_write_pin_high(SPI_MATRIX_CS_PIN);
   matrix_io_delay();
   spi_start(SPI_MATRIX_CS_PIN, SPI_lsbFirst, SPI_MODE, SPI_DIVISOR);
 }
