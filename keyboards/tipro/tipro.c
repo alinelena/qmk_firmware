@@ -35,15 +35,15 @@ const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(m
 uint8_t PROGMEM led_s = 0;
 
 void pulseHighLow(pin_t pin){
-  writePinHigh(pin);
+  gpio_write_pin_high(pin);
   wait_ms(LED_DELAY);
-  writePinLow(pin);
+  gpio_write_pin_low(pin);
 
 }
 
 void shiftOutShort(pin_t dataPin, pin_t clockPin, uint8_t val){
   for (uint8_t i = 0; i < 8; i++)  {
-    writePin(dataPin,!!(led_s & (1 << i)));
+    gpio_write_pin(dataPin,!!(led_s & (1 << i)));
     pulseHighLow(clockPin);
   }
 }
@@ -51,40 +51,40 @@ void shiftOutShort(pin_t dataPin, pin_t clockPin, uint8_t val){
 void leds_off(void) {
 
   led_s = 0;
-  writePinLow(SR_LATCH_PIN);
+  gpio_write_pin_low(SR_LATCH_PIN);
   shiftOutShort(SR_DATA_PIN, SR_CLOCK_PIN, led_s);
-  writePinHigh(SR_LATCH_PIN);
+  gpio_write_pin_high(SR_LATCH_PIN);
 }
 
 void led_on(uint8_t led) {
 
   led_s |= led;
-  writePinLow(SR_LATCH_PIN);
+  gpio_write_pin_low(SR_LATCH_PIN);
   shiftOutShort(SR_DATA_PIN, SR_CLOCK_PIN, led_s);
-  writePinHigh(SR_LATCH_PIN);
+  gpio_write_pin_high(SR_LATCH_PIN);
 
 }
 
 void led_toggle(uint8_t led) {
 
   led_s ^= led;
-  writePinLow(SR_LATCH_PIN);
+  gpio_write_pin_low(SR_LATCH_PIN);
   shiftOutShort(SR_DATA_PIN, SR_CLOCK_PIN, led_s);
-  writePinHigh(SR_LATCH_PIN);
+  gpio_write_pin_high(SR_LATCH_PIN);
 
 }
 
 
 void setup_leds(void) {
 
-  writePinLow(SR_LATCH_PIN);
-  setPinOutput(SR_LATCH_PIN);
+  gpio_write_pin_low(SR_LATCH_PIN);
+  gpio_set_pin_output(SR_LATCH_PIN);
 
-  writePinLow(SR_DATA_PIN);
-  setPinOutput(SR_DATA_PIN);
+  gpio_write_pin_low(SR_DATA_PIN);
+  gpio_set_pin_output(SR_DATA_PIN);
 
-  writePinLow(SR_CLOCK_PIN);
-  setPinOutput(SR_CLOCK_PIN);
+  gpio_write_pin_low(SR_CLOCK_PIN);
+  gpio_set_pin_output(SR_CLOCK_PIN);
 }
 
 void count_leds(void){
@@ -154,19 +154,19 @@ void matrix_init_kb(void) {
     debug_keyboard = true;
 #endif
 #if defined(LED_LWR_PIN)
-    setPinOutput(LED_LWR_PIN);
-    writePin(LED_LWR_PIN, true);
+    gpio_set_pin_output(LED_LWR_PIN);
+    gpio_write_pin(LED_LWR_PIN, true);
     wait_ms(30);
 #endif
 
 #if defined(LED_RSE_PIN)
-    setPinOutput(LED_RSE_PIN);
-    writePin(LED_RSE_PIN, true);
+    gpio_set_pin_output(LED_RSE_PIN);
+    gpio_write_pin(LED_RSE_PIN, true);
     wait_ms(30);
 #endif
 #if defined(LED_CAPS_PIN)
-    setPinOutput(LED_CAPS_PIN);
-    writePin(LED_CAPS_PIN, true);
+    gpio_set_pin_output(LED_CAPS_PIN);
+    gpio_write_pin(LED_CAPS_PIN, true);
     wait_ms(30);
 #endif
 #if defined(RGBLIGHT_ENABLE)

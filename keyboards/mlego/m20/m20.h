@@ -49,14 +49,14 @@ static inline void toggle_rgb(const uint8_t index, const bool on, const uint16_t
 
 static inline void init_lwr_rse_led(void) {
 #if defined(LED_LWR_PIN)
-    setPinOutput(LED_LWR_PIN);
-    writePin(LED_LWR_PIN, false);
+    gpio_set_pin_output(LED_LWR_PIN);
+    gpio_write_pin(LED_LWR_PIN, false);
     wait_ms(30);
 #endif
 
 #if defined(LED_RSE_PIN)
-    setPinOutput(LED_RSE_PIN);
-    writePin(LED_RSE_PIN, false);
+    gpio_set_pin_output(LED_RSE_PIN);
+    gpio_write_pin(LED_RSE_PIN, false);
     wait_ms(30);
 #endif
 }
@@ -64,9 +64,9 @@ static inline void init_lwr_rse_led(void) {
 static inline void led_lwr(const bool on) {
 #if defined(LED_LWR_PIN)
     if ((PRODUCT_ID == 0x6064) || (PRODUCT_ID == 0x6065) || (PRODUCT_ID == 0x6066) || (PRODUCT_ID == 0x6067)) {
-        writePin(LED_LWR_PIN, !on);
+        gpio_write_pin(LED_LWR_PIN, !on);
     } else {
-        writePin(LED_LWR_PIN, on);
+        gpio_write_pin(LED_LWR_PIN, on);
     }
 #endif
 }
@@ -74,9 +74,9 @@ static inline void led_lwr(const bool on) {
 static inline void led_rse(const bool on) {
 #if defined(LED_RSE_PIN)
     if ((PRODUCT_ID == 0x6064) || (PRODUCT_ID == 0x6065) || (PRODUCT_ID == 0x6066) || (PRODUCT_ID == 0x6067)) {
-        writePin(LED_RSE_PIN, !on);
+        gpio_write_pin(LED_RSE_PIN, !on);
     } else {
-        writePin(LED_RSE_PIN, on);
+        gpio_write_pin(LED_RSE_PIN, on);
     }
 #endif
 }
