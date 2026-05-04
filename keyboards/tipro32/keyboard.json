@@ -17,7 +17,7 @@
         "cols": ["A6", "C4", "B1", "B11"],
         "rows": ["B12", "B14", "A2", "A9", "A15", "C11","B4","A4"]
     },
-    "url": "",
+    "url": "https://mlego.elena.re/",
     "usb": {
         "device_version": "1.0.0",
         "pid": "0x6072",
