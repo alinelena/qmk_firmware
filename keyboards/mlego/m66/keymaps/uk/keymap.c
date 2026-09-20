@@ -129,16 +129,20 @@ const uint32_t unicode_map[] PROGMEM = {
    [rbo]   = 0x2264, // ≪
    [rBC]   = 0x226B, // ≥
    [rbc]   = 0x2265, // ≫
-   [rdo]   = 0x27FF, // ⟿  
+   [rdo]   = 0x27FF, // ⟿
    [rDO]   = 0x2B33, // ⬳
    [rco]   = 0x2245, // ≅
    [rCO]   = 0x2247, // ≇
-   [rlt]   = 0x2289, // ⊉  
-   [rLT]   = 0x228B, // ⊋   
-   [rgt]   = 0x2225, // ∥ 
+   [rlt]   = 0x2289, // ⊉
+   [rLT]   = 0x228B, // ⊋
+   [rgt]   = 0x2225, // ∥
    [rGT]   = 0x2226, // ∦
    [rqm]   = 0x2234, // ∴
-   [rQM]   = 0x2235, // ∵ 
+   [rQM]   = 0x2235, // ∵
+   [ae1]   = 0x2243, // ≃
+   [ae2]   = 0x2254, // ≔
+   [aq1]   = 0x225C, // ≜
+   [aq2]   = 0x2263 // ≣
 };
 
 // clang-format off
@@ -265,11 +269,11 @@ adj layer
 ▲l☀☼ ▼
 ╰────╯
 ┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┐
-│ l⎗ │ l⎘ │ ⌕  │ l☀ │ l☼ │ u │ u │ u❖ │ u │EMAC│    │M_T │M_SW│
+│ l⎗ │ l⎘ │ ⌕  │ l☀ │ l☼ │ u │ u │ u❖ │ u │EMAC│ ≜≣ │M_T │ ≃≔ │
 ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
-│HUI │HUD │M_P │ e␥ │ r♲ │    │    │    │ l⌧ │    │    │    │M_B │
+│HUI │HUD │M_P │ e␥ │ r♲ │    │    │    │ l⌧ │    │    │M_SW│M_B │
 ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
-│SAI │SAD │M_SN│ d⚛ │ u⎘ │    │ l⌇ │    │    │ l⏹ │    │    │M_K │
+│SAI │SAD │M_SN│ d⚛ │ u⎘ │    │ l⌇ │    │    │ l⏹│    │    │M_K │
 ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
 │VAI │VAD │M_R │    │ u⎗ │    │ b♽ │    │    │    │    │    │M_X │
 ├────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┼────┤
@@ -283,11 +287,11 @@ e - eeprom
 
 */
   [_ADJ] = LAYOUT_ortho_5x14(
-      RM_NEXT, RM_PREV,  A(KC_F2), RGB_ON_EFF, RGB_OFF_EFF, UC_LINX, UC_WIN  , UC_WINC, UC_MAC ,UC_EMAC , _______, RGB_M_T , RGB_M_SW, RM_TOGG,
-      RM_HUEU, RM_HUED ,  RGB_M_P , EE_CLR    , QK_RBT     , _______,  _______, RGB_UON, RGB_IND, _______, _______,  _______, RGB_M_B ,
-      RM_SATU, RM_SATD ,  RGB_M_SN, DB_TOGG   , UC_NEXT    , _______, RGB_HEAT, RGB_UOF, _______, RGB_LSD, _______,  _______, RGB_M_K ,
-      RM_VALU, RM_VALD ,  RGB_M_R ,    _______, UC_PREV    , _______, QK_BOOT , _______, _______, _______, _______,  _______, RGB_M_X ,
-      _______,  _______,   _______,    _______,     _______, _______,  _______, _______, _______, _______, _______, RGB_M_TW, RGB_M_G),
+      RM_NEXT, RM_PREV, A(KC_F2), RGB_ON_EFF, RGB_OFF_EFF, UC_LINX, UC_WIN  , UC_WINC, UC_MAC , UC_EMAC, UP(aq1,aq2), RGB_M_T , UP(ae1,ae2), RM_TOGG,
+      RM_HUEU, RM_HUED, RGB_M_P , EE_CLR    , QK_RBT     , _______, _______ , RGB_UON, RGB_IND, _______, _______,     RGB_M_SW,    RGB_M_B ,
+      RM_SATU, RM_SATD, RGB_M_SN, DB_TOGG   , UC_NEXT    , _______, RGB_HEAT, RGB_UOF, _______, RGB_LSD, _______,     _______ ,    RGB_M_K ,
+      RM_VALU, RM_VALD, RGB_M_R , _______   , UC_PREV    , _______, QK_BOOT , _______, _______, _______, _______,     _______ ,    RGB_M_X ,
+      _______, _______, _______ , _______   , _______    , _______, _______ , _______, _______, _______, _______,     RGB_M_TW,    RGB_M_G),
 };
 // clang-format on
 
