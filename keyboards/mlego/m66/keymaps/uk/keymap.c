@@ -142,7 +142,7 @@ const uint32_t unicode_map[] PROGMEM = {
    [ae1]   = 0x2243, // ≃
    [ae2]   = 0x2254, // ≔
    [aq1]   = 0x225C, // ≜
-   [aq2]   = 0x2263 // ≣
+   [aq2]   = 0x2263, // ≣
 };
 
 // clang-format off
