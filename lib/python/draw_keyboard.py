@@ -75,6 +75,8 @@ def summary_keymap(name,kb,output_path=None):
                            enc[0]+enc[2]*math.cos(a-da),
                            enc[1]+math.sin(a-da)*enc[1],stroke='fuchsia', stroke_width=sw, fill='none',marker_end=arrowccw))
     for c,la in zip(kb[l]['centers'],kb[l]['labels']):
+        if la == 'transparent':
+            la = 'tran'
         if la and la[0]=="⇧":
           d.append(draw.Text(la[0],fs,c[0],c[1],fill='peachpuff',center=True))
           d.append(draw.Text(la[-1],fs-1,c[0]+6,c[1],fill='peachpuff',center=True))
@@ -86,12 +88,18 @@ def summary_keymap(name,kb,output_path=None):
           d.append(draw.Text(la,fs,c[0],c[1],fill='peachpuff',center=True))
     l = layers[m+1]
     for c,la in zip(kb[l]['centers'],kb[l]['labels']):
+        if la == 'transparent':
+            la = 'tran'
         d.append(draw.Text(la,fs-1,c[0]-6,c[1]-5,fill='crimson',center=True))
     l = layers[m+2]
     for c,la in zip(kb[l]['centers'],kb[l]['labels']):
+        if la == 'transparent':
+            la = 'tran'
         d.append(draw.Text(la,fs-1,c[0]+6,c[1]-5,fill='plum',center=True))
     l = layers[m+3]
     for c,la in zip(kb[l]['centers'],kb[l]['labels']):
+        if la == 'transparent':
+            la = 'tran'
         d.append(draw.Text(" ".join(la.split("\n")),fs-2,c[0],c[1]+6,fill='peachpuff',center=True))
 
     save_svg(d,output_path,f"{name}.svg")
@@ -171,6 +179,8 @@ def draw_kb(canvas_width=600, canvas_height=300,keys=None, encoders=None, center
                 d.append(draw.ArcLine(*e[2*i+1],stroke='deeppink',fill='none',stroke_width=sw))
     if labels and centers:
         for c,l in zip(centers,labels):
+            if l == 'transparent':
+                l = 'tran'
             d.append(draw.Text(l,fs,c[0],c[1],fill='peachpuff',center=True))
 
     if tooltips and centers:

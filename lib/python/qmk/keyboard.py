@@ -272,7 +272,7 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
         no_rows = (mrows+1)//2
     last_col_row = []
     for r in range(mrows+1):
-        l =  [key['matrix'][1] for key in layout_data if key['matrix'][0] == r ]
+        l =  [key['matrix'][1] for key in layout_data if key['matrix'][0] == r and 'encoder' not in key]
         if len(l) > 0:
            last_col_row.append(max(l))
         else:
@@ -359,6 +359,8 @@ def render_layout(layout_data, render_ascii, key_labels=None, layout_name="somed
             cols[cc].append(cy+coy)
 
 
+        if label == 'transparent':
+            label = 'tran'
         labels.append(label)
         label = ''.join(c for c in label.replace('\n','') if unicodedata.east_asian_width(c) != 'W')
         if len(label)>4:
